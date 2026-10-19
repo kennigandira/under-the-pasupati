@@ -1,7 +1,7 @@
 ---
 import Base from '../../../layouts/Base.astro';
 import MediaSlot from '../../../components/MediaSlot.astro';
-import { languages, t, type Lang } from '../../../i18n/ui';
+import { languages, localeHref, t, type Lang } from '../../../i18n/ui';
 import { skaters } from '../../../data/content';
 
 export function getStaticPaths() {
@@ -16,7 +16,7 @@ const fmt = (iso: string) =>
 <Base lang={lang} title={s.name} description={s.bio[lang]} path={`/hall-of-fame/${slug}`}>
   <section class="section">
     <div class="wrap">
-      <a class="mono" href={`/${lang}/hall-of-fame`}>← {t(lang, 'hof.title')}</a>
+      <a class="mono" href={localeHref(lang, '/hall-of-fame')}>← {t(lang, 'hof.title')}</a>
       <h1 style="margin: 1rem 0 0.25rem;">{s.alias ? `${s.name} “${s.alias}”` : s.name}</h1>
       <p class="meta">
         <span>{t(lang, 'hof.crew')}: {s.crew}</span>

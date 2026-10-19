@@ -1,7 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import MediaSlot from '../../components/MediaSlot.astro';
-import { languages, t, type Lang } from '../../i18n/ui';
+import { languages, localeHref, t, type Lang } from '../../i18n/ui';
 import { skaters, posts, conditionEntries, usageSnapshot } from '../../data/content';
 
 export function getStaticPaths() {
@@ -40,7 +40,7 @@ const fmt = (iso: string) =>
     <div class="wrap">
       <div class="section-head">
         <h2>{t(lang, 'home.latest')}</h2>
-        <a class="mono" href={`/${lang}/journal`}>{t(lang, 'see.all')} →</a>
+        <a class="mono" href={localeHref(lang, '/journal')}>{t(lang, 'see.all')} →</a>
       </div>
       <div class="grid grid-3">
         {latest.map((p) => (
@@ -52,7 +52,7 @@ const fmt = (iso: string) =>
             </p>
             <h3>{p.title[lang]}</h3>
             <p>{p.excerpt[lang]}</p>
-            <a class="mono" href={`/${lang}/journal/${p.slug}`}>{t(lang, 'read.more')} →</a>
+            <a class="mono" href={localeHref(lang, `/journal/${p.slug}`)}>{t(lang, 'read.more')} →</a>
           </article>
         ))}
       </div>
@@ -64,7 +64,7 @@ const fmt = (iso: string) =>
       <div>
         <div class="section-head">
           <h2>{t(lang, 'home.featured')}</h2>
-          <a class="mono" href={`/${lang}/hall-of-fame`}>{t(lang, 'see.all')} →</a>
+          <a class="mono" href={localeHref(lang, '/hall-of-fame')}>{t(lang, 'see.all')} →</a>
         </div>
         <article class="card card-accent">
           <MediaSlot lang={lang} slot={featured.portrait} variant="portrait" />
@@ -75,13 +75,13 @@ const fmt = (iso: string) =>
             <span>{t(lang, 'hof.years')}: {featured.yearsSkating}</span>
           </p>
           <p>{featured.bio[lang]}</p>
-          <a class="mono" href={`/${lang}/hall-of-fame/${featured.slug}`}>{t(lang, 'read.more')} →</a>
+          <a class="mono" href={localeHref(lang, `/hall-of-fame/${featured.slug}`)}>{t(lang, 'read.more')} →</a>
         </article>
       </div>
       <div>
         <div class="section-head">
           <h2>{t(lang, 'home.status')}</h2>
-          <a class="mono" href={`/${lang}/the-park`}>{t(lang, 'see.all')} →</a>
+          <a class="mono" href={localeHref(lang, '/the-park')}>{t(lang, 'see.all')} →</a>
         </div>
         <div class="stats" style="margin-bottom: 1.25rem;">
           <div class="stat">

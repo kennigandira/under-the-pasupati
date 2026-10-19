@@ -1,7 +1,7 @@
 ---
 import Base from '../../../layouts/Base.astro';
 import MediaSlot from '../../../components/MediaSlot.astro';
-import { languages, t, type Lang } from '../../../i18n/ui';
+import { languages, localeHref, t, type Lang } from '../../../i18n/ui';
 import { posts } from '../../../data/content';
 
 export function getStaticPaths() {
@@ -16,7 +16,7 @@ const fmt = (iso: string) =>
 <Base lang={lang} title={p.title[lang]} description={p.excerpt[lang]} path={`/journal/${slug}`}>
   <article class="section">
     <div class="wrap" style="max-width: 720px;">
-      <a class="mono" href={`/${lang}/journal`}>← {t(lang, 'journal.title')}</a>
+      <a class="mono" href={localeHref(lang, '/journal')}>← {t(lang, 'journal.title')}</a>
       <h1 style="margin: 1rem 0 0.5rem;">{p.title[lang]}</h1>
       <p class="meta"><span>{fmt(p.date)}</span><span>{p.category}</span><span>{p.author}</span></p>
       <div class="tape" style="margin: 2rem 0;">

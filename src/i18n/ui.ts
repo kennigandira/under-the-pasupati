@@ -100,3 +100,10 @@ export type UIKey = keyof (typeof ui)['id'];
 export function t(lang: Lang, key: UIKey): string {
   return ui[lang][key] ?? ui[defaultLang][key];
 }
+
+// Single source of truth for internal URLs: Cloudflare Pages serves these as
+// directories (/id/, /id/journal/), so links must carry the trailing slash or
+// every navigation eats a 308 redirect.
+export function localeHref(lang: Lang, path: string): string {
+  return `/${lang}${path}/`;
+}

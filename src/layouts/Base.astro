@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { languages, t, type Lang } from '../i18n/ui';
+import { languages, localeHref, t, type Lang } from '../i18n/ui';
 
 interface Props {
   lang: Lang;
@@ -34,7 +34,7 @@ const nav = [
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={desc} />
     <meta property="og:type" content="website" />
-    {languages.map((l) => <link rel="alternate" hreflang={l} href={`/${l}${path}`} />)}
+    {languages.map((l) => <link rel="alternate" hreflang={l} href={localeHref(l, path)} />)}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -45,18 +45,18 @@ const nav = [
   <body>
     <header class="site-header">
       <div class="wrap">
-        <a class="brand" href={`/${lang}`}>Under the Pasupati</a>
+        <a class="brand" href={localeHref(lang, '')}>Under the Pasupati</a>
         <nav aria-label="Main">
           <ul class="nav-list">
             {nav.map(([key, href]) => (
               <li>
-                <a href={`/${lang}${href}`} aria-current={path === href ? 'page' : undefined}>
+                <a href={localeHref(lang, href)} aria-current={path === href ? 'page' : undefined}>
                   {t(lang, key)}
                 </a>
               </li>
             ))}
             <li>
-              <a class="lang-switch" href={`/${other}${path}`} hreflang={other} lang={other}>
+              <a class="lang-switch" href={localeHref(other, path)} hreflang={other} lang={other}>
                 {t(lang, 'lang.switch')}
               </a>
             </li>
