@@ -467,6 +467,89 @@ main { flex: 1; padding-bottom: 4rem; }
   .hero .burst { top: 1.5rem; right: 2rem; width: 128px; height: 128px; font-size: 0.9rem; }
 }
 
+/* ---- Full-viewport hero (The Park): photo fills the screen, type sits on it ---- */
+/* The hero starts below the sticky header *and* the ticker strip, so subtract
+   both to make the image fill exactly the first screen. Measured from the
+   rendered chrome: brand row + nav strip + ticker on mobile, single nav row +
+   ticker on desktop. */
+:root { --chrome-h: 140px; }
+@media (min-width: 760px) {
+  :root { --chrome-h: 91px; }
+}
+.hero-full {
+  position: relative;
+  min-height: max(560px, calc(100svh - var(--chrome-h)));
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  border-bottom: 3px solid var(--ink);
+  isolation: isolate;
+}
+.hero-full .media-slot {
+  position: absolute;
+  inset: 0;
+  aspect-ratio: auto;
+  border: 0;
+  border-radius: 0;
+  z-index: -2;
+}
+/* scrim: keeps the title readable over any photo */
+.hero-full::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    rgba(16, 16, 16, 0.2) 0%,
+    rgba(16, 16, 16, 0.32) 40%,
+    rgba(16, 16, 16, 0.85) 100%
+  );
+}
+.hero-full-inner {
+  width: min(1100px, 100% - 1.5rem);
+  margin-inline: auto;
+  padding-bottom: 2.25rem;
+  color: var(--paper);
+  position: relative;
+}
+.hero-full h1 {
+  color: var(--paper);
+  text-shadow: 3px 3px 0 var(--ink);
+  font-size: clamp(3rem, 17vw, 8rem);
+  line-height: 0.9;
+  transform: rotate(-1deg);
+}
+.hero-full .stamp { background: var(--paper); }
+.hero-full-tagline {
+  font-size: 1.05rem;
+  max-width: 34ch;
+  margin-top: 0.75rem;
+  text-shadow: 1px 1px 0 rgba(16, 16, 16, 0.7);
+}
+.hero-scroll {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--paper);
+}
+.hero-scroll span:last-child {
+  display: inline-block;
+  animation: nudge 1.6s ease-in-out infinite;
+}
+@keyframes nudge {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-scroll span:last-child { animation: none; }
+}
+
 /* ---- Footer ---- */
 .site-footer {
   border-top: 3px solid var(--ink);

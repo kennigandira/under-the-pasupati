@@ -11,12 +11,31 @@ const { lang } = Astro.params as { lang: Lang };
 ---
 
 <Base lang={lang} title={t(lang, 'nav.park')} path="/the-park">
+  <section class="hero-full">
+    <MediaSlot
+      lang={lang}
+      slot={{
+        kind: 'photo',
+        hint: {
+          id: 'FOTO UTAMA: panorama taman dari atas jalan layang, hitam-putih, sisakan ruang gelap di bagian bawah untuk judul',
+          en: 'HERO PHOTO: panorama of the park from the flyover, black and white, keep the lower area dark for the title',
+        },
+      }}
+    />
+    <div class="hero-full-inner">
+      <span class="stamp">Pasupati Flyover, Bandung</span>
+      <h1>{t(lang, 'nav.park')}</h1>
+      <p class="hero-full-tagline">{t(lang, 'park.hero.tagline')}</p>
+      <p class="hero-scroll">
+        <span>{t(lang, 'park.hero.scroll')}</span>
+        <span>↓</span>
+      </p>
+    </div>
+  </section>
+
   <section class="section">
     <div class="wrap">
-      <h1>{t(lang, 'nav.park')}</h1>
-      <span class="stamp">Pasupati Flyover, Bandung</span>
-
-      <h2 style="margin: 2rem 0 1rem;">{t(lang, 'park.history')}</h2>
+      <h2 style="margin-bottom: 1rem;">{t(lang, 'park.history')}</h2>
       <div class="grid grid-2" style="align-items: start;">
         <p>
           {lang === 'id'
