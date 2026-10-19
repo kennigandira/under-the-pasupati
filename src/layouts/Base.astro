@@ -1,0 +1,87 @@
+---
+import '../styles/global.css';
+import { languages, t, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  title?: string;
+  description?: string;
+  path: string; // path after /:lang, e.g. '/journal' — used for the language switcher
+}
+const { lang, title, description, path } = Astro.props;
+const pageTitle = title ? `${title} — ${t(lang, 'site.title')}` : t(lang, 'site.title');
+const desc = description ?? t(lang, 'site.tagline');
+const other: Lang = lang === 'id' ? 'en' : 'id';
+
+const nav = [
+  ['nav.home', ''],
+  ['nav.park', '/the-park'],
+  ['nav.hof', '/hall-of-fame'],
+  ['nav.journal', '/journal'],
+  ['nav.communities', '/communities'],
+  ['nav.events', '/events'],
+  ['nav.about', '/about'],
+] as const;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={desc} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={desc} />
+    <meta property="og:type" content="website" />
+    {languages.map((l) => <link rel="alternate" hreflang={l} href={`/${l}${path}`} />)}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Bungee&family=Space+Grotesk:wght@400;700&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href={`/${lang}`}>Under the Pasupati</a>
+        <nav aria-label="Main">
+          <ul class="nav-list">
+            {nav.map(([key, href]) => (
+              <li>
+                <a href={`/${lang}${href}`} aria-current={path === href ? 'page' : undefined}>
+                  {t(lang, key)}
+                </a>
+              </li>
+            ))}
+            <li>
+              <a class="lang-switch" href={`/${other}${path}`} hreflang={other} lang={other}>
+                {t(lang, 'lang.switch')}
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track">
+        {[0, 1].map(() => (
+          <span>
+            {t(lang, 'ticker.text')}&nbsp;·&nbsp;<span class="tick-accent">■</span>&nbsp;·&nbsp;{t(lang, 'ticker.facts')}&nbsp;·&nbsp;<span class="tick-accent">■</span>&nbsp;·&nbsp;
+          </span>
+        ))}
+      </div>
+    </div>
+    <main>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="wrap">
+        <p class="foot-mark">Under the Pasupati</p>
+        <p>{t(lang, 'footer.made')}</p>
+        <p>{t(lang, 'about.disclaimer')}</p>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,36 @@
+---
+import Base from '../../../layouts/Base.astro';
+import MediaSlot from '../../../components/MediaSlot.astro';
+import { languages, t, type Lang } from '../../../i18n/ui';
+import { skaters } from '../../../data/content';
+
+export function getStaticPaths() {
+  return languages.map((lang) => ({ params: { lang } }));
+}
+const { lang } = Astro.params as { lang: Lang };
+const sorted = [...skaters].sort((a, b) => b.featuredFrom.localeCompare(a.featuredFrom));
+---
+
+<Base lang={lang} title={t(lang, 'hof.title')} path="/hall-of-fame">
+  <section class="section">
+    <div class="wrap">
+      <h1>{t(lang, 'hof.title')}</h1>
+      <p style="max-width: 56ch; margin: 0.75rem 0 2rem;">{t(lang, 'hof.subtitle')}</p>
+      <div class="grid grid-3">
+        {sorted.map((s, i) => (
+          <article class:list={['card', 'tape', { 'card-accent': i === 0 }]}>
+            <MediaSlot lang={lang} slot={s.portrait} variant="portrait" />
+            {i === 0 && <span class="stamp" style="margin-top: 0.5rem;">{t(lang, 'home.featured')}</span>}
+            <h3 style="margin-top: 0.5rem;">{s.alias ? `${s.name} “${s.alias}”` : s.name}</h3>
+            <p class="meta">
+              <span>{s.crew}</span>
+              <span>{s.discipline}</span>
+              <span>{t(lang, 'hof.years')}: {s.yearsSkating}</span>
+            </p>
+            <a class="mono" href={`/${lang}/hall-of-fame/${s.slug}`}>{t(lang, 'read.more')} →</a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>

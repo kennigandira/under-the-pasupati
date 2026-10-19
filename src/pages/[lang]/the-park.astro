@@ -1,0 +1,115 @@
+---
+import Base from '../../layouts/Base.astro';
+import MediaSlot from '../../components/MediaSlot.astro';
+import { languages, t, type Lang } from '../../i18n/ui';
+import { conditionEntries, usageSnapshot, timeline, parkMapSlot } from '../../data/content';
+
+export function getStaticPaths() {
+  return languages.map((lang) => ({ params: { lang } }));
+}
+const { lang } = Astro.params as { lang: Lang };
+---
+
+<Base lang={lang} title={t(lang, 'nav.park')} path="/the-park">
+  <section class="section">
+    <div class="wrap">
+      <h1>{t(lang, 'nav.park')}</h1>
+      <span class="stamp">Pasupati Flyover, Bandung</span>
+
+      <h2 style="margin: 2rem 0 1rem;">{t(lang, 'park.history')}</h2>
+      <div class="grid grid-2" style="align-items: start;">
+        <p>
+          {lang === 'id'
+            ? 'Ruang di bawah jalan layang Pasupati berubah dari lahan kosong menjadi salah satu skatepark paling ramai di Bandung. Halaman ini mencatat sejarahnya, aturannya, dan kondisinya — apa adanya, dengan tanggal.'
+            : 'The space under the Pasupati flyover turned from an empty lot into one of Bandung’s busiest skateparks. This page records its history, its rules, and its condition — as it is, with dates.'}
+        </p>
+        <div class="card">
+          <h3 class="mono" style="margin-bottom: 0.75rem;">{t(lang, 'park.timeline')}</h3>
+          <ul class="entry-list">
+            {timeline.map((e) => (
+              <li>
+                <span class="stamp">{e.year}</span>
+                <p>{e.text[lang]}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2 style="margin-bottom: 1rem;">{t(lang, 'park.map')}</h2>
+      <MediaSlot lang={lang} slot={parkMapSlot} />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2 style="margin-bottom: 1rem;">{t(lang, 'park.condition')}</h2>
+      <div class="ledger ledger--photo">
+        <div class="ledger-head">
+          <span>{lang === 'id' ? 'Tgl' : 'Date'}</span>
+          <span>{lang === 'id' ? 'Foto' : 'Photo'}</span>
+          <span>{lang === 'id' ? 'Lokasi & catatan' : 'Spot & note'}</span>
+          <span>Status</span>
+        </div>
+        {conditionEntries.map((c) => (
+          <div class="ledger-row">
+            <span class="ledger-date">{c.date.slice(8)}.{c.date.slice(5, 7)}.{c.date.slice(2, 4)}</span>
+            <span class="ledger-thumb"><MediaSlot lang={lang} slot={c.photo} mini /></span>
+            <div>
+              <span class="ledger-spot">{c.spot[lang]}</span>
+              <p style="font-size: 0.85rem; margin-top: 0.15rem;">{c.note[lang]}</p>
+            </div>
+            <span class={`badge badge-${c.severity} ledger-badge`}>{t(lang, `condition.${c.severity}` as any)}</span>
+          </div>
+        ))}
+      </div>
+      <p class="mono" style="margin-top: 0.75rem;">
+        {lang === 'id'
+          ? 'Sudut foto yang sama diambil ulang tiap bulan untuk perbandingan sebelum/sesudah.'
+          : 'The same photo angles are retaken monthly for before/after comparison.'}
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2 style="margin-bottom: 1rem;">{t(lang, 'park.usage')}</h2>
+      <div class="stats" style="margin-bottom: 1rem;">
+        <div class="stat"><div class="num">{usageSnapshot.avgPerDay}</div><div class="mono">{lang === 'id' ? 'rata-rata skater / hari' : 'avg skaters / day'}</div></div>
+        <div class="stat"><div class="num" style="font-size: 1.2rem; padding-top: 0.4rem;">{usageSnapshot.peakHours[lang]}</div><div class="mono">{lang === 'id' ? 'jam puncak' : 'peak hours'}</div></div>
+        <div class="stat"><div class="num" style="font-size: 1.2rem; padding-top: 0.4rem;">{usageSnapshot.busiestDay[lang]}</div><div class="mono">{lang === 'id' ? 'hari teramai' : 'busiest day'}</div></div>
+      </div>
+      <p class="mono">{usageSnapshot.period[lang]} — {usageSnapshot.note[lang]}</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2 style="margin-bottom: 1rem;">{t(lang, 'park.rules')}</h2>
+      <ul class="entry-list" style="max-width: 640px;">
+        {(lang === 'id'
+          ? [
+              'Hormati antrian — tunggu giliranmu di setiap obstacle.',
+              'Helm untuk pemula dan anak-anak.',
+              'Buang sampah pada tempatnya; ikut kerja bakti bulanan.',
+              'Jangan duduk di coping atau ledge yang sedang dipakai.',
+              'Lihat sekitar sebelum drop-in.',
+            ]
+          : [
+              'Respect the queue — wait your turn at each obstacle.',
+              'Helmets for beginners and kids.',
+              'Bin your trash; join the monthly clean-up.',
+              'Don’t sit on coping or ledges that are in use.',
+              'Look around before you drop in.',
+            ]
+        ).map((rule, i) => (
+          <li><span class="mono">{String(i + 1).padStart(2, '0')}</span><p>{rule}</p></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Base>

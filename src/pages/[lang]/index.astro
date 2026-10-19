@@ -1,0 +1,116 @@
+---
+import Base from '../../layouts/Base.astro';
+import MediaSlot from '../../components/MediaSlot.astro';
+import { languages, t, type Lang } from '../../i18n/ui';
+import { skaters, posts, conditionEntries, usageSnapshot } from '../../data/content';
+
+export function getStaticPaths() {
+  return languages.map((lang) => ({ params: { lang } }));
+}
+const { lang } = Astro.params as { lang: Lang };
+
+const featured = [...skaters].sort((a, b) => b.featuredFrom.localeCompare(a.featuredFrom))[0];
+const latest = [...posts].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3);
+const fmt = (iso: string) =>
+  new Date(iso).toLocaleDateString(lang === 'id' ? 'id-ID' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+
+<Base lang={lang} path="">
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <span class="burst">Est.<br />2026</span>
+      <svg class="scribble" style="bottom: -10px; left: 55%;" width="90" height="110" viewBox="0 0 90 110" aria-hidden="true">
+        <path d="M45 5 C 20 30, 75 45, 50 70 C 35 85, 30 88, 38 98 M28 90 L 38 100 L 48 92" />
+      </svg>
+      <p class="hero-kicker">{lang === 'id' ? 'Skatepark · Jalan Layang Pasupati · Bandung' : 'Skatepark · Pasupati Flyover · Bandung'}</p>
+      <h1 class="hero-title">
+        <span class="line l1">{lang === 'id' ? 'Di Bawah' : 'Under'}</span>
+        {lang === 'en' && <span class="line l2">— the —</span>}
+        <span class="line l3">Pasupati</span>
+      </h1>
+      <p class="hero-tag">{t(lang, 'site.tagline')}</p>
+      <MediaSlot
+        lang={lang}
+        slot={{ kind: 'video', hint: { id: t(lang, 'home.hero.alt'), en: t('en', 'home.hero.alt') } }}
+      />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>{t(lang, 'home.latest')}</h2>
+        <a class="mono" href={`/${lang}/journal`}>{t(lang, 'see.all')} →</a>
+      </div>
+      <div class="grid grid-3">
+        {latest.map((p) => (
+          <article class="card tape">
+            <MediaSlot lang={lang} slot={p.cover} />
+            <p class="meta" style="margin-top: 0.75rem;">
+              <span>{fmt(p.date)}</span>
+              <span>{p.category}</span>
+            </p>
+            <h3>{p.title[lang]}</h3>
+            <p>{p.excerpt[lang]}</p>
+            <a class="mono" href={`/${lang}/journal/${p.slug}`}>{t(lang, 'read.more')} →</a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap grid grid-2" style="align-items: start;">
+      <div>
+        <div class="section-head">
+          <h2>{t(lang, 'home.featured')}</h2>
+          <a class="mono" href={`/${lang}/hall-of-fame`}>{t(lang, 'see.all')} →</a>
+        </div>
+        <article class="card card-accent">
+          <MediaSlot lang={lang} slot={featured.portrait} variant="portrait" />
+          <h3 style="margin-top: 0.75rem;">{featured.alias ? `${featured.name} “${featured.alias}”` : featured.name}</h3>
+          <p class="meta">
+            <span>{featured.crew}</span>
+            <span>{featured.discipline}</span>
+            <span>{t(lang, 'hof.years')}: {featured.yearsSkating}</span>
+          </p>
+          <p>{featured.bio[lang]}</p>
+          <a class="mono" href={`/${lang}/hall-of-fame/${featured.slug}`}>{t(lang, 'read.more')} →</a>
+        </article>
+      </div>
+      <div>
+        <div class="section-head">
+          <h2>{t(lang, 'home.status')}</h2>
+          <a class="mono" href={`/${lang}/the-park`}>{t(lang, 'see.all')} →</a>
+        </div>
+        <div class="stats" style="margin-bottom: 1.25rem;">
+          <div class="stat">
+            <div class="num">{usageSnapshot.avgPerDay}</div>
+            <div class="mono">{lang === 'id' ? 'skater / hari' : 'skaters / day'}</div>
+          </div>
+          <div class="stat">
+            <div class="num" style="font-size: 1.1rem; padding-top: 0.5rem;">{usageSnapshot.peakHours[lang]}</div>
+            <div class="mono">{lang === 'id' ? 'jam ramai' : 'peak hours'}</div>
+          </div>
+        </div>
+        <div class="ledger">
+          <div class="ledger-head">
+            <span>{lang === 'id' ? 'Tgl' : 'Date'}</span>
+            <span>{lang === 'id' ? 'Lokasi' : 'Spot'}</span>
+            <span>Status</span>
+          </div>
+          {conditionEntries.map((c) => (
+            <div class="ledger-row">
+              <span class="ledger-date">{c.date.slice(8)}.{c.date.slice(5, 7)}</span>
+              <div>
+                <span class="ledger-spot">{c.spot[lang]}</span>
+                <p style="font-size: 0.85rem; margin-top: 0.15rem;">{c.note[lang]}</p>
+              </div>
+              <span class={`badge badge-${c.severity} ledger-badge`}>{t(lang, `condition.${c.severity}` as any)}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

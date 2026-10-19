@@ -1,0 +1,39 @@
+---
+import Base from '../../../layouts/Base.astro';
+import MediaSlot from '../../../components/MediaSlot.astro';
+import { languages, t, type Lang } from '../../../i18n/ui';
+import { skaters } from '../../../data/content';
+
+export function getStaticPaths() {
+  return languages.flatMap((lang) => skaters.map((s) => ({ params: { lang, slug: s.slug } })));
+}
+const { lang, slug } = Astro.params as { lang: Lang; slug: string };
+const s = skaters.find((x) => x.slug === slug)!;
+const fmt = (iso: string) =>
+  new Date(iso).toLocaleDateString(lang === 'id' ? 'id-ID' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+
+<Base lang={lang} title={s.name} description={s.bio[lang]} path={`/hall-of-fame/${slug}`}>
+  <section class="section">
+    <div class="wrap">
+      <a class="mono" href={`/${lang}/hall-of-fame`}>← {t(lang, 'hof.title')}</a>
+      <h1 style="margin: 1rem 0 0.25rem;">{s.alias ? `${s.name} “${s.alias}”` : s.name}</h1>
+      <p class="meta">
+        <span>{t(lang, 'hof.crew')}: {s.crew}</span>
+        <span>{t(lang, 'hof.discipline')}: {s.discipline}</span>
+        <span>{t(lang, 'hof.years')}: {s.yearsSkating}</span>
+        <span>{t(lang, 'home.featured')}: {fmt(s.featuredFrom)}</span>
+      </p>
+      <div class="grid grid-2" style="margin-top: 2rem; align-items: start;">
+        <MediaSlot lang={lang} slot={s.portrait} variant="portrait" class="tape" />
+        <div>
+          <h2>{lang === 'id' ? 'Tentang' : 'About'}</h2>
+          <p style="margin: 0.75rem 0 1.5rem;">{s.bio[lang]}</p>
+          <h3>{lang === 'id' ? 'Spot & trik favorit' : 'Favorite spots & tricks'}</h3>
+          <p style="margin: 0.5rem 0 1.5rem;">{s.favorites[lang]}</p>
+          <MediaSlot lang={lang} slot={s.clip} />
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

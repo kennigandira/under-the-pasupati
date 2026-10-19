@@ -1,0 +1,56 @@
+---
+import Base from '../../layouts/Base.astro';
+import { languages, t, type Lang } from '../../i18n/ui';
+
+export function getStaticPaths() {
+  return languages.map((lang) => ({ params: { lang } }));
+}
+const { lang } = Astro.params as { lang: Lang };
+---
+
+<Base lang={lang} title={t(lang, 'nav.about')} path="/about">
+  <section class="section">
+    <div class="wrap" style="max-width: 720px;">
+      <h1>{t(lang, 'nav.about')}</h1>
+      <span class="stamp" style="margin: 1rem 0 2rem; display: inline-block;">{t(lang, 'about.disclaimer')}</span>
+
+      <h2 style="margin-bottom: 0.5rem;">{lang === 'id' ? 'Visi' : 'Vision'}</h2>
+      <p style="margin-bottom: 1.5rem;">
+        {lang === 'id'
+          ? 'Pasupati Skatepark yang aman, terawat, dan diakui sebagai ruang publik berharga bagi Bandung.'
+          : 'A Pasupati Skatepark that is safe, well kept, and recognized as a valued public space for Bandung.'}
+      </p>
+
+      <h2 style="margin-bottom: 0.5rem;">{lang === 'id' ? 'Misi' : 'Mission'}</h2>
+      <ul class="entry-list" style="margin-bottom: 1.5rem;">
+        {(lang === 'id'
+          ? [
+              'Mendokumentasikan taman dan komunitasnya dengan jujur dan konsisten.',
+              'Merayakan para skater yang menghidupkan tempat ini.',
+              'Memberi semua komunitas satu suara bersama.',
+              'Menyediakan informasi faktual yang mendukung kemitraan konstruktif dengan kota.',
+            ]
+          : [
+              'Document the park and its community honestly and consistently.',
+              'Celebrate the skaters who keep the place alive.',
+              'Give all communities a shared voice.',
+              'Provide factual information that supports a constructive partnership with the city.',
+            ]
+        ).map((m) => <li><p>{m}</p></li>)}
+      </ul>
+
+      <h2 style="margin-bottom: 0.5rem;">{lang === 'id' ? 'Kontak' : 'Contact'}</h2>
+      <p>
+        {lang === 'id'
+          ? 'Untuk masukan, nominasi Hall of Fame, koreksi, permintaan penghapusan konten, atau pertanyaan dari pemerintah/mitra — email Kenni:'
+          : 'For feedback, Hall of Fame nominations, corrections, content takedown requests, or government/partner inquiries — email Kenni:'}{' '}
+        <a href="mailto:halo@example.com">halo@example.com</a>
+      </p>
+      <p class="mono" style="margin-top: 1rem;">
+        {lang === 'id'
+          ? 'Semua orang yang tampil di foto/video/profil telah memberi persetujuan. Permintaan penghapusan selalu diproses.'
+          : 'Everyone featured in photos/videos/profiles has given consent. Takedown requests are always honored.'}
+      </p>
+    </div>
+  </section>
+</Base>

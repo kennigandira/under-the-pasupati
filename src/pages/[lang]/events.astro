@@ -1,0 +1,47 @@
+---
+import Base from '../../layouts/Base.astro';
+import MediaSlot from '../../components/MediaSlot.astro';
+import { languages, t, type Lang } from '../../i18n/ui';
+import { events } from '../../data/content';
+
+export function getStaticPaths() {
+  return languages.map((lang) => ({ params: { lang } }));
+}
+const { lang } = Astro.params as { lang: Lang };
+const fmt = (iso: string) =>
+  new Date(iso).toLocaleDateString(lang === 'id' ? 'id-ID' : 'en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+const upcoming = events.filter((e) => !e.past).sort((a, b) => a.date.localeCompare(b.date));
+const past = events.filter((e) => e.past).sort((a, b) => b.date.localeCompare(a.date));
+---
+
+<Base lang={lang} title={t(lang, 'nav.events')} path="/events">
+  <section class="section">
+    <div class="wrap">
+      <h1>{t(lang, 'nav.events')}</h1>
+
+      <h2 style="margin: 2rem 0 1rem;">{t(lang, 'events.upcoming')}</h2>
+      <div class="grid grid-2">
+        {upcoming.map((e) => (
+          <article class="card card-accent tape">
+            <p class="meta"><span>{fmt(e.date)}</span><span>{e.organizer}</span></p>
+            <h3>{e.title[lang]}</h3>
+            <p>{e.description[lang]}</p>
+            <MediaSlot lang={lang} slot={e.photo} />
+          </article>
+        ))}
+      </div>
+
+      <h2 style="margin: 2.5rem 0 1rem;">{t(lang, 'events.past')}</h2>
+      <div class="grid grid-2">
+        {past.map((e) => (
+          <article class="card">
+            <p class="meta"><span>{fmt(e.date)}</span><span>{e.organizer}</span></p>
+            <h3>{e.title[lang]}</h3>
+            <p>{e.description[lang]}</p>
+            <MediaSlot lang={lang} slot={e.photo} />
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>

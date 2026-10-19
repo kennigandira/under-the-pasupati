@@ -1,0 +1,27 @@
+---
+import type { Lang } from '../i18n/ui';
+import { t } from '../i18n/ui';
+import type { MediaSlot } from '../data/content';
+
+interface Props {
+  slot: MediaSlot;
+  lang: Lang;
+  variant?: string; // extra data-kind e.g. 'portrait'
+  mini?: boolean; // ledger-thumb: hint moves to the tooltip, box shrinks
+  class?: string;
+}
+const { slot, lang, variant, mini, class: cls } = Astro.props;
+const hint = slot.hint[lang];
+// The hint doubles as the intended alt text once a real asset replaces this box.
+---
+
+<div
+  class:list={['media-slot', { 'media-mini': mini }, cls]}
+  data-kind={variant ?? slot.kind}
+  role="img"
+  aria-label={hint}
+  title={hint}
+>
+  <span class="media-tag">{t(lang, 'media.placeholder')} · {slot.kind}</span>
+  <span class="media-hint">{hint}</span>
+</div>

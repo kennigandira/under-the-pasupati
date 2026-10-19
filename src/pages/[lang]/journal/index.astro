@@ -1,0 +1,35 @@
+---
+import Base from '../../../layouts/Base.astro';
+import MediaSlot from '../../../components/MediaSlot.astro';
+import { languages, t, type Lang } from '../../../i18n/ui';
+import { posts } from '../../../data/content';
+
+export function getStaticPaths() {
+  return languages.map((lang) => ({ params: { lang } }));
+}
+const { lang } = Astro.params as { lang: Lang };
+const sorted = [...posts].sort((a, b) => b.date.localeCompare(a.date));
+const fmt = (iso: string) =>
+  new Date(iso).toLocaleDateString(lang === 'id' ? 'id-ID' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+
+<Base lang={lang} title={t(lang, 'journal.title')} path="/journal">
+  <section class="section">
+    <div class="wrap">
+      <h1>{t(lang, 'journal.title')}</h1>
+      <div class="grid grid-3" style="margin-top: 2rem;">
+        {sorted.map((p) => (
+          <article class="card tape">
+            <MediaSlot lang={lang} slot={p.cover} />
+            <p class="meta" style="margin-top: 0.75rem;">
+              <span>{fmt(p.date)}</span><span>{p.category}</span><span>{p.author}</span>
+            </p>
+            <h3>{p.title[lang]}</h3>
+            <p>{p.excerpt[lang]}</p>
+            <a class="mono" href={`/${lang}/journal/${p.slug}`}>{t(lang, 'read.more')} →</a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>

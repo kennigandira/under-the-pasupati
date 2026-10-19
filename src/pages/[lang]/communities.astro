@@ -1,0 +1,34 @@
+---
+import Base from '../../layouts/Base.astro';
+import MediaSlot from '../../components/MediaSlot.astro';
+import { languages, t, type Lang } from '../../i18n/ui';
+import { communities } from '../../data/content';
+
+export function getStaticPaths() {
+  return languages.map((lang) => ({ params: { lang } }));
+}
+const { lang } = Astro.params as { lang: Lang };
+---
+
+<Base lang={lang} title={t(lang, 'communities.title')} path="/communities">
+  <section class="section">
+    <div class="wrap">
+      <h1>{t(lang, 'communities.title')}</h1>
+      <p style="max-width: 56ch; margin: 0.75rem 0 2rem;">{t(lang, 'communities.subtitle')}</p>
+      <div class="grid grid-3">
+        {communities.map((c) => (
+          <article class="card" style="text-align: center;">
+            <MediaSlot lang={lang} slot={c.logo} />
+            <h3 style="margin-top: 0.75rem;">{c.name}</h3>
+            <p>{c.intro[lang]}</p>
+            {c.link && (
+              <a class="mono" href={c.link} rel="noopener noreferrer">
+                {new URL(c.link).hostname.replace('www.', '')} ↗
+              </a>
+            )}
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>

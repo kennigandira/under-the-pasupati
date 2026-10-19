@@ -1,0 +1,19 @@
+---
+import Base from '../../layouts/Base.astro';
+import { languages, t, type Lang } from '../../i18n/ui';
+
+export function getStaticPaths() {
+  return languages.map((lang) => ({ params: { lang } }));
+}
+const { lang } = Astro.params as { lang: Lang };
+---
+
+<Base lang={lang} title={t(lang, 'nav.support')} path="/support">
+  <section class="section">
+    <div class="wrap" style="max-width: 640px; text-align: center;">
+      <span class="stamp">{t(lang, 'support.soon')}</span>
+      <h1 style="margin: 1.5rem 0;">{t(lang, 'nav.support')}</h1>
+      <p>{t(lang, 'support.body')}</p>
+    </div>
+  </section>
+</Base>

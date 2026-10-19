@@ -1,0 +1,28 @@
+---
+import Base from '../../../layouts/Base.astro';
+import MediaSlot from '../../../components/MediaSlot.astro';
+import { languages, t, type Lang } from '../../../i18n/ui';
+import { posts } from '../../../data/content';
+
+export function getStaticPaths() {
+  return languages.flatMap((lang) => posts.map((p) => ({ params: { lang, slug: p.slug } })));
+}
+const { lang, slug } = Astro.params as { lang: Lang; slug: string };
+const p = posts.find((x) => x.slug === slug)!;
+const fmt = (iso: string) =>
+  new Date(iso).toLocaleDateString(lang === 'id' ? 'id-ID' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+
+<Base lang={lang} title={p.title[lang]} description={p.excerpt[lang]} path={`/journal/${slug}`}>
+  <article class="section">
+    <div class="wrap" style="max-width: 720px;">
+      <a class="mono" href={`/${lang}/journal`}>← {t(lang, 'journal.title')}</a>
+      <h1 style="margin: 1rem 0 0.5rem;">{p.title[lang]}</h1>
+      <p class="meta"><span>{fmt(p.date)}</span><span>{p.category}</span><span>{p.author}</span></p>
+      <div class="tape" style="margin: 2rem 0;">
+        <MediaSlot lang={lang} slot={p.cover} />
+      </div>
+      {p.body[lang].split('\n\n').map((para) => <p style="margin-bottom: 1.25rem; font-size: 1.05rem;">{para}</p>)}
+    </div>
+  </article>
+</Base>
