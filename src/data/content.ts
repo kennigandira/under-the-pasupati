@@ -554,7 +554,6 @@ export interface LessonProvider {
   age?: number; // published only if the provider wants it shown
   yearsSkating?: number;
   competition?: Local<string>; // competition experience, free text
-  teaches: Local<string>;
   levels: Local<string>;
   area: Local<string>;
   contactKind: 'whatsapp' | 'instagram' | 'email';
@@ -574,7 +573,6 @@ export const lessonProviders: LessonProvider[] = [
       id: 'Juara 2 Bandung Street Series 2024 · Finalis Indo Skate Open 2023',
       en: '2nd place, Bandung Street Series 2024 · Finalist, Indo Skate Open 2023',
     },
-    teaches: { id: 'Dasar street: ollie, push, drop-in', en: 'Street basics: ollie, push, drop-in' },
     levels: { id: 'Pemula & remaja', en: 'Beginners & teens' },
     area: { id: 'Pasupati, Sabtu pagi', en: 'Pasupati, Saturday mornings' },
     contactKind: 'whatsapp',
@@ -595,7 +593,6 @@ export const lessonProviders: LessonProvider[] = [
       id: 'Juara 3 Skena Putri Jam 2025',
       en: '3rd place, Skena Putri Jam 2025',
     },
-    teaches: { id: 'Klinik pemula & anak-anak', en: 'Beginner & kids clinic' },
     levels: { id: 'Anak 6 tahun ke atas, pemula dewasa', en: 'Kids 6+, adult beginners' },
     area: { id: 'Pasupati, Sabtu pagi', en: 'Pasupati, Saturday mornings' },
     contactKind: 'instagram',
@@ -616,7 +613,6 @@ export const lessonProviders: LessonProvider[] = [
       id: 'Juara 1 Bowl Pasupati Open 2018 (Bang Udin)',
       en: '1st place, Bowl, Pasupati Open 2018 (Bang Udin)',
     },
-    teaches: { id: 'Transisi, bowl, dan teknik drop-in', en: 'Transition, bowl, and drop-in technique' },
     levels: { id: 'Menengah ke atas', en: 'Intermediate and up' },
     area: { id: 'Pasupati, sore hari', en: 'Pasupati, afternoons' },
     contactKind: 'whatsapp',

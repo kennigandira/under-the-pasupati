@@ -45,10 +45,9 @@ after the provider agreed in writing. `consentOn` is the date they agreed and is
 printed on the card; leave the entry out until you have it.
 
 Each card shows, in order: name, age, years skating, competition experience,
-what they teach, levels, area, rate, contact and languages. `age`,
-`yearsSkating`, `competition` and `rate` are optional — omit any of them and the
-row simply doesn't render, so a provider can be listed without publishing their
-age or record.
+levels, area, rate, contact and languages. `age`, `yearsSkating`, `competition`
+and `rate` are optional — omit any of them and the row simply doesn't render, so
+a provider can be listed without publishing their age or record.
 
 ### Board rental
 
