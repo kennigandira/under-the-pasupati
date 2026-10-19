@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "deploy": "npm run build && sh -c 'set -a; . ./.env.local; set +a; wrangler pages deploy dist --branch=main'",
+    "deploy:preview": "npm run build && sh -c 'set -a; . ./.env.local; set +a; wrangler pages deploy dist --branch=preview'"
   },
   "dependencies": {
     "astro": "^5.14.1"

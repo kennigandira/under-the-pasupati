@@ -53,15 +53,63 @@ tags: `ok`, `repair`, `hazard`.
 
 Every photo/video/map/logo slot renders a dashed placeholder box whose text says **exactly what asset to shoot and its intended alt text** (bilingual). Replace a `<MediaSlot>` with a real `<img>`/embed when the asset exists; copy the hint into the `alt` attribute. Photos should be black-and-white (the CSS already applies `grayscale(1)` to all images as a safety net).
 
-## Deploy
+## Accounts: three Cloudflare logins
 
-Cloudflare Pages project: **`under-the-pasupati`** (production branch `main`).
-`wrangler.jsonc` points at `dist/`, so no flags are needed locally:
+This machine uses several Cloudflare accounts. Each one gets a named `cf` profile,
+bound to the project folder that owns it, so no command ever needs an account flag.
 
 ```sh
-npm run build
-npx wrangler pages deploy --branch=main     # production
-npx wrangler pages deploy --branch=<name>   # preview alias
+cf auth create <name>                              # one browser approval per account
+cf auth activate <name> <project-dir>              # pin it to that folder
+cf auth list                                       # see bindings
+cf auth whoami                                     # in a folder: confirms the active account
+```
+
+| Account | Profile | Bound to |
+| --- | --- | --- |
+| devkenni.g@gmail.com | `devkenni` | this project |
+| aktivasiatech@gmail.com | `default` | — |
+| sustaindeveloper396@gmail.com | *to add* | — |
+
+`cf` handles account-level work (creating projects, listing resources). It cannot
+deploy Pages — that is Wrangler's job.
+
+### Wrangler has no profiles
+
+`wrangler login` stores **one** global OAuth token, so it is the wrong tool for
+switching accounts. Instead, credentials are per project, in `.env.local`
+(gitignored):
+
+```
+CLOUDFLARE_ACCOUNT_ID=<account id>
+CLOUDFLARE_API_TOKEN=<Pages:Edit token>
+```
+
+`npm run deploy` sources that file before deploying, so this project always hits
+the devkenni account regardless of which account Wrangler is logged into globally.
+Create the token at https://dash.cloudflare.com/profile/api-tokens with
+**Account → Cloudflare Pages → Edit**.
+
+### Setting up another account's project
+
+```sh
+cf auth create sustaindeveloper
+cf auth activate sustaindeveloper /path/to/that/project
+```
+
+Then create `.env.local` there with that account's ID and a Pages:Edit token from
+its dashboard. Nothing global changes, and no project can deploy into the wrong
+account by accident.
+
+## Deploy
+
+Cloudflare Pages project: **`under-the-pasupati`** (production branch `main`),
+owned by the devkenni.g@gmail.com account.
+`wrangler.jsonc` points at `dist/`, so no flags are needed:
+
+```sh
+npm run deploy          # build + production deploy
+npm run deploy:preview  # build + preview alias
 ```
 
 ### CI (GitHub Actions)
@@ -74,14 +122,14 @@ Add these repository secrets (Settings → Secrets and variables → Actions):
 
 | Secret | Value |
 | --- | --- |
-| `CLOUDFLARE_API_TOKEN` | API token with **Cloudflare Pages: Edit** permission |
-| `CLOUDFLARE_ACCOUNT_ID` | `8b416f679a46313c3cf2128b548d45a9` |
+| `CLOUDFLARE_API_TOKEN` | Pages:Edit token from the **devkenni** account |
+| `CLOUDFLARE_ACCOUNT_ID` | `fdfd99f39ae433ab6b17c88f62af0316` |
 
 Without them the deploy step fails; fork PRs skip the deploy step by design.
 
 ### URLs
 
-- Production alias: `https://under-the-pasupati.pages.dev/` (assigns on the first production deploy)
+- Production alias: `https://under-the-pasupati.pages.dev/`
 - Preview: `https://<branch>.under-the-pasupati.pages.dev/`
 
 All routes are directories (`/id/`, `/id/journal/`), so internal links are

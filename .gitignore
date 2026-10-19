@@ -12,7 +12,9 @@ yarn-error.log*
 
 # environment
 .env
-.env.production
+.env.local
+.env.*.local
+.dev.vars
 
 # macOS
 .DS_Store
