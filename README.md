@@ -23,7 +23,7 @@ All content lives in `src/data/content.ts` (stub for the future Directus collect
 | `events`        | `EventItem`        | Events page (split by `past`)  |
 | `conditionEntries` | `ConditionEntry`| The Park + Home status         |
 | `obstacles`     | `Obstacle`         | The Park obstacle gallery      |
-| `lessonProviders` | `LessonProvider` | Home instructors section       |
+| `lessonProviders` | `LessonProvider` | Home instructors section + `/coaches/<slug>` |
 | `boardRental`   | `{ label, title, body, note, cta }` | Home rental callout + FAQ |
 | `faqs`          | `{ q, a }`         | Home FAQ                       |
 | `aboutSlides`   | `MediaSlot[]`      | Home about carousel            |
@@ -48,6 +48,18 @@ Each card shows, in order: name, age, years skating, competition experience,
 levels, area, rate, contact and languages. `age`, `yearsSkating`, `competition`
 and `rate` are optional — omit any of them and the row simply doesn't render, so
 a provider can be listed without publishing their age or record.
+
+### Coach detail pages
+
+Every provider gets `/coaches/<slug>` (both languages) with their portrait, the
+full fact ledger, contact, and **two videos**:
+
+- `trainingVideo` — footage of them teaching a session
+- `trickVideo` — footage of them skating: a line or signature trick
+
+Both are required fields; each carries its own bilingual shooting brief. The
+cards on Home link through via *Lihat profil lengkap →*. Adding a provider
+automatically creates their page at build time.
 
 ### Board rental
 

@@ -219,6 +219,9 @@ const fmt = (iso: string) =>
                 {p.contactKind === 'whatsapp' ? 'WhatsApp' : p.contactKind === 'instagram' ? 'Instagram' : 'Email'} ↗
               </a>
             </p>
+            <p style="margin-top: 0.6rem;">
+              <a class="mono" href={localeHref(lang, `/coaches/${p.slug}`)}>{t(lang, 'coach.viewProfile')} →</a>
+            </p>
             <p class="mono" style="margin-top: 0.4rem;">{p.languages.join(' · ')}</p>
             <span class="consent-note">{t(lang, 'home.lessons.consent')}: {fmt(p.consentOn)}</span>
           </article>

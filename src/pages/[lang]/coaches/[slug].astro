@@ -1,0 +1,100 @@
+---
+import Base from '../../../layouts/Base.astro';
+import MediaSlot from '../../../components/MediaSlot.astro';
+import { languages, localeHref, t, type Lang } from '../../../i18n/ui';
+import { lessonProviders } from '../../../data/content';
+
+export function getStaticPaths() {
+  return languages.flatMap((lang) => lessonProviders.map((p) => ({ params: { lang, slug: p.slug } })));
+}
+const { lang, slug } = Astro.params as { lang: Lang; slug: string };
+const coach = lessonProviders.find((p) => p.slug === slug)!;
+const fmt = (iso: string) =>
+  new Date(iso).toLocaleDateString(lang === 'id' ? 'id-ID' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+const contactHref =
+  coach.contactKind === 'whatsapp'
+    ? `https://wa.me/${coach.contact.replace(/[^0-9]/g, '')}`
+    : coach.contactKind === 'instagram'
+      ? `https://${coach.contact}`
+      : `mailto:${coach.contact}`;
+const contactLabel =
+  coach.contactKind === 'whatsapp' ? 'WhatsApp' : coach.contactKind === 'instagram' ? 'Instagram' : 'Email';
+---
+
+<Base lang={lang} title={coach.name} description={coach.levels[lang]} path={`/coaches/${slug}`}>
+  <section class="section">
+    <div class="wrap">
+      <a class="mono" href={localeHref(lang, '')}>← {t(lang, 'home.lessons.title')}</a>
+
+      <div class="grid grid-2" style="margin-top: 1.5rem; align-items: start;">
+        <MediaSlot lang={lang} slot={coach.portrait} variant="portrait" class="tape" />
+
+        <div>
+          <span class="stamp">{t(lang, 'coach.profile')}</span>
+          <h1 style="margin: 0.75rem 0 0.5rem;">{coach.name}</h1>
+          <p class="meta">
+            <span>{coach.levels[lang]}</span>
+            <span>{coach.area[lang]}</span>
+          </p>
+
+          <dl class="coach-facts">
+            {coach.age !== undefined && (
+              <div>
+                <dt>{t(lang, 'coach.age')}</dt>
+                <dd>{coach.age}</dd>
+              </div>
+            )}
+            {coach.yearsSkating !== undefined && (
+              <div>
+                <dt>{t(lang, 'hof.years')}</dt>
+                <dd>{coach.yearsSkating}</dd>
+              </div>
+            )}
+            {coach.competition && (
+              <div>
+                <dt>{t(lang, 'coach.competition')}</dt>
+                <dd>{coach.competition[lang]}</dd>
+              </div>
+            )}
+            {coach.rate && (
+              <div>
+                <dt>{lang === 'id' ? 'Tarif' : 'Rate'}</dt>
+                <dd>{coach.rate[lang]}</dd>
+              </div>
+            )}
+            <div>
+              <dt>{lang === 'id' ? 'Bahasa' : 'Languages'}</dt>
+              <dd>{coach.languages.join(' · ')}</dd>
+            </div>
+          </dl>
+
+          <p style="margin: 1rem 0;">
+            <a class="contact-pill" href={contactHref} rel="noopener noreferrer">
+              {t(lang, 'coach.contact')}: {contactLabel} ↗
+            </a>
+          </p>
+          <span class="consent-note">
+            {t(lang, 'home.lessons.consent')}: {fmt(coach.consentOn)}
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2 style="margin-bottom: 0.5rem;">{t(lang, 'coach.videoTraining')}</h2>
+      <p class="mono" style="margin-bottom: 1rem;">{t(lang, 'coach.videoTraining.note')}</p>
+      <MediaSlot lang={lang} slot={coach.trainingVideo} />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2 style="margin-bottom: 0.5rem;">{t(lang, 'coach.videoTrick')}</h2>
+      <p class="mono" style="margin-bottom: 1rem;">{t(lang, 'coach.videoTrick.note')}</p>
+      <MediaSlot lang={lang} slot={coach.trickVideo} />
+    </div>
+  </section>
+</Base>

@@ -550,6 +550,7 @@ export const obstacles: Obstacle[] = [
 // Lesson providers. Optional listing on Home — contact details are published
 // ONLY with the provider's explicit consent (see consentOn).
 export interface LessonProvider {
+  slug: string;
   name: string;
   age?: number; // published only if the provider wants it shown
   yearsSkating?: number;
@@ -562,10 +563,13 @@ export interface LessonProvider {
   rate?: Local<string>;
   consentOn: string;
   portrait: MediaSlot;
+  trainingVideo: MediaSlot; // coaching a session
+  trickVideo: MediaSlot; // their own riding
 }
 
 export const lessonProviders: LessonProvider[] = [
   {
+    slug: 'raka-jr',
     name: 'Raka “JR” Pratama',
     age: 31,
     yearsSkating: 9,
@@ -584,8 +588,23 @@ export const lessonProviders: LessonProvider[] = [
       kind: 'photo',
       hint: { id: 'FOTO: JR sedang mengajar, hitam-putih', en: 'PHOTO: JR mid-lesson, black and white' },
     },
+    trainingVideo: {
+      kind: 'video',
+      hint: {
+        id: 'VIDEO: sesi mengajar — JR mengoreksi posisi kaki pemula, 30–60 detik, rekaman HP cukup',
+        en: 'VIDEO: teaching session — JR correcting a beginner’s foot placement, 30–60 seconds, phone footage is fine',
+      },
+    },
+    trickVideo: {
+      kind: 'video',
+      hint: {
+        id: 'VIDEO: trik andalan JR — satu line bersih, boleh dari dua sudut, 15–30 detik',
+        en: 'VIDEO: JR’s signature trick — one clean line, two angles if possible, 15–30 seconds',
+      },
+    },
   },
   {
+    slug: 'sinta-maheswari',
     name: 'Sinta Maheswari',
     age: 24,
     yearsSkating: 4,
@@ -604,8 +623,23 @@ export const lessonProviders: LessonProvider[] = [
       kind: 'photo',
       hint: { id: 'FOTO: klinik pemula Sabtu, anak-anak dengan papan', en: 'PHOTO: Saturday beginner clinic, kids with boards' },
     },
+    trainingVideo: {
+      kind: 'video',
+      hint: {
+        id: 'VIDEO: sesi mengajar — Sinta memandu anak-anak pemula, 30–60 detik',
+        en: 'VIDEO: teaching session — Sinta guiding beginner kids, 30–60 seconds',
+      },
+    },
+    trickVideo: {
+      kind: 'video',
+      hint: {
+        id: 'VIDEO: trik andalan Sinta — satu line bersih di flatground atau bank',
+        en: 'VIDEO: Sinta’s signature trick — one clean line on the flatground or bank',
+      },
+    },
   },
   {
+    slug: 'pasupati-old-school',
     name: 'Pasupati Old School',
     age: 39,
     yearsSkating: 18,
@@ -622,6 +656,20 @@ export const lessonProviders: LessonProvider[] = [
     portrait: {
       kind: 'photo',
       hint: { id: 'FOTO: sesi transisi bersama senior', en: 'PHOTO: transition session with the seniors' },
+    },
+    trainingVideo: {
+      kind: 'video',
+      hint: {
+        id: 'VIDEO: sesi mengajar — pendampingan drop-in pertama seorang pemula, 30–60 detik',
+        en: 'VIDEO: teaching session — walking a beginner through their first drop-in, 30–60 seconds',
+      },
+    },
+    trickVideo: {
+      kind: 'video',
+      hint: {
+        id: 'VIDEO: trik andalan — run bowl atau line transisi, 15–30 detik',
+        en: 'VIDEO: signature riding — a bowl run or transition line, 15–30 seconds',
+      },
     },
   },
 ];
