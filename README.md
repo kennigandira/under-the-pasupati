@@ -24,6 +24,7 @@ All content lives in `src/data/content.ts` (stub for the future Directus collect
 | `conditionEntries` | `ConditionEntry`| The Park + Home status         |
 | `obstacles`     | `Obstacle`         | The Park obstacle gallery      |
 | `lessonProviders` | `LessonProvider` | Home instructors section       |
+| `boardRental`   | `{ label, title, body, note, cta }` | Home rental callout + FAQ |
 | `faqs`          | `{ q, a }`         | Home FAQ                       |
 | `aboutSlides`   | `MediaSlot[]`      | Home about carousel            |
 | `usageSnapshot`, `timeline`, `parkMapSlot` | — | The Park |
@@ -48,6 +49,14 @@ what they teach, levels, area, rate, contact and languages. `age`,
 `yearsSkating`, `competition` and `rate` are optional — omit any of them and the
 row simply doesn't render, so a provider can be listed without publishing their
 age or record.
+
+### Board rental
+
+The rental offer (boards to rent, plus a buddy for first-timers) lives in
+`boardRental` — one highlighted callout at the top of the instructors section,
+and two FAQ entries that point at it. Its CTA links to the contact route on
+`/about`; keep that contact address current, since it is where rental and
+listing requests land.
 
 ### Obstacle gallery
 

@@ -739,6 +739,31 @@ main { flex: 1; padding-bottom: 4rem; }
 }
 
 /* ---- Instructor / provider cards ---- */
+/* ---- Rental callout: highlighted sticker inside the instructors section ---- */
+.rental-callout {
+  background: #fff4ec;
+  border: 2px dashed var(--accent);
+  border-radius: 12px;
+  box-shadow: 5px 6px 0 var(--accent);
+  padding: 1.15rem;
+  margin: 0 0 1.75rem 0;
+  display: grid;
+  gap: 1rem;
+  transform: rotate(-0.4deg);
+}
+.rental-callout h3 { font-size: 1.3rem; }
+.rental-callout .btn { transform: rotate(0deg); }
+@media (min-width: 760px) {
+  .rental-callout {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    padding: 1.5rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rental-callout { transform: none; }
+}
+
 /* ---- Coach facts: mini ledger inside instructor cards ---- */
 .coach-facts {
   display: grid;

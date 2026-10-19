@@ -630,6 +630,22 @@ export const lessonProviders: LessonProvider[] = [
   },
 ];
 
+// Board rental + optional buddy. Surfaced as a callout in the instructors
+// section on Home and as FAQ entries, so newcomers find it either way.
+export const boardRental = {
+  label: { id: 'Sewa Papan', en: 'Board Rental' },
+  title: { id: 'Sewa papan & pendamping', en: 'Board rental & a buddy' },
+  body: {
+    id: 'Kita sedia sewa papan. Semisal butuh pendamping saat pertama kali mencoba, kita sedia juga.',
+    en: 'We rent boards out. And if you want someone beside you the first time, we can provide a buddy too.',
+  },
+  note: {
+    id: 'Tidak perlu beli papan dulu. Sewa ini ada untuk yang masih penasaran dan ingin coba-coba.',
+    en: 'No need to buy a board first. The rental exists for people who are curious and want to try it out.',
+  },
+  cta: { id: 'Tanya soal sewa', en: 'Ask about rentals' },
+};
+
 // FAQ — shown on Home.
 export const faqs: { q: Local<string>; a: Local<string> }[] = [
   {
@@ -637,6 +653,20 @@ export const faqs: { q: Local<string>; a: Local<string> }[] = [
     a: {
       id: 'Di kolong jalan layang Pasupati, Bandung. Gratis dan terbuka untuk umum — tidak ada tiket atau jam buka resmi.',
       en: 'Under the Pasupati flyover, Bandung. Free and open to the public — no ticket, no official opening hours.',
+    },
+  },
+  {
+    q: { id: 'Apakah bisa sewa papan?', en: 'Can I rent a board?' },
+    a: {
+      id: 'Bisa. Kita sedia sewa papan juga, dan semisal butuh pendamping saat mencoba, kita sedia juga.',
+      en: 'Yes. We rent boards out, and if you want someone with you while you try it, we can provide a buddy too.',
+    },
+  },
+  {
+    q: { id: 'Kenapa kita menyediakan sewa papan?', en: 'Why do you rent boards out?' },
+    a: {
+      id: 'Karena banyak orang yang penasaran main skateboard, tapi belum mampu untuk beli papan. Makanya kita sedia sewa papan supaya bisa coba-coba dulu.',
+      en: 'Because plenty of people are curious about skateboarding but can’t afford to buy a board yet. Renting lets them try it out first.',
     },
   },
   {

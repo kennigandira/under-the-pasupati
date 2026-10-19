@@ -9,6 +9,7 @@ import {
   usageSnapshot,
   aboutSlides,
   lessonProviders,
+  boardRental,
   faqs,
 } from '../../data/content';
 
@@ -161,6 +162,18 @@ const fmt = (iso: string) =>
         <a class="mono" href={localeHref(lang, '/about')}>{t(lang, 'home.lessons.cta')} →</a>
       </div>
       <p style="max-width: 60ch; margin-bottom: 1.5rem;">{t(lang, 'home.lessons.body')}</p>
+
+      <div class="rental-callout">
+        <div>
+          <span class="stamp">{boardRental.label[lang]}</span>
+          <h3 style="margin-top: 0.6rem;">{boardRental.title[lang]}</h3>
+          <p style="margin-top: 0.4rem;">{boardRental.body[lang]}</p>
+          <p class="mono" style="margin-top: 0.5rem;">{boardRental.note[lang]}</p>
+        </div>
+        <p>
+          <a class="btn" href={localeHref(lang, '/about')}>{boardRental.cta[lang]} →</a>
+        </p>
+      </div>
       <div class="grid grid-3">
         {lessonProviders.map((p) => (
           <article class="card">
