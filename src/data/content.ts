@@ -551,6 +551,9 @@ export const obstacles: Obstacle[] = [
 // ONLY with the provider's explicit consent (see consentOn).
 export interface LessonProvider {
   name: string;
+  age?: number; // published only if the provider wants it shown
+  yearsSkating?: number;
+  competition?: Local<string>; // competition experience, free text
   teaches: Local<string>;
   levels: Local<string>;
   area: Local<string>;
@@ -565,6 +568,12 @@ export interface LessonProvider {
 export const lessonProviders: LessonProvider[] = [
   {
     name: 'Raka “JR” Pratama',
+    age: 31,
+    yearsSkating: 9,
+    competition: {
+      id: 'Juara 2 Bandung Street Series 2024 · Finalis Indo Skate Open 2023',
+      en: '2nd place, Bandung Street Series 2024 · Finalist, Indo Skate Open 2023',
+    },
     teaches: { id: 'Dasar street: ollie, push, drop-in', en: 'Street basics: ollie, push, drop-in' },
     levels: { id: 'Pemula & remaja', en: 'Beginners & teens' },
     area: { id: 'Pasupati, Sabtu pagi', en: 'Pasupati, Saturday mornings' },
@@ -580,6 +589,12 @@ export const lessonProviders: LessonProvider[] = [
   },
   {
     name: 'Sinta Maheswari',
+    age: 24,
+    yearsSkating: 4,
+    competition: {
+      id: 'Juara 3 Skena Putri Jam 2025',
+      en: '3rd place, Skena Putri Jam 2025',
+    },
     teaches: { id: 'Klinik pemula & anak-anak', en: 'Beginner & kids clinic' },
     levels: { id: 'Anak 6 tahun ke atas, pemula dewasa', en: 'Kids 6+, adult beginners' },
     area: { id: 'Pasupati, Sabtu pagi', en: 'Pasupati, Saturday mornings' },
@@ -595,6 +610,12 @@ export const lessonProviders: LessonProvider[] = [
   },
   {
     name: 'Pasupati Old School',
+    age: 39,
+    yearsSkating: 18,
+    competition: {
+      id: 'Juara 1 Bowl Pasupati Open 2018 (Bang Udin)',
+      en: '1st place, Bowl, Pasupati Open 2018 (Bang Udin)',
+    },
     teaches: { id: 'Transisi, bowl, dan teknik drop-in', en: 'Transition, bowl, and drop-in technique' },
     levels: { id: 'Menengah ke atas', en: 'Intermediate and up' },
     area: { id: 'Pasupati, sore hari', en: 'Pasupati, afternoons' },

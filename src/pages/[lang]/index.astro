@@ -170,6 +170,26 @@ const fmt = (iso: string) =>
               <span>{p.levels[lang]}</span>
               <span>{p.area[lang]}</span>
             </p>
+            <dl class="coach-facts">
+              {p.age !== undefined && (
+                <div>
+                  <dt>{t(lang, 'coach.age')}</dt>
+                  <dd>{p.age}</dd>
+                </div>
+              )}
+              {p.yearsSkating !== undefined && (
+                <div>
+                  <dt>{t(lang, 'hof.years')}</dt>
+                  <dd>{p.yearsSkating}</dd>
+                </div>
+              )}
+              {p.competition && (
+                <div>
+                  <dt>{t(lang, 'coach.competition')}</dt>
+                  <dd>{p.competition[lang]}</dd>
+                </div>
+              )}
+            </dl>
             <p>{p.teaches[lang]}</p>
             {p.rate && <p class="mono" style="margin-top: 0.35rem;">{p.rate[lang]}</p>}
             <p style="margin-top: 0.85rem;">

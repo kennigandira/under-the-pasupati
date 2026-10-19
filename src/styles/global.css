@@ -739,6 +739,32 @@ main { flex: 1; padding-bottom: 4rem; }
 }
 
 /* ---- Instructor / provider cards ---- */
+/* ---- Coach facts: mini ledger inside instructor cards ---- */
+.coach-facts {
+  display: grid;
+  gap: 0;
+  margin: 0.5rem 0 0.75rem;
+  border-top: 2px dashed rgba(16, 16, 16, 0.3);
+}
+.coach-facts > div {
+  display: grid;
+  grid-template-columns: 45% 1fr;
+  gap: 0.5rem;
+  padding: 0.35rem 0;
+  border-bottom: 1px dashed rgba(16, 16, 16, 0.18);
+  align-items: baseline;
+}
+.coach-facts > div:last-child { border-bottom: 0; }
+.coach-facts dt {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+.coach-facts dd { font-size: 0.85rem; margin: 0; }
+
 .contact-pill {
   display: inline-flex;
   align-items: center;
