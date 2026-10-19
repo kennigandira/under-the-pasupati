@@ -410,3 +410,254 @@ export const parkMapSlot: MediaSlot = {
     en: 'MAP: illustrated park layout — pillars, ledges, banks, quarter pipe, flatground; mark condition issue spots',
   },
 };
+
+// Slides for the "about this site" carousel on Home.
+export const aboutSlides: MediaSlot[] = [
+  {
+    kind: 'photo',
+    hint: {
+      id: 'SLIDE 1: foto lebar taman dari atas jalan layang, hitam-putih',
+      en: 'SLIDE 1: wide shot of the park from the flyover, black and white',
+    },
+  },
+  {
+    kind: 'photo',
+    hint: {
+      id: 'SLIDE 2: kerja bakti — orang menyapu flatground, candid',
+      en: 'SLIDE 2: clean-up day — people sweeping the flatground, candid',
+    },
+  },
+  {
+    kind: 'photo',
+    hint: {
+      id: 'SLIDE 3: sesi pemula Sabtu pagi, anak-anak dengan helm',
+      en: 'SLIDE 3: Saturday beginner session, kids wearing helmets',
+    },
+  },
+  {
+    kind: 'photo',
+    hint: {
+      id: 'SLIDE 4: sesi malam di bawah lampu jalan layang',
+      en: 'SLIDE 4: night session under the flyover lights',
+    },
+  },
+];
+
+// Obstacles: used by the gallery on The Park page.
+export interface Obstacle {
+  slug: string;
+  name: Local<string>;
+  type: Local<string>;
+  note: Local<string>;
+  condition?: Severity;
+  lastChecked: string;
+  photo: MediaSlot;
+}
+
+export const obstacles: Obstacle[] = [
+  {
+    slug: 'ledge-barat',
+    name: { id: 'Ledge Barat', en: 'West Ledge' },
+    type: { id: 'Ledge', en: 'Ledge' },
+    note: {
+      id: 'Ledge beton panjang ±12 m, tinggi sedang. Spot paling ramai saat sore.',
+      en: 'Long concrete ledge, roughly 12 m, medium height. Busiest spot in the afternoon.',
+    },
+    condition: 'ok',
+    lastChecked: '2026-10-08',
+    photo: {
+      kind: 'photo',
+      hint: { id: 'FOTO: ledge barat dari samping, sertakan skater untuk skala', en: 'PHOTO: west ledge from the side, include a skater for scale' },
+    },
+  },
+  {
+    slug: 'bank-timur',
+    name: { id: 'Bank Timur', en: 'East Bank' },
+    type: { id: 'Bank / Transisi', en: 'Bank / Transition' },
+    note: {
+      id: 'Transisi landai menuju pilar. Ada retakan yang melebar sejak Oktober.',
+      en: 'Gentle transition into the pillar. Has a crack that has been widening since October.',
+    },
+    condition: 'hazard',
+    lastChecked: '2026-10-08',
+    photo: {
+      kind: 'photo',
+      hint: { id: 'FOTO: bank timur wide + close-up retakan', en: 'PHOTO: wide shot of the east bank + close-up of the crack' },
+    },
+  },
+  {
+    slug: 'manual-pad-pilar-4',
+    name: { id: 'Manual Pad Pilar 4', en: 'Manual Pad, Pillar 4' },
+    type: { id: 'Manual pad', en: 'Manual pad' },
+    note: {
+      id: 'Pad rendah di kaki pilar 4. Coping mulai longgar.',
+      en: 'Low pad at the base of pillar 4. The coping is starting to loosen.',
+    },
+    condition: 'repair',
+    lastChecked: '2026-10-08',
+    photo: {
+      kind: 'photo',
+      hint: { id: 'FOTO: manual pad pilar 4, tunjukkan coping', en: 'PHOTO: manual pad at pillar 4, show the coping' },
+    },
+  },
+  {
+    slug: 'quarter-pipe',
+    name: { id: 'Quarter Pipe', en: 'Quarter Pipe' },
+    type: { id: 'Transition', en: 'Transition' },
+    note: {
+      id: 'Transisi terbesar di taman, menghadap ke utara. Permukaan masih mulus.',
+      en: 'The park’s biggest transition, facing north. Surface is still smooth.',
+    },
+    condition: 'ok',
+    lastChecked: '2026-10-08',
+    photo: {
+      kind: 'photo',
+      hint: { id: 'FOTO: quarter pipe, sudut rendah dari bawah', en: 'PHOTO: quarter pipe, low angle from the bottom' },
+    },
+  },
+  {
+    slug: 'flatground-tengah',
+    name: { id: 'Flatground Tengah', en: 'Center Flatground' },
+    type: { id: 'Flatground', en: 'Flatground' },
+    note: {
+      id: 'Area datar utama untuk warm-up. Dibersihkan tiap kerja bakti bulanan.',
+      en: 'Main flat area for warm-ups. Swept at every monthly clean-up.',
+    },
+    condition: 'ok',
+    lastChecked: '2026-10-08',
+    photo: {
+      kind: 'photo',
+      hint: { id: 'FOTO: flatground tengah, wide shot dari ujung timur', en: 'PHOTO: center flatground, wide shot from the east end' },
+    },
+  },
+  {
+    slug: 'bowl-corner',
+    name: { id: 'Bowl Corner', en: 'Bowl Corner' },
+    type: { id: 'Bowl', en: 'Bowl' },
+    note: {
+      id: 'Sudut bowl dengan coping paling tebal. Favorit para senior.',
+      en: 'Bowl corner with the thickest coping. A senior favourite.',
+    },
+    condition: 'ok',
+    lastChecked: '2026-10-08',
+    photo: {
+      kind: 'photo',
+      hint: { id: 'FOTO: bowl corner, tunjukkan coping dan dinding', en: 'PHOTO: bowl corner, show the coping and the wall' },
+    },
+  },
+];
+
+// Lesson providers. Optional listing on Home — contact details are published
+// ONLY with the provider's explicit consent (see consentOn).
+export interface LessonProvider {
+  name: string;
+  teaches: Local<string>;
+  levels: Local<string>;
+  area: Local<string>;
+  contactKind: 'whatsapp' | 'instagram' | 'email';
+  contact: string;
+  languages: string[];
+  rate?: Local<string>;
+  consentOn: string;
+  portrait: MediaSlot;
+}
+
+export const lessonProviders: LessonProvider[] = [
+  {
+    name: 'Raka “JR” Pratama',
+    teaches: { id: 'Dasar street: ollie, push, drop-in', en: 'Street basics: ollie, push, drop-in' },
+    levels: { id: 'Pemula & remaja', en: 'Beginners & teens' },
+    area: { id: 'Pasupati, Sabtu pagi', en: 'Pasupati, Saturday mornings' },
+    contactKind: 'whatsapp',
+    contact: '+62 812-0000-0000',
+    languages: ['id', 'en'],
+    rate: { id: 'Sukarela / negotiable', en: 'Sliding scale / negotiable' },
+    consentOn: '2026-10-01',
+    portrait: {
+      kind: 'photo',
+      hint: { id: 'FOTO: JR sedang mengajar, hitam-putih', en: 'PHOTO: JR mid-lesson, black and white' },
+    },
+  },
+  {
+    name: 'Sinta Maheswari',
+    teaches: { id: 'Klinik pemula & anak-anak', en: 'Beginner & kids clinic' },
+    levels: { id: 'Anak 6 tahun ke atas, pemula dewasa', en: 'Kids 6+, adult beginners' },
+    area: { id: 'Pasupati, Sabtu pagi', en: 'Pasupati, Saturday mornings' },
+    contactKind: 'instagram',
+    contact: 'instagram.com/skenaputri',
+    languages: ['id'],
+    rate: { id: 'Gratis untuk pemula', en: 'Free for beginners' },
+    consentOn: '2026-09-20',
+    portrait: {
+      kind: 'photo',
+      hint: { id: 'FOTO: klinik pemula Sabtu, anak-anak dengan papan', en: 'PHOTO: Saturday beginner clinic, kids with boards' },
+    },
+  },
+  {
+    name: 'Pasupati Old School',
+    teaches: { id: 'Transisi, bowl, dan teknik drop-in', en: 'Transition, bowl, and drop-in technique' },
+    levels: { id: 'Menengah ke atas', en: 'Intermediate and up' },
+    area: { id: 'Pasupati, sore hari', en: 'Pasupati, afternoons' },
+    contactKind: 'whatsapp',
+    contact: '+62 813-0000-0000',
+    languages: ['id'],
+    consentOn: '2026-09-05',
+    portrait: {
+      kind: 'photo',
+      hint: { id: 'FOTO: sesi transisi bersama senior', en: 'PHOTO: transition session with the seniors' },
+    },
+  },
+];
+
+// FAQ — shown on Home.
+export const faqs: { q: Local<string>; a: Local<string> }[] = [
+  {
+    q: { id: 'Di mana lokasinya dan apakah gratis?', en: 'Where is it, and is it free?' },
+    a: {
+      id: 'Di kolong jalan layang Pasupati, Bandung. Gratis dan terbuka untuk umum — tidak ada tiket atau jam buka resmi.',
+      en: 'Under the Pasupati flyover, Bandung. Free and open to the public — no ticket, no official opening hours.',
+    },
+  },
+  {
+    q: { id: 'Kapan waktu terbaik untuk pemula?', en: 'When is the best time for beginners?' },
+    a: {
+      id: 'Pagi hari, sekitar 07.00–10.00, saat taman masih lengang. Jam tersibuk adalah 16.00–18.30, terutama Sabtu.',
+      en: 'Mornings, roughly 7–10 AM, while the park is still quiet. The busiest window is 4:00–6:30 PM, especially Saturday.',
+    },
+  },
+  {
+    q: { id: 'Apakah harus memakai helm?', en: 'Is a helmet required?' },
+    a: {
+      id: 'Tidak ada aturan resmi, tetapi kami mendorong helm untuk pemula dan semua anak di bawah 18 tahun.',
+      en: 'There is no official rule, but we encourage helmets for beginners and everyone under 18.',
+    },
+  },
+  {
+    q: { id: 'Bagaimana kalau ada obstacle yang rusak?', en: 'What if an obstacle is damaged?' },
+    a: {
+      id: 'Kirim foto dan lokasinya lewat halaman Tentang. Catatan bertanggal seperti itu masuk ke catatan kondisi taman.',
+      en: 'Send a photo and location via the About page. Dated entries like that go straight into the park condition record.',
+    },
+  },
+  {
+    q: { id: 'Dari mana angka penggunaan taman berasal?', en: 'Where do the usage numbers come from?' },
+    a: {
+      id: 'Dihitung manual tiga kali sehari selama beberapa minggu, lalu dirata-ratakan. Semuanya agregat — tidak ada data pribadi.',
+      en: 'Counted by hand three times a day over several weeks, then averaged. All aggregated — no personal data.',
+    },
+  },
+  {
+    q: { id: 'Saya mau mengajar skateboard. Bagaimana caranya?', en: 'I want to teach skateboarding. How?' },
+    a: {
+      id: 'Hubungi kami lewat halaman Tentang dengan kontak yang ingin dipublikasikan dan tanggal mulai. Kami hanya mencantumkan kontak setelah ada persetujuan tertulis.',
+      en: 'Reach out via the About page with the contact details you want published and a start date. Contacts are listed only after written consent.',
+    },
+  },
+  {
+    q: { id: 'Apakah situs ini milik pemerintah?', en: 'Is this site run by the government?' },
+    a: {
+      id: 'Bukan. Ini proyek komunitas independen oleh salah satu reguler taman, dibuat agar catatan publik tersedia untuk semua pihak.',
+      en: 'No. It is an independent community project by one of the park regulars, built so a public record exists for everyone.',
+    },
+  },
+];

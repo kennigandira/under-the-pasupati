@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import MediaSlot from '../../components/MediaSlot.astro';
 import { languages, t, type Lang } from '../../i18n/ui';
-import { conditionEntries, usageSnapshot, timeline, parkMapSlot } from '../../data/content';
+import { conditionEntries, usageSnapshot, timeline, parkMapSlot, obstacles } from '../../data/content';
 
 export function getStaticPaths() {
   return languages.map((lang) => ({ params: { lang } }));
@@ -42,6 +42,31 @@ const { lang } = Astro.params as { lang: Lang };
     <div class="wrap">
       <h2 style="margin-bottom: 1rem;">{t(lang, 'park.map')}</h2>
       <MediaSlot lang={lang} slot={parkMapSlot} />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>{t(lang, 'park.gallery')}</h2>
+      </div>
+      <p class="mono" style="margin-bottom: 1.5rem;">{t(lang, 'park.gallery.note')}</p>
+      <div class="grid grid-3">
+        {obstacles.map((o) => (
+          <article class="card tape">
+            <span class="obstacle-type">{o.type[lang]}</span>
+            <div style="margin-top: 0.6rem;">
+              <MediaSlot lang={lang} slot={o.photo} />
+            </div>
+            <h3 style="margin-top: 0.75rem;">{o.name[lang]}</h3>
+            <p>{o.note[lang]}</p>
+            <p class="meta" style="margin-top: 0.5rem;">
+              {o.condition && <span class={`badge badge-${o.condition}`}>{t(lang, `condition.${o.condition}` as any)}</span>}
+              <span>{t(lang, 'park.lastChecked')}: {o.lastChecked}</span>
+            </p>
+          </article>
+        ))}
+      </div>
     </div>
   </section>
 

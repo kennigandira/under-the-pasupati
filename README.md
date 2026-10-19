@@ -17,12 +17,37 @@ All content lives in `src/data/content.ts` (stub for the future Directus collect
 
 | Collection      | Content model      | Used by                        |
 | --------------- | ------------------ | ------------------------------ |
-| `skaters`       | `Skater`           | Hall of Fame + Home featured   |
+| `skaters`       | `Skater`           | Hall of Fame + Home skater of the month |
 | `posts`         | `Post`             | Journal + Home latest          |
 | `communities`   | `Community`        | Communities page               |
 | `events`        | `EventItem`        | Events page (split by `past`)  |
 | `conditionEntries` | `ConditionEntry`| The Park + Home status         |
+| `obstacles`     | `Obstacle`         | The Park obstacle gallery      |
+| `lessonProviders` | `LessonProvider` | Home instructors section       |
+| `faqs`          | `{ q, a }`         | Home FAQ                       |
+| `aboutSlides`   | `MediaSlot[]`      | Home about carousel            |
 | `usageSnapshot`, `timeline`, `parkMapSlot` | — | The Park |
+
+### Home section order
+
+1. Hero
+2. About this site — carousel (`aboutSlides`) + excerpt + link to `/about`
+3. Skater of the month (newest `featuredFrom`) alongside the park condition ledger
+4. Journal — 3 latest posts
+5. Skateboard instructors (`lessonProviders`)
+6. FAQ (`faqs`)
+
+### Publishing an instructor
+
+Append a `LessonProvider` to `lessonProviders` in `src/data/content.ts` and only
+after the provider agreed in writing. `consentOn` is the date they agreed and is
+printed on the card; leave the entry out until you have it.
+
+### Obstacle gallery
+
+Each `Obstacle` carries a fixed photo hint — shoot the same angle every time so
+before/after comparisons stay honest. `condition` (optional) reuses the severity
+tags: `ok`, `repair`, `hazard`.
 
 ## Media placeholders
 
