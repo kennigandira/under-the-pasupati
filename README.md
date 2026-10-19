@@ -99,6 +99,18 @@ the devkenni account regardless of which account Wrangler is logged into globall
 Create the token at https://dash.cloudflare.com/profile/api-tokens with
 **Account → Cloudflare Pages → Edit**.
 
+Two rough edges worth knowing:
+
+- Pages config files **reject `account_id`** (`wrangler.jsonc` cannot pin it), so
+  the pin lives in `CLOUDFLARE_ACCOUNT_ID` from `.env.local` / the CI secret. Always
+  deploy through `npm run deploy` / `deploy:preview` rather than a bare
+  `npx wrangler pages deploy` — a bare call falls back to Wrangler's global login
+  and would target whatever account that happens to be.
+- `wrangler whoami` needs account-listing rights the Pages:Edit token doesn't
+  have, so it errors misleadingly. Use `npm run account` instead: it lists the
+  Pages projects the current credentials can actually reach, which is the honest
+  answer to "which account is this project deploying to".
+
 ### Setting up another account's project
 
 ```sh
