@@ -74,6 +74,15 @@ cf auth whoami                                     # in a folder: confirms the a
 `cf` handles account-level work (creating projects, listing resources). It cannot
 deploy Pages — that is Wrangler's job.
 
+**Gotcha:** `cf` auto-loads `.env.local` from the current directory. Inside this
+project that file defines `CLOUDFLARE_API_TOKEN`, so `cf auth` commands refuse to
+run there ("Cannot manage auth profiles while CLOUDFLARE_API_TOKEN is set").
+Run profile management from outside the project:
+
+```sh
+cd /tmp && cf auth create <name>
+```
+
 ### Wrangler has no profiles
 
 `wrangler login` stores **one** global OAuth token, so it is the wrong tool for
