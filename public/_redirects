@@ -1,4 +1,12 @@
-/id/communities/ /id/partners/ 301
+# Indonesian now lives at the root (/about/), English keeps its prefix
+# (/en/about/). Old /id/... links were shared widely, so fold them onto root.
+# /id/ is listed before the wildcard so the empty-splat case never relies on
+# Cloudflare collapsing /:splat to nothing.
+/id/ / 301
+/id / 301
+/id/* /:splat 301
+
+/communities/ /partners/ 301
+/communities /partners/ 301
 /en/communities/ /en/partners/ 301
-/id/communities /id/partners/ 301
 /en/communities /en/partners/ 301

@@ -5,7 +5,7 @@ import JournalCard from "../../components/JournalCard.astro";
 import PartnerChip from "../../components/PartnerChip.astro";
 import SpecialtyLink from "../../components/SpecialtyLink.astro";
 import SpecialtyVideoDialog from "../../components/SpecialtyVideoDialog.astro";
-import { languages, localeHref, t, type Lang } from "../../i18n/ui";
+import { localeHref, localeRoutes, routeLang, t } from "../../i18n/ui";
 import {
     skaters,
     posts,
@@ -22,9 +22,9 @@ import { withBuddyTip } from "../../lib/terms";
 import { years } from "../../lib/format";
 
 export function getStaticPaths() {
-    return languages.map((lang) => ({ params: { lang } }));
+    return localeRoutes();
 }
-const { lang } = Astro.params as { lang: Lang };
+const lang = routeLang(Astro.params.lang);
 const partnerBySlug = (slug?: string) => partners.find((p) => p.slug === slug);
 const rentalPartner = partnerBySlug(boardRental.partner);
 

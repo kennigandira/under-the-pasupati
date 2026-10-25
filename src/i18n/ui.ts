@@ -210,8 +210,20 @@ export function t(lang: Lang, key: UIKey): string {
 }
 
 // Single source of truth for internal URLs: Cloudflare Pages serves these as
-// directories (/id/, /id/journal/), so links must carry the trailing slash or
-// every navigation eats a 308 redirect.
+// directories, so links must carry the trailing slash or every navigation eats
+// a 308 redirect. The default language sits at the root — Indonesian is
+// /journal/, English is /en/journal/.
 export function localeHref(lang: Lang, path: string): string {
-  return `/${lang}${path}/`;
+  return `${lang === defaultLang ? '' : `/${lang}`}${path}/`;
+}
+
+// getStaticPaths() for the [lang] pages: an undefined param drops the segment,
+// which is how the default language lands on the root paths.
+export function localeRoutes(): { params: { lang: Lang | undefined } }[] {
+  return languages.map((lang) => ({ params: { lang: lang === defaultLang ? undefined : lang } }));
+}
+
+// Pages read the locale off that optional param; absent means the default.
+export function routeLang(raw: string | undefined): Lang {
+  return (languages as readonly string[]).includes(raw ?? '') ? (raw as Lang) : defaultLang;
 }

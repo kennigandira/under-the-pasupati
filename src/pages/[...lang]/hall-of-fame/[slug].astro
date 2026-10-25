@@ -1,14 +1,17 @@
 ---
 import Base from '../../../layouts/Base.astro';
 import MediaSlot from '../../../components/MediaSlot.astro';
-import { languages, localeHref, t, type Lang } from '../../../i18n/ui';
+import { localeHref, localeRoutes, routeLang, t } from '../../../i18n/ui';
 import { skaters } from '../../../data/content';
 import { years } from '../../../lib/format';
 
 export function getStaticPaths() {
-  return languages.flatMap((lang) => skaters.map((s) => ({ params: { lang, slug: s.slug } })));
+  return localeRoutes().flatMap(({ params }) =>
+    skaters.map((s) => ({ params: { ...params, slug: s.slug } })),
+  );
 }
-const { lang, slug } = Astro.params as { lang: Lang; slug: string };
+const { slug } = Astro.params as { slug: string };
+const lang = routeLang(Astro.params.lang);
 const s = skaters.find((x) => x.slug === slug)!;
 const fmt = (iso: string) =>
   new Date(iso).toLocaleDateString(lang === 'id' ? 'id-ID' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });

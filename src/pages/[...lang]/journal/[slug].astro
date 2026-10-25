@@ -2,14 +2,17 @@
 import Base from '../../../layouts/Base.astro';
 import MediaSlot from '../../../components/MediaSlot.astro';
 import ShareBar from '../../../components/ShareBar.astro';
-import { languages, localeHref, t, type Lang } from '../../../i18n/ui';
+import { localeHref, localeRoutes, routeLang, t } from '../../../i18n/ui';
 import { posts } from '../../../data/content';
 import { plainInline, renderInline } from '../../../lib/inline';
 
 export function getStaticPaths() {
-  return languages.flatMap((lang) => posts.map((p) => ({ params: { lang, slug: p.slug } })));
+  return localeRoutes().flatMap(({ params }) =>
+    posts.map((p) => ({ params: { ...params, slug: p.slug } })),
+  );
 }
-const { lang, slug } = Astro.params as { lang: Lang; slug: string };
+const { slug } = Astro.params as { slug: string };
+const lang = routeLang(Astro.params.lang);
 const p = posts.find((x) => x.slug === slug)!;
 const fmt = (iso: string) =>
   new Date(iso).toLocaleDateString(lang === 'id' ? 'id-ID' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });

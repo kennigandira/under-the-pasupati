@@ -4,15 +4,18 @@ import CoachMedia from '../../../components/CoachMedia.astro';
 import PartnerChip from '../../../components/PartnerChip.astro';
 import SpecialtyLink from '../../../components/SpecialtyLink.astro';
 import SpecialtyVideoDialog from '../../../components/SpecialtyVideoDialog.astro';
-import { languages, localeHref, t, type Lang } from '../../../i18n/ui';
+import { localeHref, localeRoutes, routeLang, t } from '../../../i18n/ui';
 import { lessonProviders, partners } from '../../../data/content';
 import { contactHref, contactLabel } from '../../../lib/contacts';
 import { years, coachSummary } from '../../../lib/format';
 
 export function getStaticPaths() {
-  return languages.flatMap((lang) => lessonProviders.map((p) => ({ params: { lang, slug: p.slug } })));
+  return localeRoutes().flatMap(({ params }) =>
+    lessonProviders.map((p) => ({ params: { ...params, slug: p.slug } })),
+  );
 }
-const { lang, slug } = Astro.params as { lang: Lang; slug: string };
+const { slug } = Astro.params as { slug: string };
+const lang = routeLang(Astro.params.lang);
 const coach = lessonProviders.find((p) => p.slug === slug)!;
 const partnerBySlug = (slug?: string) => partners.find((p) => p.slug === slug);
 const specialtyLabel = coach.specialties?.map((s) => s.label[lang]).join(' & ');

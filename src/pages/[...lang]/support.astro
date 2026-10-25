@@ -1,11 +1,11 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { languages, t, type Lang } from '../../i18n/ui';
+import { localeRoutes, routeLang, t } from '../../i18n/ui';
 
 export function getStaticPaths() {
-  return languages.map((lang) => ({ params: { lang } }));
+  return localeRoutes();
 }
-const { lang } = Astro.params as { lang: Lang };
+const lang = routeLang(Astro.params.lang);
 ---
 
 <Base lang={lang} title={t(lang, 'nav.support')} path="/support">
