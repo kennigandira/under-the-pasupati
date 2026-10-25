@@ -511,10 +511,37 @@ export const obstacles: Obstacle[] = [
 // Swap `id` to change the clip; a missing id leaves the label as plain text.
 export type SpecialtyKey = 'street' | 'bowl' | 'transition';
 
-export const specialtyVideos: Record<SpecialtyKey, { id: string; by: string; vertical?: boolean }> = {
-  street: { id: '2qFgoSLzErA', by: 'Skateboarding Stories', vertical: true },
-  bowl: { id: 'wd-VD__yTb0', by: 'ItzTekk', vertical: true },
-  transition: { id: '_KgiJGjpABw', by: 'Zack Dowdy', vertical: true },
+export const specialtyVideos: Record<
+  SpecialtyKey,
+  { id: string; by: string; vertical?: boolean; blurb: Local<string> }
+> = {
+  street: {
+    id: '2qFgoSLzErA',
+    by: 'Skateboarding Stories',
+    vertical: true,
+    blurb: {
+      id: 'Street skating: main di ledge, rail, bank, dan flatground — obstacle kota, di-skate dengan kecepatan.',
+      en: 'Street skating: ledges, rails, banks, and flatground — city obstacles, skated at speed.',
+    },
+  },
+  bowl: {
+    id: 'wd-VD__yTb0',
+    by: 'ItzTekk',
+    vertical: true,
+    blurb: {
+      id: 'Bowl: kolam beton dengan dinding melengkung. Jaga kecepatan, carving di dinding, cari line.',
+      en: 'Bowl: a concrete pool with curved walls. Keep speed, carve the walls, find a line.',
+    },
+  },
+  transition: {
+    id: '_KgiJGjpABw',
+    by: 'Zack Dowdy',
+    vertical: true,
+    blurb: {
+      id: 'Transisi: ramp, quarter pipe, dan bank. Kamu pumping dan carving, memakai lengkungan untuk dapat udara.',
+      en: 'Transition: ramps, quarter pipes, and banks. You pump and carve, using the curve to get air.',
+    },
+  },
 };
 
 // A discipline the coach teaches. `video` names the reference clip; without one

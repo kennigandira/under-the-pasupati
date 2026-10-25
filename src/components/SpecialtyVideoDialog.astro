@@ -12,7 +12,10 @@ const { lang } = Astro.props;
 <dialog class="specialty-lightbox" data-specialty-lightbox aria-label={t(lang, 'coach.specialty.video')}>
   <button class="specialty-lightbox-close" type="button" aria-label={t(lang, 'media.close')}>×</button>
   <div class="specialty-lightbox-stage">
-    <div class="specialty-lightbox-frame"></div>
+    <div class="specialty-lightbox-inner">
+      <div class="specialty-lightbox-frame"></div>
+      <p class="specialty-lightbox-note"></p>
+    </div>
   </div>
 </dialog>
 
@@ -22,9 +25,11 @@ const { lang } = Astro.props;
   if (dialog && !dialog.dataset.ready) {
     dialog.dataset.ready = '1';
     const frame = dialog.querySelector<HTMLElement>('.specialty-lightbox-frame')!;
+    const note = dialog.querySelector<HTMLElement>('.specialty-lightbox-note')!;
 
     const reset = () => {
       frame.replaceChildren();
+      note.textContent = '';
       document.documentElement.classList.remove('lightbox-open');
     };
 
@@ -36,6 +41,7 @@ const { lang } = Astro.props;
         reset();
         const vertical = button.dataset.specialtyVertical === '1';
         frame.classList.toggle('is-vertical', vertical);
+        note.textContent = button.dataset.specialtyBlurb ?? '';
 
         const iframe = document.createElement('iframe');
         iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1`;
