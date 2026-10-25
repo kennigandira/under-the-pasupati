@@ -19,6 +19,7 @@ const video = videoKey ? specialtyVideos[videoKey] : undefined;
     class="specialty-link"
     type="button"
     data-specialty-video={video.id}
+    data-specialty-vertical={video.vertical ? '1' : undefined}
     aria-label={`${specialty[lang]} — ${t(lang, 'coach.specialty.video')}`}
   >
     {specialty[lang]} <span aria-hidden="true">▶</span>

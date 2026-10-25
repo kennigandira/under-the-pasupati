@@ -34,6 +34,9 @@ const { lang } = Astro.props;
         if (!id) return;
 
         reset();
+        const vertical = button.dataset.specialtyVertical === '1';
+        frame.classList.toggle('is-vertical', vertical);
+
         const iframe = document.createElement('iframe');
         iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1`;
         iframe.title = button.getAttribute('aria-label') ?? 'Specialty video';

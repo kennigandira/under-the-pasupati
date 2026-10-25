@@ -1032,6 +1032,11 @@ main { flex: 1; padding-bottom: 4rem; }
   border-radius: 6px;
   background: #000;
 }
+/* YouTube Shorts / vertical clips get a portrait frame instead of letterboxing. */
+.specialty-lightbox-frame.is-vertical {
+  width: min(440px, 100%, calc((100dvh - 10rem) * 9 / 16));
+  aspect-ratio: 9 / 16;
+}
 .specialty-lightbox-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
 .specialty-lightbox-close {
   position: absolute;

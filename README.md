@@ -104,10 +104,11 @@ Posters are made with `ffmpeg -ss <seconds> -i clip.mp4 -frames:v 1 frame.png`
 `cwebp -q 88 frame.png -o poster.webp`.
 
 A coach's specialty is clickable when `LessonProvider.specialtyKey` matches an
-entry in `specialtyVideos` (`street` / `bowl` / `transition`); it opens the shared
-16:9 YouTube dialog (`youtube-nocookie` embed, autoplay, blurred unscrollable
-backdrop). Swap an `id` in `specialtyVideos` to change the clip, or drop the key to
-leave the label plain text. `age` / `yearsSkating` render through
+entry in `specialtyVideos` (`street` / `bowl` / `transition`); it opens the shared YouTube dialog
+(`youtube-nocookie` embed, autoplay, blurred unscrollable backdrop). Set
+`vertical: true` on a Shorts clip and the frame switches to 9:16 instead of
+letterboxing. Swap an `id` in `specialtyVideos` to change the clip, or drop the key
+to leave the label plain text. `age` / `yearsSkating` render through
 `src/lib/format.ts` (`years()`) so they always carry "tahun" / "years".
 
 Partners carry a real `logo` slot with `src`, and every `LessonProvider` can point at one via `partner: '<partner slug>'` — coach cards and profile pages then show that partner's logo as a linked chip. `boardRental.partner` does the same for the rental callout.

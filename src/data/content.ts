@@ -511,8 +511,8 @@ export const obstacles: Obstacle[] = [
 // Swap `id` to change the clip; a missing id leaves the label as plain text.
 export type SpecialtyKey = 'street' | 'bowl' | 'transition';
 
-export const specialtyVideos: Record<SpecialtyKey, { id: string; by: string }> = {
-  street: { id: 'tYv7cGyzRow', by: 'Spencer Nuzzi' },
+export const specialtyVideos: Record<SpecialtyKey, { id: string; by: string; vertical?: boolean }> = {
+  street: { id: '2qFgoSLzErA', by: 'Skateboarding Stories', vertical: true },
   bowl: { id: 'X7o6gVzBhqE', by: 'Zack Dowdy' },
   transition: { id: 'VYAV8yDhKrk', by: 'Sarah PM' },
 };
