@@ -15,7 +15,6 @@ export const ui = {
     'nav.about': 'Tentang',
     'nav.support': 'Dukung',
     'home.latest': 'Jurnal Terbaru',
-    'home.carousel.hint': 'geser →',
     'home.about.title': 'Tentang Skate Park Pasupati',
     'home.about.body':
       'Skatepark Pasupati menempati kolong jalan layang Pasupati di Bandung. Gratis, terbuka setiap hari, dan dipakai puluhan skater — dari yang baru pertama kali naik papan sampai senior yang main sejak taman ini dibuka. Obstacle-nya beton: ledge, bank, manual pad, quarter pipe, dan bowl corner.',
@@ -101,7 +100,6 @@ export const ui = {
     'nav.about': 'About',
     'nav.support': 'Support',
     'home.latest': 'Latest from the Journal',
-    'home.carousel.hint': 'swipe →',
     'home.about.title': 'About Pasupati Skatepark',
     'home.about.body':
       'Pasupati Skatepark sits under the Pasupati flyover in Bandung. It is free, open every day, and used by dozens of skaters — from people on a board for the first time to seniors who have skated here since the park opened. The obstacles are concrete: ledges, banks, a manual pad, a quarter pipe and a bowl corner.',
