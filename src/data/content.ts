@@ -513,8 +513,8 @@ export type SpecialtyKey = 'street' | 'bowl' | 'transition';
 
 export const specialtyVideos: Record<SpecialtyKey, { id: string; by: string; vertical?: boolean }> = {
   street: { id: '2qFgoSLzErA', by: 'Skateboarding Stories', vertical: true },
-  bowl: { id: 'X7o6gVzBhqE', by: 'Zack Dowdy' },
-  transition: { id: 'VYAV8yDhKrk', by: 'Sarah PM' },
+  bowl: { id: 'wd-VD__yTb0', by: 'ItzTekk', vertical: true },
+  transition: { id: '_KgiJGjpABw', by: 'Zack Dowdy', vertical: true },
 };
 
 // Lesson providers. Optional listing on Home — contact details are published
