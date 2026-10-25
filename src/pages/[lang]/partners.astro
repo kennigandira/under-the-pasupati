@@ -14,8 +14,7 @@ const { lang } = Astro.params as { lang: Lang };
   <section class="section">
     <div class="wrap">
       <h1>{t(lang, 'partners.title')}</h1>
-      <p style="max-width: 56ch; margin: 0.75rem 0 2rem;">{t(lang, 'partners.subtitle')}</p>
-      <div class="grid grid-3">
+      <div class="grid grid-3" style="margin-top: 2rem;">
         {partners.map((c) => (
           <article class="card" style="text-align: center;">
             <MediaSlot lang={lang} slot={c.logo} link={c.link} />
