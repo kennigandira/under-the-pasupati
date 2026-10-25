@@ -24,6 +24,7 @@ All content lives in `src/data/content.ts` (stub for the future Directus collect
 | `conditionEntries` | `ConditionEntry`| The Park + Home status         |
 | `obstacles`     | `Obstacle`         | The Park obstacle gallery      |
 | `lessonProviders` | `LessonProvider` | Home instructors section + `/coaches/<slug>` |
+| `aboutSlides`   | `MediaSlot[]`      | Home about carousel            |
 | `boardRental`   | `{ label, title, body, note, cta, partner }` | Home rental callout + FAQ |
 | `faqs`          | `{ q, a }`         | Home FAQ                       |
 | `usageSnapshot`, `timeline` | — | The Park |
@@ -31,7 +32,7 @@ All content lives in `src/data/content.ts` (stub for the future Directus collect
 ### Home section order
 
 1. Hero
-2. About the park — copy + ownership note (city land, not city-run) + link to `/the-park`
+2. About the park — carousel (`aboutSlides`) + copy + ownership note (city land, not city-run) + link to `/the-park`
 3. Skater of the month (newest `featuredFrom`) alongside the park condition ledger
 4. Journal — 3 latest posts
 5. Skateboard instructors (`lessonProviders`, anchored at `#pengajar`)

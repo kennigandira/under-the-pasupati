@@ -10,6 +10,7 @@ import {
     posts,
     conditionEntries,
     usageSnapshot,
+    aboutSlides,
     lessonProviders,
     boardRental,
     partners,
@@ -80,21 +81,43 @@ const fmt = (iso: string) =>
         </div>
     </section>
 
-    <!-- 2. About the park -->
+    <!-- 2. About this site: carousel + excerpt -->
     <section class="section">
-        <div class="wrap" style="max-width: 72ch;">
+        <div class="wrap">
             <div class="section-head">
                 <h2>{t(lang, "home.about.title")}</h2>
+                <span class="mono">{t(lang, "home.carousel.hint")}</span>
             </div>
-            <p style="font-size: 1.05rem;">{t(lang, "home.about.body")}</p>
-            <p class="mono home-about-ownership">
-                {t(lang, "home.about.ownership")}
-            </p>
-            <p style="margin-top: 1.25rem;">
-                <a class="btn" href={localeHref(lang, "/the-park")}>
-                    {t(lang, "home.about.cta")} →
-                </a>
-            </p>
+            <div class="grid grid-2" style="align-items: start;">
+                <div
+                    class="carousel"
+                    role="group"
+                    aria-label={t(lang, "home.about.title")}
+                >
+                    {aboutSlides.map((slide, i) => (
+                        <figure class="slide">
+                            <span class="slide-index">
+                                {String(i + 1).padStart(2, "0")} /{" "}
+                                {String(aboutSlides.length).padStart(2, "0")}
+                            </span>
+                            <MediaSlot lang={lang} slot={slide} />
+                        </figure>
+                    ))}
+                </div>
+                <div>
+                    <p style="font-size: 1.05rem;">
+                        {t(lang, "home.about.body")}
+                    </p>
+                    <p class="mono home-about-ownership">
+                        {t(lang, "home.about.ownership")}
+                    </p>
+                    <p style="margin-top: 1.25rem;">
+                        <a class="btn" href={localeHref(lang, "/the-park")}>
+                            {t(lang, "home.about.cta")} →
+                        </a>
+                    </p>
+                </div>
+            </div>
         </div>
     </section>
 
