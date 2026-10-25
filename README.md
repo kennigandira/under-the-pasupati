@@ -31,10 +31,11 @@ All content lives in `src/data/content.ts` (stub for the future Directus collect
 ### Home section order
 
 1. Hero
-2. Skater of the month (newest `featuredFrom`) alongside the park condition ledger
-3. Journal — 3 latest posts
-4. Skateboard instructors (`lessonProviders`, anchored at `#pengajar`)
-5. FAQ (`faqs`)
+2. About the park — copy + ownership note (city land, not city-run) + link to `/the-park`
+3. Skater of the month (newest `featuredFrom`) alongside the park condition ledger
+4. Journal — 3 latest posts
+5. Skateboard instructors (`lessonProviders`, anchored at `#pengajar`)
+6. FAQ (`faqs`)
 
 ### Publishing an instructor
 

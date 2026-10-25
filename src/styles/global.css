@@ -942,6 +942,17 @@ main { flex: 1; padding-bottom: 4rem; }
 .coach-card img { filter: none; }
 /* Anchor target on Home: keep the heading clear of the sticky header. */
 #pengajar { scroll-margin-top: 4.5rem; }
+/* Ownership note: the park is city land the city does not run. */
+.home-about-ownership {
+  margin-top: 1rem;
+  padding: 0.85rem 1rem;
+  max-width: 62ch;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: var(--ink);
+  background: var(--paper);
+  border-left: 4px solid var(--accent);
+}
 .coach-contact-note {
   max-width: 62ch;
   margin: 1.25rem 0 0.85rem;
