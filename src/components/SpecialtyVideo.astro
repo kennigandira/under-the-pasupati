@@ -1,0 +1,71 @@
+---
+import type { Lang } from '../i18n/ui';
+import { t } from '../i18n/ui';
+import { specialtyVideos, type SpecialtyKey } from '../data/content';
+
+// Renders a coach's specialty as a link when a reference clip exists, and the
+// single YouTube dialog that all specialty links on the page open.
+interface Props {
+  lang: Lang;
+  specialty: Record<Lang, string>;
+  videoKey?: SpecialtyKey;
+}
+const { lang, specialty, videoKey } = Astro.props;
+const video = videoKey ? specialtyVideos[videoKey] : undefined;
+---
+
+<button
+  class="specialty-link"
+  type="button"
+  data-specialty-video={video?.id}
+  aria-label={`${specialty[lang]} — ${t(lang, 'coach.specialty.video')}`}
+>
+  {specialty[lang]} <span aria-hidden="true">▶</span>
+</button>
+
+<dialog class="specialty-lightbox" data-specialty-lightbox aria-label={t(lang, 'coach.specialty.video')}>
+  <button class="specialty-lightbox-close" type="button" aria-label={t(lang, 'media.close')}>×</button>
+  <div class="specialty-lightbox-stage">
+    <div class="specialty-lightbox-frame"></div>
+  </div>
+</dialog>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('[data-specialty-lightbox]');
+
+  if (dialog && !dialog.dataset.ready) {
+    dialog.dataset.ready = '1';
+    const frame = dialog.querySelector<HTMLElement>('.specialty-lightbox-frame')!;
+
+    const reset = () => {
+      frame.replaceChildren();
+      document.documentElement.classList.remove('lightbox-open');
+    };
+
+    document.querySelectorAll<HTMLButtonElement>('[data-specialty-video]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const id = button.dataset.specialtyVideo;
+        if (!id) return;
+
+        reset();
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1`;
+        iframe.title = button.getAttribute('aria-label') ?? 'Specialty video';
+        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+        iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+        iframe.allowFullscreen = true;
+        frame.append(iframe);
+
+        dialog.showModal();
+        document.documentElement.classList.add('lightbox-open');
+      });
+    });
+
+    dialog.querySelector('.specialty-lightbox-close')!.addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+      if (target === dialog || target.classList.contains('specialty-lightbox-stage')) dialog.close();
+    });
+    dialog.addEventListener('close', reset);
+  }
+</script>

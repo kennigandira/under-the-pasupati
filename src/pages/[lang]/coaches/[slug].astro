@@ -2,9 +2,12 @@
 import Base from '../../../layouts/Base.astro';
 import CoachMedia from '../../../components/CoachMedia.astro';
 import PartnerChip from '../../../components/PartnerChip.astro';
+import SpecialtyLink from '../../../components/SpecialtyLink.astro';
+import SpecialtyVideoDialog from '../../../components/SpecialtyVideoDialog.astro';
 import { languages, localeHref, t, type Lang } from '../../../i18n/ui';
 import { lessonProviders, partners } from '../../../data/content';
 import { contactHref, contactLabel } from '../../../lib/contacts';
+import { years } from '../../../lib/format';
 
 export function getStaticPaths() {
   return languages.flatMap((lang) => lessonProviders.map((p) => ({ params: { lang, slug: p.slug } })));
@@ -33,19 +36,21 @@ const partnerBySlug = (slug?: string) => partners.find((p) => p.slug === slug);
             {coach.specialty && (
               <div>
                 <dt>{t(lang, 'coach.specialty')}</dt>
-                <dd>{coach.specialty[lang]}</dd>
+                <dd>
+                  <SpecialtyLink lang={lang} specialty={coach.specialty} videoKey={coach.specialtyKey} />
+                </dd>
               </div>
             )}
             {coach.age !== undefined && (
               <div>
                 <dt>{t(lang, 'coach.age')}</dt>
-                <dd>{coach.age}</dd>
+                <dd>{years(coach.age, lang)}</dd>
               </div>
             )}
             {coach.yearsSkating !== undefined && (
               <div>
                 <dt>{t(lang, 'hof.years')}</dt>
-                <dd>{coach.yearsSkating}</dd>
+                <dd>{years(coach.yearsSkating, lang)}</dd>
               </div>
             )}
             {coach.competition && (
@@ -94,4 +99,5 @@ const partnerBySlug = (slug?: string) => partners.find((p) => p.slug === slug);
       />
     </div>
   </section>
+  <SpecialtyVideoDialog lang={lang} />
 </Base>

@@ -1,0 +1,28 @@
+---
+import type { Lang } from '../i18n/ui';
+import { t } from '../i18n/ui';
+import { specialtyVideos, type SpecialtyKey } from '../data/content';
+
+// A coach's specialty, linked to its reference clip. Falls back to plain text
+// when the discipline has no clip configured.
+interface Props {
+  lang: Lang;
+  specialty: Record<Lang, string>;
+  videoKey?: SpecialtyKey;
+}
+const { lang, specialty, videoKey } = Astro.props;
+const video = videoKey ? specialtyVideos[videoKey] : undefined;
+---
+
+{video ? (
+  <button
+    class="specialty-link"
+    type="button"
+    data-specialty-video={video.id}
+    aria-label={`${specialty[lang]} — ${t(lang, 'coach.specialty.video')}`}
+  >
+    {specialty[lang]} <span aria-hidden="true">▶</span>
+  </button>
+) : (
+  specialty[lang]
+)}

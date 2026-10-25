@@ -2,6 +2,8 @@
 import Base from "../../layouts/Base.astro";
 import MediaSlot from "../../components/MediaSlot.astro";
 import PartnerChip from "../../components/PartnerChip.astro";
+import SpecialtyLink from "../../components/SpecialtyLink.astro";
+import SpecialtyVideoDialog from "../../components/SpecialtyVideoDialog.astro";
 import { languages, localeHref, t, type Lang } from "../../i18n/ui";
 import {
     skaters,
@@ -16,6 +18,7 @@ import {
 } from "../../data/content";
 import { contactHref, contactLabel } from "../../lib/contacts";
 import { withBuddyTip } from "../../lib/terms";
+import { years } from "../../lib/format";
 
 export function getStaticPaths() {
     return languages.map((lang) => ({ params: { lang } }));
@@ -140,7 +143,7 @@ const fmt = (iso: string) =>
                         <span>{featured.crew}</span>
                         <span>{featured.discipline}</span>
                         <span>
-                            {t(lang, "hof.years")}: {featured.yearsSkating}
+                            {t(lang, "hof.years")}: {years(featured.yearsSkating, lang)}
                         </span>
                     </p>
                     <p>{featured.bio[lang]}</p>
@@ -322,19 +325,25 @@ const fmt = (iso: string) =>
                             {p.specialty && (
                                 <div>
                                     <dt>{t(lang, "coach.specialty")}</dt>
-                                    <dd>{p.specialty[lang]}</dd>
+                                    <dd>
+                                        <SpecialtyLink
+                                            lang={lang}
+                                            specialty={p.specialty}
+                                            videoKey={p.specialtyKey}
+                                        />
+                                    </dd>
                                 </div>
                             )}
                             {p.age !== undefined && (
                                 <div>
                                     <dt>{t(lang, "coach.age")}</dt>
-                                    <dd>{p.age}</dd>
+                                    <dd>{years(p.age, lang)}</dd>
                                 </div>
                             )}
                             {p.yearsSkating !== undefined && (
                                 <div>
                                     <dt>{t(lang, "hof.years")}</dt>
-                                    <dd>{p.yearsSkating}</dd>
+                                    <dd>{years(p.yearsSkating, lang)}</dd>
                                 </div>
                             )}
                             {p.competition && (
@@ -400,4 +409,5 @@ const fmt = (iso: string) =>
             </div>
         </div>
     </section>
+    <SpecialtyVideoDialog lang={lang} />
 </Base>

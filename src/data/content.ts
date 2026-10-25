@@ -507,6 +507,16 @@ export const obstacles: Obstacle[] = [
   },
 ];
 
+// Reference clip per discipline, embedded when a coach's specialty is tapped.
+// Swap `id` to change the clip; a missing id leaves the label as plain text.
+export type SpecialtyKey = 'street' | 'bowl' | 'transition';
+
+export const specialtyVideos: Record<SpecialtyKey, { id: string; by: string }> = {
+  street: { id: 'tYv7cGyzRow', by: 'Spencer Nuzzi' },
+  bowl: { id: 'X7o6gVzBhqE', by: 'Zack Dowdy' },
+  transition: { id: 'VYAV8yDhKrk', by: 'Sarah PM' },
+};
+
 // Lesson providers. Optional listing on Home — contact details are published
 // ONLY with the provider's explicit consent (see consentOn).
 export interface LessonProvider {
@@ -516,6 +526,7 @@ export interface LessonProvider {
   yearsSkating?: number;
   competition?: Local<string>; // competition experience, free text
   specialty?: Local<string>; // e.g. Street, Bowl, Transition & bowl
+  specialtyKey?: SpecialtyKey; // picks the reference video
   partner?: string; // slug of the partner they are under (see partners)
   levels: Local<string>;
   contacts: Contact[];
@@ -533,6 +544,7 @@ export const lessonProviders: LessonProvider[] = [
     age: 19,
     yearsSkating: 4,
     specialty: { id: 'Street', en: 'Street' },
+    specialtyKey: 'street',
     partner: 'tup',
     levels: { id: 'Beginner to Intermediate', en: 'Beginner to Intermediate' },
     contacts: [
@@ -569,6 +581,7 @@ export const lessonProviders: LessonProvider[] = [
     age: 21,
     yearsSkating: 2,
     specialty: { id: 'Street', en: 'Street' },
+    specialtyKey: 'street',
     partner: 'tup',
     levels: { id: 'Beginner to Intermediate', en: 'Beginner to Intermediate' },
     contacts: [
@@ -604,6 +617,7 @@ export const lessonProviders: LessonProvider[] = [
     age: 19,
     yearsSkating: 6,
     specialty: { id: 'Transisi & Bowl', en: 'Transition & bowl' },
+    specialtyKey: 'transition',
     levels: { id: 'Beginner to Intermediate', en: 'Beginner to Intermediate' },
     contacts: [
       { kind: 'instagram', value: '_3rrrrrrr' },

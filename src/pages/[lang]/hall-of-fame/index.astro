@@ -3,6 +3,7 @@ import Base from '../../../layouts/Base.astro';
 import MediaSlot from '../../../components/MediaSlot.astro';
 import { languages, localeHref, t, type Lang } from '../../../i18n/ui';
 import { skaters } from '../../../data/content';
+import { years } from '../../../lib/format';
 
 export function getStaticPaths() {
   return languages.map((lang) => ({ params: { lang } }));
@@ -25,7 +26,7 @@ const sorted = [...skaters].sort((a, b) => b.featuredFrom.localeCompare(a.featur
             <p class="meta">
               <span>{s.crew}</span>
               <span>{s.discipline}</span>
-              <span>{t(lang, 'hof.years')}: {s.yearsSkating}</span>
+              <span>{t(lang, 'hof.years')}: {years(s.yearsSkating, lang)}</span>
             </p>
             <a class="mono" href={localeHref(lang, `/hall-of-fame/${s.slug}`)}>{t(lang, 'read.more')} →</a>
           </article>

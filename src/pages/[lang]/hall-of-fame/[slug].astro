@@ -3,6 +3,7 @@ import Base from '../../../layouts/Base.astro';
 import MediaSlot from '../../../components/MediaSlot.astro';
 import { languages, localeHref, t, type Lang } from '../../../i18n/ui';
 import { skaters } from '../../../data/content';
+import { years } from '../../../lib/format';
 
 export function getStaticPaths() {
   return languages.flatMap((lang) => skaters.map((s) => ({ params: { lang, slug: s.slug } })));
@@ -21,7 +22,7 @@ const fmt = (iso: string) =>
       <p class="meta">
         <span>{t(lang, 'hof.crew')}: {s.crew}</span>
         <span>{t(lang, 'hof.discipline')}: {s.discipline}</span>
-        <span>{t(lang, 'hof.years')}: {s.yearsSkating}</span>
+        <span>{t(lang, 'hof.years')}: {years(s.yearsSkating, lang)}</span>
         <span>{t(lang, 'home.featured')}: {fmt(s.featuredFrom)}</span>
       </p>
       <div class="grid grid-2" style="margin-top: 2rem; align-items: start;">
