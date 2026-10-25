@@ -981,6 +981,8 @@ main { flex: 1; padding-bottom: 4rem; }
 
 /* Instructor cards: portraits stay in colour like the coach pages. */
 .coach-card img { filter: none; }
+/* Anchor target on Home: keep the heading clear of the sticky header. */
+#pengajar { scroll-margin-top: 4.5rem; }
 .coach-contact-note {
   max-width: 62ch;
   margin: 1.25rem 0 0.85rem;

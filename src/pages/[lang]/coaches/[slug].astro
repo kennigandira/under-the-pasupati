@@ -20,7 +20,7 @@ const partnerBySlug = (slug?: string) => partners.find((p) => p.slug === slug);
 <Base lang={lang} title={coach.name} description={coach.levels[lang]} path={`/coaches/${slug}`}>
   <section class="section">
     <div class="wrap">
-      <a class="mono" href={localeHref(lang, '')}>← {t(lang, 'home.lessons.title')}</a>
+      <a class="mono" href={`${localeHref(lang, '')}#pengajar`}>← {t(lang, 'home.lessons.title')}</a>
 
       <div class="coach-header" style="margin-top: 1.5rem;">
         <div>
