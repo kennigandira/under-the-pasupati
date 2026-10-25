@@ -569,6 +569,8 @@ export const lessonProviders: LessonProvider[] = [
         id: 'VIDEO: sesi mengajar — Arif memandu pemula, 30–60 detik, rekaman HP cukup',
         en: 'VIDEO: teaching session — Arif guiding a beginner, 30–60 seconds, phone footage is fine',
       },
+      src: '/media/coaches/arif-ajah/teaching.mp4',
+      poster: '/media/coaches/arif-ajah/teaching-poster.webp',
     },
     trickVideo: {
       kind: 'video',
