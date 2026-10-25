@@ -7,7 +7,7 @@ import SpecialtyVideoDialog from '../../../components/SpecialtyVideoDialog.astro
 import { languages, localeHref, t, type Lang } from '../../../i18n/ui';
 import { lessonProviders, partners } from '../../../data/content';
 import { contactHref, contactLabel } from '../../../lib/contacts';
-import { years } from '../../../lib/format';
+import { years, coachSummary } from '../../../lib/format';
 
 export function getStaticPaths() {
   return languages.flatMap((lang) => lessonProviders.map((p) => ({ params: { lang, slug: p.slug } })));
@@ -15,9 +15,11 @@ export function getStaticPaths() {
 const { lang, slug } = Astro.params as { lang: Lang; slug: string };
 const coach = lessonProviders.find((p) => p.slug === slug)!;
 const partnerBySlug = (slug?: string) => partners.find((p) => p.slug === slug);
+const specialtyLabel = coach.specialties?.map((s) => s.label[lang]).join(' & ');
+const description = coachSummary(specialtyLabel, coach.levels[lang], lang);
 ---
 
-<Base lang={lang} title={coach.name} description={coach.levels[lang]} path={`/coaches/${slug}`}>
+<Base lang={lang} title={coach.name} description={description} path={`/coaches/${slug}`}>
   <section class="section">
     <div class="wrap">
       <a class="mono" href={`${localeHref(lang, '')}#pengajar`}>← {t(lang, 'home.lessons.title')}</a>
