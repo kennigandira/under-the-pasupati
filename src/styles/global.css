@@ -983,6 +983,13 @@ main { flex: 1; padding-bottom: 4rem; }
 .coach-card img { filter: none; }
 
 /* ---- Specialty reference video ---- */
+.specialty-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.3rem;
+}
+.specialty-sep { color: var(--muted); }
 .specialty-link {
   margin: 0;
   padding: 0;

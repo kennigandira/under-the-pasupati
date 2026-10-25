@@ -322,15 +322,20 @@ const fmt = (iso: string) =>
                         </p>
                         <PartnerChip partner={partnerBySlug(p.partner)} lang={lang} />
                         <dl class="coach-facts">
-                            {p.specialty && (
+                            {p.specialties?.length && (
                                 <div>
                                     <dt>{t(lang, "coach.specialty")}</dt>
-                                    <dd>
-                                        <SpecialtyLink
-                                            lang={lang}
-                                            specialty={p.specialty}
-                                            videoKey={p.specialtyKey}
-                                        />
+                                    <dd class="specialty-list">
+                                        {p.specialties.map((s, i) => (
+                                            <>
+                                                {i > 0 && <span class="specialty-sep" aria-hidden="true">·</span>}
+                                                <SpecialtyLink
+                                                    lang={lang}
+                                                    label={s.label}
+                                                    videoKey={s.video}
+                                                />
+                                            </>
+                                        ))}
                                     </dd>
                                 </div>
                             )}

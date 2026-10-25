@@ -517,6 +517,13 @@ export const specialtyVideos: Record<SpecialtyKey, { id: string; by: string; ver
   transition: { id: '_KgiJGjpABw', by: 'Zack Dowdy', vertical: true },
 };
 
+// A discipline the coach teaches. `video` names the reference clip; without one
+// the label renders as plain text.
+export interface Specialty {
+  label: Local<string>;
+  video?: SpecialtyKey;
+}
+
 // Lesson providers. Optional listing on Home — contact details are published
 // ONLY with the provider's explicit consent (see consentOn).
 export interface LessonProvider {
@@ -525,8 +532,7 @@ export interface LessonProvider {
   age?: number; // published only if the provider wants it shown
   yearsSkating?: number;
   competition?: Local<string>; // competition experience, free text
-  specialty?: Local<string>; // e.g. Street, Bowl, Transition & bowl
-  specialtyKey?: SpecialtyKey; // picks the reference video
+  specialties?: Specialty[]; // e.g. Street, or Transition + Bowl
   partner?: string; // slug of the partner they are under (see partners)
   levels: Local<string>;
   contacts: Contact[];
@@ -543,8 +549,7 @@ export const lessonProviders: LessonProvider[] = [
     name: 'Arif ajah',
     age: 19,
     yearsSkating: 4,
-    specialty: { id: 'Street', en: 'Street' },
-    specialtyKey: 'street',
+    specialties: [{ label: { id: 'Street', en: 'Street' }, video: 'street' }],
     partner: 'tup',
     levels: { id: 'Beginner to Intermediate', en: 'Beginner to Intermediate' },
     contacts: [
@@ -580,8 +585,7 @@ export const lessonProviders: LessonProvider[] = [
     name: 'Hadi Baik',
     age: 21,
     yearsSkating: 2,
-    specialty: { id: 'Street', en: 'Street' },
-    specialtyKey: 'street',
+    specialties: [{ label: { id: 'Street', en: 'Street' }, video: 'street' }],
     partner: 'tup',
     levels: { id: 'Beginner to Intermediate', en: 'Beginner to Intermediate' },
     contacts: [
@@ -616,8 +620,10 @@ export const lessonProviders: LessonProvider[] = [
     name: 'Udin',
     age: 19,
     yearsSkating: 6,
-    specialty: { id: 'Transisi & Bowl', en: 'Transition & bowl' },
-    specialtyKey: 'transition',
+    specialties: [
+      { label: { id: 'Transisi', en: 'Transition' }, video: 'transition' },
+      { label: { id: 'Bowl', en: 'Bowl' }, video: 'bowl' },
+    ],
     levels: { id: 'Beginner to Intermediate', en: 'Beginner to Intermediate' },
     contacts: [
       { kind: 'instagram', value: '_3rrrrrrr' },

@@ -3,14 +3,14 @@ import type { Lang } from '../i18n/ui';
 import { t } from '../i18n/ui';
 import { specialtyVideos, type SpecialtyKey } from '../data/content';
 
-// A coach's specialty, linked to its reference clip. Falls back to plain text
+// A coach's discipline, linked to its reference clip. Falls back to plain text
 // when the discipline has no clip configured.
 interface Props {
   lang: Lang;
-  specialty: Record<Lang, string>;
+  label: Record<Lang, string>;
   videoKey?: SpecialtyKey;
 }
-const { lang, specialty, videoKey } = Astro.props;
+const { lang, label, videoKey } = Astro.props;
 const video = videoKey ? specialtyVideos[videoKey] : undefined;
 ---
 
@@ -20,10 +20,10 @@ const video = videoKey ? specialtyVideos[videoKey] : undefined;
     type="button"
     data-specialty-video={video.id}
     data-specialty-vertical={video.vertical ? '1' : undefined}
-    aria-label={`${specialty[lang]} — ${t(lang, 'coach.specialty.video')}`}
+    aria-label={`${label[lang]} — ${t(lang, 'coach.specialty.video')}`}
   >
-    {specialty[lang]} <span aria-hidden="true">▶</span>
+    {label[lang]} <span aria-hidden="true">▶</span>
   </button>
 ) : (
-  specialty[lang]
+  label[lang]
 )}
