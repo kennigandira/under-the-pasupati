@@ -707,47 +707,6 @@ main { flex: 1; padding-bottom: 4rem; }
 }
 @media (min-width: 760px) { .stat .num { font-size: 2.6rem; } }
 
-/* ---- Carousel: scroll-snap contact sheet, no JS ---- */
-.carousel {
-  display: flex;
-  gap: 1rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  padding: 0.5rem 0.25rem 1rem;
-  -webkit-overflow-scrolling: touch;
-}
-.carousel::-webkit-scrollbar { height: 8px; }
-.carousel::-webkit-scrollbar-track { background: var(--paper); border-radius: 999px; }
-.carousel::-webkit-scrollbar-thumb { background: var(--ink); border-radius: 999px; }
-.carousel > * {
-  flex: 0 0 84%;
-  scroll-snap-align: center;
-}
-@media (min-width: 760px) {
-  .carousel > * { flex-basis: 42%; }
-}
-.slide {
-  background: var(--white);
-  border: var(--border);
-  border-radius: 12px;
-  padding: 0.6rem;
-  box-shadow: 4px 5px 0 rgba(16, 16, 16, 0.9);
-}
-.slide:nth-child(odd) { transform: rotate(-1deg); }
-.slide:nth-child(even) { transform: rotate(0.8deg); }
-.slide-index {
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  background: var(--ink);
-  color: var(--white);
-  border-radius: 999px;
-  padding: 0.1rem 0.5rem;
-  display: inline-block;
-  margin-bottom: 0.4rem;
-}
-
 /* sticker button */
 .btn {
   display: inline-block;
@@ -1282,5 +1241,5 @@ html.lightbox-open body { overflow: hidden; }
 .coach-lightbox-close:focus-visible { background: var(--accent); border-color: var(--accent); }
 @media (prefers-reduced-motion: reduce) {
   .coach-media-tile { transform: none !important; transition: none; }
-  .grid > .card, .stat, .entry-list li, .nav-list a, .slide, .hero-title .line, .burst, .ledger, .btn { transform: none !important; }
+  .grid > .card, .stat, .entry-list li, .nav-list a, .hero-title .line, .burst, .ledger, .btn { transform: none !important; }
 }

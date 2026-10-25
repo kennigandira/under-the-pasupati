@@ -10,7 +10,6 @@ import {
     posts,
     conditionEntries,
     usageSnapshot,
-    aboutSlides,
     lessonProviders,
     boardRental,
     partners,
@@ -81,44 +80,7 @@ const fmt = (iso: string) =>
         </div>
     </section>
 
-    <!-- 2. About this site: carousel + excerpt -->
-    <section class="section">
-        <div class="wrap">
-            <div class="section-head">
-                <h2>{t(lang, "home.about.title")}</h2>
-                <span class="mono">{t(lang, "home.carousel.hint")}</span>
-            </div>
-            <div class="grid grid-2" style="align-items: start;">
-                <div
-                    class="carousel"
-                    role="group"
-                    aria-label={t(lang, "home.about.title")}
-                >
-                    {aboutSlides.map((slide, i) => (
-                        <figure class="slide">
-                            <span class="slide-index">
-                                {String(i + 1).padStart(2, "0")} /{" "}
-                                {String(aboutSlides.length).padStart(2, "0")}
-                            </span>
-                            <MediaSlot lang={lang} slot={slide} />
-                        </figure>
-                    ))}
-                </div>
-                <div>
-                    <p style="font-size: 1.05rem;">
-                        {t(lang, "home.about.body")}
-                    </p>
-                    <p style="margin-top: 1.25rem;">
-                        <a class="btn" href={localeHref(lang, "/the-park")}>
-                            {t(lang, "home.about.cta")} →
-                        </a>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 3. Skater of the month -->
+    <!-- 2. Skater of the month -->
     <section class="section">
         <div class="wrap grid grid-2" style="align-items: start;">
             <div>
@@ -159,7 +121,7 @@ const fmt = (iso: string) =>
                 </article>
             </div>
 
-            <!-- 4. Park condition -->
+            <!-- 3. Park condition -->
             <div>
                 <div class="section-head">
                     <h2>{t(lang, "home.status")}</h2>
@@ -215,7 +177,7 @@ const fmt = (iso: string) =>
         </div>
     </section>
 
-    <!-- 5. Journal -->
+    <!-- 4. Journal -->
     <section class="section">
         <div class="wrap">
             <div class="section-head">
@@ -246,7 +208,7 @@ const fmt = (iso: string) =>
         </div>
     </section>
 
-    <!-- 6. Skateboard instructors -->
+    <!-- 5. Skateboard instructors -->
     <section class="section" id="pengajar">
         <div class="wrap">
             <div class="section-head">
@@ -391,7 +353,7 @@ const fmt = (iso: string) =>
         </div>
     </section>
 
-    <!-- 7. FAQ -->
+    <!-- 6. FAQ -->
     <section class="section">
         <div class="wrap" style="max-width: 820px; margin-inline: auto;">
             <div class="section-head">

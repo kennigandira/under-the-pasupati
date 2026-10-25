@@ -15,11 +15,6 @@ export const ui = {
     'nav.about': 'Tentang',
     'nav.support': 'Dukung',
     'home.latest': 'Jurnal Terbaru',
-    'home.about.title': 'Tentang Skate Park Pasupati',
-    'home.about.body':
-      'Skatepark Pasupati menempati kolong jalan layang Pasupati di Bandung. Gratis, terbuka setiap hari, dan dipakai puluhan skater — dari yang baru pertama kali naik papan sampai senior yang main sejak taman ini dibuka. Obstacle-nya beton: ledge, bank, manual pad, quarter pipe, dan bowl corner.',
-    'home.about.cta': 'Selengkapnya soal taman',
-    'home.carousel.hint': 'geser →',
     'home.lessons.title': 'Pengajar Skateboard',
     'home.lessons.body':
       'Ingin belajar? Kontak di bawah ini milik pengajar yang sudah setuju namanya dipublikasikan. Hubungi mereka langsung — situs ini tidak mengatur jadwal atau pembayaran.',
@@ -59,7 +54,6 @@ export const ui = {
     'park.map.google': 'Street View © Google',
     'park.map.open': 'Buka rute di Google Maps',
     'park.map.credit': 'Peta © kontributor OpenStreetMap',
-    'park.rules': 'Aturan & Etika',
     'park.condition': 'Catatan Kondisi',
     'park.usage': 'Rekap Penggunaan',
     'park.timeline': 'Linimasa',
@@ -101,11 +95,6 @@ export const ui = {
     'nav.about': 'About',
     'nav.support': 'Support',
     'home.latest': 'Latest from the Journal',
-    'home.about.title': 'About Pasupati Skatepark',
-    'home.about.body':
-      'Pasupati Skatepark sits under the Pasupati flyover in Bandung. It is free, open every day, and used by dozens of skaters — from people on a board for the first time to seniors who have skated here since the park opened. The obstacles are concrete: ledges, banks, a manual pad, a quarter pipe and a bowl corner.',
-    'home.about.cta': 'More about the park',
-    'home.carousel.hint': 'swipe →',
     'home.lessons.title': 'Skateboard Instructors',
     'home.lessons.body':
       'Want to learn? The contacts below belong to instructors who agreed to be listed. Reach them directly — this site handles no scheduling and no payments.',
@@ -145,7 +134,6 @@ export const ui = {
     'park.map.google': 'Street View © Google',
     'park.map.open': 'Get directions in Google Maps',
     'park.map.credit': 'Map © OpenStreetMap contributors',
-    'park.rules': 'Rules & Etiquette',
     'park.condition': 'Condition Record',
     'park.usage': 'Usage Snapshot',
     'park.timeline': 'Timeline',

@@ -371,38 +371,6 @@ export const timeline: { year: string; text: Local<string> }[] = [
   },
 ];
 
-// Slides for the "about this site" carousel on Home.
-export const aboutSlides: MediaSlot[] = [
-  {
-    kind: 'photo',
-    hint: {
-      id: 'SLIDE 1: foto lebar taman dari atas jalan layang, hitam-putih',
-      en: 'SLIDE 1: wide shot of the park from the flyover, black and white',
-    },
-  },
-  {
-    kind: 'photo',
-    hint: {
-      id: 'SLIDE 2: kerja bakti — orang menyapu flatground, candid',
-      en: 'SLIDE 2: clean-up day — people sweeping the flatground, candid',
-    },
-  },
-  {
-    kind: 'photo',
-    hint: {
-      id: 'SLIDE 3: sesi pemula Sabtu pagi, anak-anak dengan helm',
-      en: 'SLIDE 3: Saturday beginner session, kids wearing helmets',
-    },
-  },
-  {
-    kind: 'photo',
-    hint: {
-      id: 'SLIDE 4: sesi malam di bawah lampu jalan layang',
-      en: 'SLIDE 4: night session under the flyover lights',
-    },
-  },
-];
-
 // Obstacles: used by the gallery on The Park page.
 export interface Obstacle {
   slug: string;

@@ -26,17 +26,15 @@ All content lives in `src/data/content.ts` (stub for the future Directus collect
 | `lessonProviders` | `LessonProvider` | Home instructors section + `/coaches/<slug>` |
 | `boardRental`   | `{ label, title, body, note, cta, partner }` | Home rental callout + FAQ |
 | `faqs`          | `{ q, a }`         | Home FAQ                       |
-| `aboutSlides`   | `MediaSlot[]`      | Home about carousel            |
 | `usageSnapshot`, `timeline` | — | The Park |
 
 ### Home section order
 
 1. Hero
-2. About this site — carousel (`aboutSlides`) + excerpt + link to `/about`
-3. Skater of the month (newest `featuredFrom`) alongside the park condition ledger
-4. Journal — 3 latest posts
-5. Skateboard instructors (`lessonProviders`)
-6. FAQ (`faqs`)
+2. Skater of the month (newest `featuredFrom`) alongside the park condition ledger
+3. Journal — 3 latest posts
+4. Skateboard instructors (`lessonProviders`, anchored at `#pengajar`)
+5. FAQ (`faqs`)
 
 ### Publishing an instructor
 

@@ -212,30 +212,4 @@ const { lang } = Astro.params as { lang: Lang };
       <p class="mono">{usageSnapshot.period[lang]} — {usageSnapshot.note[lang]}</p>
     </div>
   </section>
-
-  <section class="section">
-    <div class="wrap">
-      <h2 style="margin-bottom: 1rem;">{t(lang, 'park.rules')}</h2>
-      <ul class="entry-list" style="max-width: 640px;">
-        {(lang === 'id'
-          ? [
-              'Hormati antrian — tunggu giliranmu di setiap obstacle.',
-              'Helm untuk pemula dan anak-anak.',
-              'Buang sampah pada tempatnya; ikut kerja bakti bulanan.',
-              'Jangan duduk di coping atau ledge yang sedang dipakai.',
-              'Lihat sekitar sebelum drop-in.',
-            ]
-          : [
-              'Respect the queue — wait your turn at each obstacle.',
-              'Helmets for beginners and kids.',
-              'Bin your trash; join the monthly clean-up.',
-              'Don’t sit on coping or ledges that are in use.',
-              'Look around before you drop in.',
-            ]
-        ).map((rule, i) => (
-          <li><span class="mono">{String(i + 1).padStart(2, '0')}</span><p>{rule}</p></li>
-        ))}
-      </ul>
-    </div>
-  </section>
 </Base>
