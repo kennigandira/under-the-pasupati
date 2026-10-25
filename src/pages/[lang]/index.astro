@@ -322,11 +322,12 @@ const fmt = (iso: string) =>
                     <article class="card coach-card">
                         <MediaSlot lang={lang} slot={p.portrait} />
                         <h3 style="margin-top: 0.75rem;">{p.name}</h3>
-                        <p class="meta" style="margin-bottom: 0.5rem;">
-                            <span>{p.levels[lang]}</span>
-                        </p>
                         <PartnerChip partner={partnerBySlug(p.partner)} lang={lang} />
                         <dl class="coach-facts">
+                            <div>
+                                <dt>{t(lang, "coach.level")}</dt>
+                                <dd>{p.levels[lang]}</dd>
+                            </div>
                             {p.specialties?.length && (
                                 <div>
                                     <dt>{t(lang, "coach.specialty")}</dt>

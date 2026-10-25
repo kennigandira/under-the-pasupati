@@ -26,13 +26,14 @@ const partnerBySlug = (slug?: string) => partners.find((p) => p.slug === slug);
         <div>
           <PartnerChip partner={partnerBySlug(coach.partner)} lang={lang} />
           <h1 style="margin: 0.75rem 0 0.5rem;">{coach.name}</h1>
-          <p class="meta">
-            <span>{coach.levels[lang]}</span>
-          </p>
         </div>
 
         <div>
           <dl class="coach-facts">
+            <div>
+              <dt>{t(lang, 'coach.level')}</dt>
+              <dd>{coach.levels[lang]}</dd>
+            </div>
             {coach.specialties?.length && (
               <div>
                 <dt>{t(lang, 'coach.specialty')}</dt>

@@ -578,7 +578,7 @@ export const lessonProviders: LessonProvider[] = [
     yearsSkating: 4,
     specialties: [{ label: { id: 'Street', en: 'Street' }, video: 'street' }],
     partner: 'tup',
-    levels: { id: 'Beginner to Intermediate', en: 'Beginner to Intermediate' },
+    levels: { id: 'Pemula sampai Menengah', en: 'Beginner to Intermediate' },
     contacts: [
       { kind: 'instagram', value: 'arif_ibdr' },
       { kind: 'whatsapp', value: '0895418294397' },
@@ -616,7 +616,7 @@ export const lessonProviders: LessonProvider[] = [
     yearsSkating: 2,
     specialties: [{ label: { id: 'Street', en: 'Street' }, video: 'street' }],
     partner: 'tup',
-    levels: { id: 'Beginner to Intermediate', en: 'Beginner to Intermediate' },
+    levels: { id: 'Pemula sampai Menengah', en: 'Beginner to Intermediate' },
     contacts: [
       { kind: 'instagram', value: '_hadibaik' },
       { kind: 'whatsapp', value: '087784878716' },
@@ -653,7 +653,7 @@ export const lessonProviders: LessonProvider[] = [
       { label: { id: 'Transisi', en: 'Transition' }, video: 'transition' },
       { label: { id: 'Bowl', en: 'Bowl' }, video: 'bowl' },
     ],
-    levels: { id: 'Beginner to Intermediate', en: 'Beginner to Intermediate' },
+    levels: { id: 'Pemula sampai Menengah', en: 'Beginner to Intermediate' },
     contacts: [
       { kind: 'instagram', value: '_3rrrrrrr' },
       { kind: 'tiktok', value: 'ernazhiem' },

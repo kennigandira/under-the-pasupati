@@ -2,7 +2,7 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  site: 'https://under-the-pasupati.pages.dev',
+  site: 'https://underthepasupati.org',
   output: 'static',
   trailingSlash: 'always',
 });

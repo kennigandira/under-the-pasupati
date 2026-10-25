@@ -44,8 +44,9 @@ Append a `LessonProvider` to `lessonProviders` in `src/data/content.ts` and only
 after the provider agreed in writing. `consentOn` is the internal date they agreed
 (it is not rendered); leave the entry out until you have it.
 
-Each card shows, in order: name, specialty, age, years skating, competition experience,
-levels, rate and contacts. `specialty`, `age`, `yearsSkating`,
+Each card shows the name, then a fact ledger: student level (`levels`, always
+present), specialty, age, years skating and competition experience — then rate
+and contacts. `specialty`, `age`, `yearsSkating`,
 `competition` and `rate` are optional — omit any of them and the row
 simply doesn't render, so a provider can be listed without publishing their age or
 record. Contacts are a list (`contacts: [{ kind, value }]`) so a provider can publish
@@ -211,6 +212,8 @@ Without them the deploy step fails; fork PRs skip the deploy step by design.
 
 ### URLs
 
+- Production: `https://underthepasupati.org/` (custom domains on the Pages
+  project: `underthepasupati.org` and `www.underthepasupati.org`)
 - Production alias: `https://under-the-pasupati.pages.dev/`
 - Preview: `https://<branch>.under-the-pasupati.pages.dev/`
 
