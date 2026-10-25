@@ -77,9 +77,10 @@ The rental offer (boards to rent, plus a buddy for first-timers) lives in
 and a FAQ entry that points at it. Rates: board Rp15,000/hour; buddy Rp50,000/hour
 for 15 and over; under 15 goes straight to private. `buddyTip` is the buddy
 explanation, rendered as a tooltip on every `pendamping`/`buddy` mention by
-`withBuddyTip` in `src/lib/terms.ts`. Its CTA links to the contact route on
-`/about`; keep that contact address current, since it is where rental and
-listing requests land.
+`withBuddyTip` in `src/lib/terms.ts`. Its CTA opens WhatsApp directly — the
+number lives in `boardRental.contact` (a `Contact` resolved through
+`contactHref` in `src/lib/contacts.ts`), so update it there when the rental line
+changes. Listing requests still go through the contact route on `/about`.
 
 ### Obstacle gallery
 

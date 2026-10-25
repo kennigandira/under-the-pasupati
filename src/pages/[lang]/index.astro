@@ -281,7 +281,12 @@ const latest = [...posts]
                 </div>
                 <div class="rental-right">
                     <p>
-                        <a class="btn" href={localeHref(lang, "/about")}>
+                        <a
+                            class="btn"
+                            href={contactHref(boardRental.contact)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
                             {boardRental.cta[lang]} →
                         </a>
                     </p>

@@ -699,6 +699,8 @@ export const boardRental = {
     en: 'A buddy stays with you, teaches the skateboarding basics, and keeps an eye on you while you try it out with the other skaters at the park.',
   },
   cta: { id: 'Tanya soal sewa', en: 'Ask about rentals' },
+  // The rental CTA opens WhatsApp directly.
+  contact: { kind: 'whatsapp', value: '085185690494' } as Contact,
 };
 
 // FAQ — shown on Home.
