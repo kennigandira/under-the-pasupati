@@ -111,6 +111,27 @@ const nav = [
             href="https://fonts.googleapis.com/css2?family=Anton&family=Bungee&family=Space+Grotesk:wght@400;700&family=Space+Mono:wght@400;700&display=swap"
             rel="stylesheet"
         />
+
+        {/* Google tag (gtag.js) — inlined verbatim: Astro must not bundle or
+            defer this, gtag.js depends on the global dataLayer/gtag pair.
+            Production builds only, so dev hits stay out of the property. */}
+        {import.meta.env.PROD && (
+            <>
+                <script
+                    is:inline
+                    async
+                    src="https://www.googletagmanager.com/gtag/js?id=G-X5T4VM0TDX"
+                />
+                <script is:inline>
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag() {
+                        dataLayer.push(arguments);
+                    }
+                    gtag("js", new Date());
+                    gtag("config", "G-X5T4VM0TDX");
+                </script>
+            </>
+        )}
     </head>
     <body>
         <header class="site-header">
