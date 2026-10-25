@@ -212,8 +212,14 @@ Without them the deploy step fails; fork PRs skip the deploy step by design.
 
 ### URLs
 
-- Production: `https://underthepasupati.org/` (custom domains on the Pages
-  project: `underthepasupati.org` and `www.underthepasupati.org`)
+- Production: `https://underthepasupati.org/`
+  - Zone `underthepasupati.org` lives in the same Cloudflare account as the
+    project (registered via Cloudflare Registrar).
+  - DNS: proxied `CNAME underthepasupati.org → under-the-pasupati.pages.dev`
+    plus the same for `www`; the Pages project holds only the apex custom domain.
+  - `www` and plain `http` both 301 to `https://underthepasupati.org` — the www
+    hop is a Single Redirect rule (`http_request_dynamic_redirect`), so the
+    Pages domain list stays apex-only.
 - Production alias: `https://under-the-pasupati.pages.dev/`
 - Preview: `https://<branch>.under-the-pasupati.pages.dev/`
 
