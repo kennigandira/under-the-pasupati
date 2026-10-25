@@ -981,6 +981,12 @@ main { flex: 1; padding-bottom: 4rem; }
 
 /* Instructor cards: portraits stay in colour like the coach pages. */
 .coach-card img { filter: none; }
+.coach-contact-note {
+  max-width: 62ch;
+  margin: 1.25rem 0 0.85rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
 
 /* ---- Specialty reference video ---- */
 .specialty-list {

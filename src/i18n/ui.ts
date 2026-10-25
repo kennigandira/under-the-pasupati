@@ -24,6 +24,7 @@ export const ui = {
     'home.lessons.body':
       'Ingin belajar? Kontak di bawah ini milik pengajar yang sudah setuju namanya dipublikasikan. Hubungi mereka langsung — situs ini tidak mengatur jadwal atau pembayaran.',
     'home.lessons.cta': 'Mau kontakmu dipasang di sini?',
+    'home.lessons.contact': 'Silakan langsung kontak para coach di bawah.',
     'coach.age': 'Umur',
     'coach.specialty': 'Spesialisasi',
     'coach.specialty.video': 'Video spesialisasi',
@@ -110,6 +111,7 @@ export const ui = {
     'home.lessons.body':
       'Want to learn? The contacts below belong to instructors who agreed to be listed. Reach them directly — this site handles no scheduling and no payments.',
     'home.lessons.cta': 'Want your contact listed here?',
+    'home.lessons.contact': 'Reach out to the coaches below directly.',
     'coach.age': 'Age',
     'coach.specialty': 'Specialty',
     'coach.specialty.video': 'Specialty video',
