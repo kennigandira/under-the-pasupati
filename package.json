@@ -12,7 +12,8 @@
     "deploy:preview": "npm run build && sh -c 'set -a; . ./.env.local; set +a; wrangler pages deploy dist --branch=preview'"
   },
   "dependencies": {
-    "astro": "^5.14.1"
+    "astro": "^5.14.1",
+    "sharp": "^0.34.5"
   },
   "devDependencies": {
     "wrangler": "^4.151.1"

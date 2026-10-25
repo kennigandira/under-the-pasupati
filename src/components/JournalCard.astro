@@ -1,0 +1,27 @@
+---
+import MediaSlot from './MediaSlot.astro';
+import { localeHref, t, type Lang } from '../i18n/ui';
+import type { Post } from '../data/content';
+import { plainInline } from '../lib/inline';
+
+interface Props {
+  post: Post;
+  lang: Lang;
+}
+const { post, lang } = Astro.props;
+const date = new Date(post.date).toLocaleDateString(lang === 'id' ? 'id-ID' : 'en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+---
+
+<article class="card tape journal-card">
+  <MediaSlot lang={lang} slot={post.cover} class="journal-photo" />
+  <p class="meta" style="margin-top: 0.75rem;">
+    <span>{date}</span><span>{post.category}</span><span>{post.author}</span>
+  </p>
+  <h3>{plainInline(post.title[lang])}</h3>
+  <p>{plainInline(post.excerpt[lang])}</p>
+  <a class="mono" href={localeHref(lang, `/journal/${post.slug}`)}>{t(lang, 'read.more')} →</a>
+</article>

@@ -25,7 +25,6 @@ export const ui = {
     'home.lessons.body':
       'Ingin belajar? Kontak di bawah ini milik pengajar yang sudah setuju namanya dipublikasikan. Hubungi mereka langsung — situs ini tidak mengatur jadwal atau pembayaran.',
     'home.lessons.cta': 'Mau kontakmu dipasang di sini?',
-    'home.lessons.contact': 'Silakan langsung kontak para coach di bawah.',
     'coach.age': 'Umur',
     'coach.level': 'Level murid',
     'coach.specialty': 'Spesialisasi',
@@ -88,6 +87,19 @@ export const ui = {
     'lang.switch': 'EN',
     'read.more': 'Baca selengkapnya',
     'post.writtenBy': 'Ditulis oleh',
+    'post.share': 'Bagikan',
+    'post.share.text': 'Baca di Under the Pasupati:',
+    'post.translationNotice':
+      'Versi bahasa Inggris artikel ini diterjemahkan oleh AI. Terbuka untuk kontributor penerjemah sukarela!',
+    'share.whatsapp': 'Bagikan ke WhatsApp',
+    'share.telegram': 'Bagikan ke Telegram',
+    'share.facebook': 'Bagikan ke Facebook',
+    'share.x': 'Bagikan ke X',
+    'share.instagram': 'Bagikan ke Instagram Story',
+    'share.instagram.preparing': 'Menyiapkan kartu Story…',
+    'share.instagram.downloaded':
+      'Kartu Story 1080×1920 diunduh, tautan disalin. Posting dari aplikasi Instagram, lalu tempel tautan di sticker tautan.',
+    'share.copyFailed': 'Gagal menyalin tautan. Salin manual dari address bar.',
     'see.all': 'Lihat semua',
   },
   en: {
@@ -112,7 +124,6 @@ export const ui = {
     'home.lessons.body':
       'Want to learn? The contacts below belong to instructors who agreed to be listed. Reach them directly — this site handles no scheduling and no payments.',
     'home.lessons.cta': 'Want your contact listed here?',
-    'home.lessons.contact': 'Reach out to the coaches below directly.',
     'coach.age': 'Age',
     'coach.level': 'Student level',
     'coach.specialty': 'Specialty',
@@ -175,6 +186,19 @@ export const ui = {
     'lang.switch': 'ID',
     'read.more': 'Read more',
     'post.writtenBy': 'Written by',
+    'post.share': 'Share',
+    'post.share.text': 'Read at Under the Pasupati:',
+    'post.translationNotice':
+      'This English version was translated by AI. Open for volunteer translator contributors!',
+    'share.whatsapp': 'Share on WhatsApp',
+    'share.telegram': 'Share on Telegram',
+    'share.facebook': 'Share on Facebook',
+    'share.x': 'Share on X',
+    'share.instagram': 'Share to Instagram Story',
+    'share.instagram.preparing': 'Preparing the Story card…',
+    'share.instagram.downloaded':
+      'Story card (1080×1920) downloaded and link copied. Post it from the Instagram app, then add the link sticker.',
+    'share.copyFailed': 'Could not copy the link. Copy it from the address bar.',
     'see.all': 'See all',
   },
 } as const;

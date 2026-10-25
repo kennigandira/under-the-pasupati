@@ -29,6 +29,12 @@ All content lives in `src/data/content.ts` (stub for the future Directus collect
 | `faqs`          | `{ q, a }`         | Home FAQ                       |
 | `usageSnapshot`, `timeline` | — | The Park |
 
+Journal `title`, `excerpt` and `body` support one inline mark: `*italic*` —
+carried over from the author's Google Docs (loanwords like *skateboard*). Render
+it with `renderInline()` from `src/lib/inline.ts` (`set:html`) and strip it with
+`plainInline()` for `<title>`, meta/OG tags, share messages and OG cards. No
+other markup (bold, links, headings) exists in the grammar.
+
 ### Home section order
 
 1. Hero
@@ -114,6 +120,44 @@ specialty's `video` to leave the label plain text. `age` / `yearsSkating` render
 `src/lib/format.ts` (`years()`) so they always carry "tahun" / "years".
 
 Partners carry a real `logo` slot with `src`, and every `LessonProvider` can point at one via `partner: '<partner slug>'` — coach cards and profile pages then show that partner's logo as a linked chip. `boardRental.partner` does the same for the rental callout.
+
+## Sharing & SEO
+
+`src/layouts/Base.astro` owns every social/SEO tag: absolute canonical, `hreflang`
+alternates plus `x-default`, Open Graph (`og:type`, `og:locale`/alternate, image
+dimensions, article dates/author/section), `twitter:card`,
+and optional JSON-LD passed as `jsonLd`. Pages pass `type="article"` and the
+article fields to opt into the article tags. `astro.config.mjs` `site` is what
+makes the URLs absolute — keep it set.
+
+Social preview images are generated at build time, not committed:
+
+- `src/pages/og/[lang]/[slug].png.ts` — 1200×630 article cards (title, date,
+  cover photo) from `src/lib/og.ts`, driven by the `posts` array.
+- `src/pages/og/story/[lang]/[slug].png.ts` — 1080×1920 Instagram Story cards
+  (`renderStoryCard`), same cover/title but laid out for the 9:16 safe area.
+- `src/pages/og/site-[lang].png.ts` — default card for every other page.
+- Adding a post or changing its cover/title regenerates both automatically;
+  the article page points `og:image` at `/og/<lang>/<slug>.png`.
+
+`src/pages/sitemap.xml.ts` lists both languages for every static and detail route
+with `hreflang` alternates; `public/robots.txt` points at it. New detail routes
+must be added to `detailPaths` there.
+
+Journal articles end with `<ShareBar>` (`src/components/ShareBar.astro`):
+WhatsApp, Telegram, Facebook and X use the networks' share intents. Instagram
+has no web intent for Stories, so that button hands the story card to the native
+share sheet: on phones it shares the 1080×1920 PNG as a file (Instagram appears
+as a Stories target) and falls back to sharing the link, which opens Instagram's
+story editor with a link sticker. On desktop, where Instagram cannot publish a
+Story from the web, it downloads the card and copies the link for the sticker.
+The image is prefetched on hover/focus so the share call stays inside the click
+gesture (Safari refuses a share that awaits a network request first). No web API
+can pre-fill the link sticker or caption — the user places them in the app. Copy
+strings live in `src/i18n/ui.ts` under `share.*`.
+
+English journal articles show an AI-translation disclosure (`post.translationNotice`)
+directly under the byline. It is a plain muted line — no extra styling.
 
 ## Accounts: three Cloudflare logins
 

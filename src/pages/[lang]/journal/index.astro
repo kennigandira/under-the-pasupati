@@ -1,7 +1,7 @@
 ---
 import Base from '../../../layouts/Base.astro';
-import MediaSlot from '../../../components/MediaSlot.astro';
-import { languages, localeHref, t, type Lang } from '../../../i18n/ui';
+import JournalCard from '../../../components/JournalCard.astro';
+import { languages, t, type Lang } from '../../../i18n/ui';
 import { posts } from '../../../data/content';
 
 export function getStaticPaths() {
@@ -9,8 +9,6 @@ export function getStaticPaths() {
 }
 const { lang } = Astro.params as { lang: Lang };
 const sorted = [...posts].sort((a, b) => b.date.localeCompare(a.date));
-const fmt = (iso: string) =>
-  new Date(iso).toLocaleDateString(lang === 'id' ? 'id-ID' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 ---
 
 <Base lang={lang} title={t(lang, 'journal.title')} path="/journal">
@@ -18,17 +16,7 @@ const fmt = (iso: string) =>
     <div class="wrap">
       <h1>{t(lang, 'journal.title')}</h1>
       <div class="grid grid-3" style="margin-top: 2rem;">
-        {sorted.map((p) => (
-          <article class="card tape">
-            <MediaSlot lang={lang} slot={p.cover} class="journal-photo" />
-            <p class="meta" style="margin-top: 0.75rem;">
-              <span>{fmt(p.date)}</span><span>{p.category}</span><span>{p.author}</span>
-            </p>
-            <h3>{p.title[lang]}</h3>
-            <p>{p.excerpt[lang]}</p>
-            <a class="mono" href={localeHref(lang, `/journal/${p.slug}`)}>{t(lang, 'read.more')} →</a>
-          </article>
-        ))}
+        {sorted.map((p) => <JournalCard post={p} lang={lang} />)}
       </div>
     </div>
   </section>

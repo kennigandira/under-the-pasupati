@@ -1,6 +1,7 @@
 ---
 import Base from "../../layouts/Base.astro";
 import MediaSlot from "../../components/MediaSlot.astro";
+import JournalCard from "../../components/JournalCard.astro";
 import PartnerChip from "../../components/PartnerChip.astro";
 import SpecialtyLink from "../../components/SpecialtyLink.astro";
 import SpecialtyVideoDialog from "../../components/SpecialtyVideoDialog.astro";
@@ -33,12 +34,6 @@ const featured = [...skaters].sort((a, b) =>
 const latest = [...posts]
     .sort((a, b) => b.date.localeCompare(a.date))
     .slice(0, 3);
-const fmt = (iso: string) =>
-    new Date(iso).toLocaleDateString(lang === "id" ? "id-ID" : "en-GB", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-    });
 ---
 
 <Base lang={lang} path="">
@@ -228,21 +223,7 @@ const fmt = (iso: string) =>
             </div>
             <div class="grid grid-3">
                 {latest.map((p) => (
-                    <article class="card tape">
-                        <MediaSlot lang={lang} slot={p.cover} class="journal-photo" />
-                        <p class="meta" style="margin-top: 0.75rem;">
-                            <span>{fmt(p.date)}</span>
-                            <span>{p.category}</span>
-                        </p>
-                        <h3>{p.title[lang]}</h3>
-                        <p>{p.excerpt[lang]}</p>
-                        <a
-                            class="mono"
-                            href={localeHref(lang, `/journal/${p.slug}`)}
-                        >
-                            {t(lang, "read.more")} →
-                        </a>
-                    </article>
+                    <JournalCard post={p} lang={lang} />
                 ))}
             </div>
         </div>
@@ -314,9 +295,6 @@ const fmt = (iso: string) =>
                     />
                 </div>
             </div>
-            <p class="mono coach-contact-note">
-                {t(lang, "home.lessons.contact")}
-            </p>
             <div class="grid grid-3">
                 {lessonProviders.map((p) => (
                     <article class="card coach-card">

@@ -1,0 +1,220 @@
+---
+import { t, type Lang } from '../i18n/ui';
+
+interface Props {
+  url: string; // absolute URL to share
+  title: string; // shared message
+  lang: Lang;
+  story: string; // same-origin URL of the 1080×1920 story card
+  slug: string; // used as the downloaded file name
+}
+const { url, title, lang, story, slug } = Astro.props;
+
+const text = `${t(lang, 'post.share.text')} ${title}`;
+const enc = encodeURIComponent;
+const networks = [
+  {
+    key: 'whatsapp',
+    label: t(lang, 'share.whatsapp'),
+    href: `https://wa.me/?text=${enc(`${text} ${url}`)}`,
+  },
+  {
+    key: 'telegram',
+    label: t(lang, 'share.telegram'),
+    href: `https://t.me/share/url?url=${enc(url)}&text=${enc(text)}`,
+  },
+  {
+    key: 'facebook',
+    label: t(lang, 'share.facebook'),
+    href: `https://www.facebook.com/sharer/sharer.php?u=${enc(url)}`,
+  },
+  {
+    key: 'x',
+    label: t(lang, 'share.x'),
+    href: `https://twitter.com/intent/tweet?url=${enc(url)}&text=${enc(text)}`,
+  },
+] as const;
+---
+
+<div class="share" role="group" aria-label={t(lang, 'post.share')}>
+  <p class="share-label mono">{t(lang, 'post.share')}</p>
+  <ul class="share-list">
+    {networks.map((n) => (
+      <li>
+        <a
+          class="share-btn"
+          href={n.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={n.label}
+          title={n.label}
+        >
+          {n.key === 'whatsapp' && (
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.04 2a9.9 9.9 0 0 0-8.42 15.16L2 22l4.97-1.58A9.9 9.9 0 1 0 12.04 2Zm0 1.8a8.1 8.1 0 0 1 0 16.2 8.02 8.02 0 0 1-4.09-1.12l-.29-.17-2.95.94.96-2.87-.19-.3a8.1 8.1 0 0 1 6.56-12.68Zm-3.2 3.7c-.18 0-.46.07-.7.33-.24.26-.92.9-.92 2.19s.94 2.53 1.07 2.7c.13.18 1.82 2.9 4.5 3.95 2.23.88 2.68.7 3.17.66.48-.04 1.55-.63 1.77-1.25.22-.61.22-1.14.15-1.25-.06-.11-.24-.18-.5-.31-.26-.13-1.55-.76-1.79-.85-.24-.09-.41-.13-.58.13-.17.26-.67.85-.82 1.02-.15.18-.3.2-.56.07-.26-.13-1.09-.4-2.07-1.28-.76-.68-1.28-1.52-1.43-1.78-.15-.26-.02-.4.11-.53.12-.12.28-.3.42-.46.13-.15.17-.26.26-.44.09-.17.04-.33-.02-.46-.07-.13-.57-1.41-.79-1.93-.2-.5-.42-.51-.58-.52h-.48Z"/></svg>
+          )}
+          {n.key === 'telegram' && (
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21.9 4.3 18.8 19c-.23 1.04-.85 1.3-1.73.81l-4.78-3.52-2.31 2.22c-.26.26-.47.47-.96.47l.34-4.87 8.85-7.99c.38-.34-.08-.53-.6-.19L6.7 12.87 1.98 11.4c-1.02-.32-1.04-1.02.21-1.51l18.4-7.09c.85-.31 1.6.2 1.31 1.5Z"/></svg>
+          )}
+          {n.key === 'facebook' && (
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14 9h3l.5-3H14V4.5c0-.9.3-1.5 1.7-1.5H17V.1C16.6.05 15.5 0 14.3 0 11.6 0 9.8 1.6 9.8 4.5V6H7v3h2.8v9H14V9Z"/></svg>
+          )}
+          {n.key === 'x' && (
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.24 2h3.31l-7.23 8.26L22.79 22h-6.66l-5.22-6.82L4.94 22H1.63l7.73-8.84L1.47 2h6.83l4.71 6.23L18.24 2Zm-1.16 17.9h1.83L7.02 3.99H5.05L17.08 19.9Z"/></svg>
+          )}
+        </a>
+      </li>
+    ))}
+    <li>
+      <button
+        class="share-btn"
+        type="button"
+        data-share-instagram
+        data-url={url}
+        data-text={text}
+        data-story={story}
+        data-file={`under-the-pasupati-${slug}-${lang}.png`}
+        data-preparing={t(lang, 'share.instagram.preparing')}
+        data-downloaded={t(lang, 'share.instagram.downloaded')}
+        data-failed={t(lang, 'share.copyFailed')}
+        aria-label={t(lang, 'share.instagram')}
+        title={t(lang, 'share.instagram')}
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" d="M7 2.5h10A4.5 4.5 0 0 1 21.5 7v10a4.5 4.5 0 0 1-4.5 4.5H7A4.5 4.5 0 0 1 2.5 17V7A4.5 4.5 0 0 1 7 2.5Z"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.6" cy="6.4" r="1.2" fill="currentColor"/></svg>
+      </button>
+    </li>
+  </ul>
+  <p class="share-status mono" role="status" aria-live="polite"></p>
+</div>
+
+<script>
+  const copy = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      const area = document.createElement('textarea');
+      area.value = text;
+      area.setAttribute('readonly', '');
+      area.style.position = 'fixed';
+      area.style.opacity = '0';
+      document.body.appendChild(area);
+      area.select();
+      let ok = false;
+      try {
+        ok = document.execCommand('copy');
+      } catch {
+        ok = false;
+      }
+      area.remove();
+      return ok;
+    }
+  };
+
+  document.querySelectorAll<HTMLButtonElement>('[data-share-instagram]').forEach((btn) => {
+    const status = btn.closest('.share')?.querySelector<HTMLElement>('.share-status');
+    const {
+      url = '',
+      text = '',
+      story = '',
+      file = 'under-the-pasupati-story.png',
+      preparing = '',
+      downloaded = '',
+      failed = '',
+    } = btn.dataset;
+
+    const payload = `${text} ${url}`.trim();
+    const coarse = window.matchMedia('(pointer: coarse)').matches;
+    const setStatus = (message: string) => {
+      if (status) status.textContent = message;
+    };
+
+    // Instagram has no web share intent: a Story is only reachable by handing a
+    // 9:16 image (or the link) to the native share sheet.
+    const canShareFiles = (() => {
+      if (typeof navigator.share !== 'function' || typeof navigator.canShare !== 'function') {
+        return false;
+      }
+      try {
+        const probe = new File([new Uint8Array([137, 80, 78, 71])], 'probe.png', {
+          type: 'image/png',
+        });
+        return navigator.canShare({ files: [probe] });
+      } catch {
+        return false;
+      }
+    })();
+
+    // Prefetch so the share call stays inside the click gesture: Safari drops
+    // Web Share when the handler awaits a network response first.
+    let card: Promise<File | null> | undefined;
+    const loadCard = () => {
+      if (!story) return Promise.resolve(null);
+      card ??= fetch(story, { credentials: 'same-origin' })
+        .then((res) => (res.ok ? res.blob() : null))
+        .then((blob) => (blob ? new File([blob], file, { type: 'image/png' }) : null))
+        .catch(() => null);
+      return card;
+    };
+
+    const download = () => {
+      const link = document.createElement('a');
+      link.href = story;
+      link.download = file;
+      link.rel = 'noopener';
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    };
+
+    // 'shared' and 'cancelled' both mean the sheet did its job.
+    const present = async (data: ShareData) => {
+      try {
+        await navigator.share(data);
+        return 'shared';
+      } catch (error) {
+        return error instanceof Error && error.name === 'AbortError' ? 'cancelled' : 'failed';
+      }
+    };
+
+    if (canShareFiles) {
+      btn.addEventListener('pointerenter', () => void loadCard(), { once: true });
+      btn.addEventListener('focus', () => void loadCard(), { once: true });
+    }
+
+    btn.addEventListener('click', async () => {
+      if (btn.disabled) return;
+      btn.disabled = true;
+      setStatus('');
+      const slow = setTimeout(() => setStatus(preparing), 300);
+
+      try {
+        if (canShareFiles) {
+          const image = await loadCard();
+          if (image) {
+            clearTimeout(slow);
+            if ((await present({ files: [image], text: payload })) !== 'failed') return;
+          }
+          // Link-only share still lands in Instagram on a phone and opens the
+          // Story editor with a link sticker.
+          if (coarse) {
+            clearTimeout(slow);
+            if ((await present({ title: text, text: payload, url })) !== 'failed') return;
+          }
+        } else if (coarse && typeof navigator.share === 'function') {
+          clearTimeout(slow);
+          if ((await present({ title: text, text: payload, url })) !== 'failed') return;
+        }
+
+        // Desktop: Instagram cannot publish a Story from the web, so hand over
+        // the card plus the link for the sticker. Copy first — clipboard needs
+        // the click's activation.
+        const copied = await copy(url);
+        setStatus(copied ? downloaded : failed);
+        download();
+      } finally {
+        clearTimeout(slow);
+        btn.disabled = false;
+      }
+    });
+  });
+</script>
