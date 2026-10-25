@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import MediaSlot from '../../components/MediaSlot.astro';
 import { languages, t, type Lang } from '../../i18n/ui';
-import { conditionEntries, usageSnapshot, timeline, parkMapSlot, obstacles } from '../../data/content';
+import { conditionEntries, usageSnapshot, timeline, obstacles } from '../../data/content';
 
 export function getStaticPaths() {
   return languages.map((lang) => ({ params: { lang } }));
@@ -60,7 +60,89 @@ const { lang } = Astro.params as { lang: Lang };
   <section class="section">
     <div class="wrap">
       <h2 style="margin-bottom: 1rem;">{t(lang, 'park.map')}</h2>
-      <MediaSlot lang={lang} slot={parkMapSlot} />
+      <div class="map-grid">
+        <div>
+          <h3>{t(lang, 'park.map.entry')}</h3>
+          <div class="map-embed">
+            <iframe
+              title={`${t(lang, 'park.map.title')} — ${t(lang, 'park.map.entry')}`}
+              src="https://www.openstreetmap.org/export/embed.html?bbox=107.60756%2C-6.89870%2C107.60996%2C-6.89710&amp;layer=mapnik&amp;marker=-6.8979049%2C107.60876"
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+          <p class="map-link">
+            <a
+              href="https://maps.app.goo.gl/RmR6oV1J8JAJQbQw8"
+              rel="noopener noreferrer"
+              aria-label={`${t(lang, 'park.map.open')} — ${t(lang, 'park.map.entry')}`}
+            >{t(lang, 'park.map.open')} ↗</a>
+          </p>
+          <p class="map-note">{t(lang, 'park.map.entry.note')}</p>
+          <figure class="map-figure">
+            <img
+              class="map-photo"
+              src="/images/park-access-motor-pedestrian.webp"
+              width="1600"
+              height="664"
+              loading="lazy"
+              decoding="async"
+              alt={t(lang, 'park.map.entry.alt')}
+            />
+            <figcaption>{t(lang, 'park.map.google')}</figcaption>
+          </figure>
+        </div>
+        <div>
+          <h3>{t(lang, 'park.map.car1')}</h3>
+          <div class="map-embed">
+            <iframe
+              title={`${t(lang, 'park.map.title')} — ${t(lang, 'park.map.car1')}`}
+              src="https://www.openstreetmap.org/export/embed.html?bbox=107.60712%2C-6.89880%2C107.60952%2C-6.89720&amp;layer=mapnik&amp;marker=-6.8980009%2C107.6083175"
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+          <p class="map-link">
+            <a
+              href="https://maps.app.goo.gl/47TGyDF8Ce78v7Uy9"
+              rel="noopener noreferrer"
+              aria-label={`${t(lang, 'park.map.open')} — ${t(lang, 'park.map.car1')}`}
+            >{t(lang, 'park.map.open')} ↗</a>
+          </p>
+          <p class="map-note">{t(lang, 'park.map.car1.note')}</p>
+          <figure class="map-figure">
+            <img
+              class="map-photo"
+              src="/images/park-access-car.webp"
+              width="1600"
+              height="603"
+              loading="lazy"
+              decoding="async"
+              alt={t(lang, 'park.map.car1.alt')}
+            />
+            <figcaption>{t(lang, 'park.map.google')}</figcaption>
+          </figure>
+        </div>
+        <div>
+          <h3>{t(lang, 'park.map.car2')}</h3>
+          <div class="map-embed">
+            <iframe
+              title={`${t(lang, 'park.map.title')} — ${t(lang, 'park.map.car2')}`}
+              src="https://www.openstreetmap.org/export/embed.html?bbox=107.60734%2C-6.89953%2C107.60974%2C-6.89793&amp;layer=mapnik&amp;marker=-6.8987329%2C107.6085366"
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+          <p class="map-link">
+            <a
+              href="https://maps.app.goo.gl/7v3aoHCeKGujgRC2A"
+              rel="noopener noreferrer"
+              aria-label={`${t(lang, 'park.map.open')} — ${t(lang, 'park.map.car2')}`}
+            >{t(lang, 'park.map.open')} ↗</a>
+          </p>
+          <p class="map-note">{t(lang, 'park.map.car2.note')}</p>
+        </div>
+      </div>
+      <p class="map-meta">
+        <span>{t(lang, 'park.map.credit')}</span>
+      </p>
     </div>
   </section>
 

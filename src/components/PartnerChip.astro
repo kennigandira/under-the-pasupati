@@ -1,0 +1,40 @@
+---
+import type { Partner } from '../data/content';
+import type { Lang } from '../i18n/ui';
+
+// Partner attribution. `chip` is the small pill for coach cards/profiles;
+// `lockup` is the editorial "by <logo>" used on the rental callout.
+interface Props {
+  partner?: Partner;
+  lang: Lang;
+  label?: string;
+  variant?: 'chip' | 'lockup';
+}
+const { partner, lang, label, variant = 'chip' } = Astro.props;
+const src = partner?.logo.src;
+---
+
+{partner && src && variant === 'lockup' && (
+  <a
+    class="partner-lockup"
+    href={partner.link ?? `/partners/`}
+    rel="noopener noreferrer"
+    title={`${label ? `${label} ` : ''}${partner.name}`}
+  >
+    {label && <span>{label}</span>}
+    <img src={src} alt={partner.name} />
+  </a>
+)}
+
+{partner && src && variant === 'chip' && (
+  <a
+    class="partner-chip"
+    href={partner.link ?? `/partners/`}
+    rel="noopener noreferrer"
+    title={partner.logo.hint[lang]}
+  >
+    {label && <span class="partner-chip-label">{label}</span>}
+    <img src={src} alt="" />
+    <span>{partner.name}</span>
+  </a>
+)}

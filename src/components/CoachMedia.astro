@@ -1,0 +1,121 @@
+---
+import type { Lang } from '../i18n/ui';
+import { t } from '../i18n/ui';
+import type { MediaSlot } from '../data/content';
+
+// Photo + two videos in one row of columns. Clicking a real asset opens it
+// full-screen over a blurred backdrop.
+interface Props {
+  lang: Lang;
+  items: { slot: MediaSlot; label: string; tag?: string }[];
+}
+const { lang, items } = Astro.props;
+---
+
+<div class="coach-media" data-coach-media>
+  <ul class="coach-media-grid">
+    {items.map(({ slot, label, tag }) => (
+      <li class="coach-media-cell">
+        {slot.src ? (
+          <button
+            class="coach-media-tile"
+            type="button"
+            data-media-src={slot.src}
+            data-media-type={slot.kind === 'video' ? 'video' : 'image'}
+            data-media-poster={slot.poster}
+            data-media-alt={slot.hint[lang]}
+            aria-label={`${label} — ${t(lang, 'media.open')}`}
+          >
+            {slot.kind === 'video' && !slot.poster ? (
+              <video src={`${slot.src}#t=0.1`} preload="metadata" muted playsinline aria-hidden="true"></video>
+            ) : (
+              <img src={slot.poster ?? slot.src} alt="" loading="lazy" />
+            )}
+            {tag && (
+              <span class="coach-media-tag" aria-hidden="true">
+                <span class="coach-media-tag-text">{tag}</span>
+              </span>
+            )}
+            <span class="coach-media-badge" aria-hidden="true">
+              {slot.kind === 'video' ? (
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
+              ) : (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square">
+                  <path d="M9 4H4v5M15 4h5v5M9 20H4v-5M15 20h5v-5" />
+                </svg>
+              )}
+            </span>
+          </button>
+        ) : (
+          <div class="coach-media-tile is-empty" role="img" aria-label={slot.hint[lang]} title={slot.hint[lang]}>
+            <span class="media-tag">{t(lang, 'media.placeholder')} · {slot.kind}</span>
+            <span class="media-hint">{slot.hint[lang]}</span>
+          </div>
+        )}
+      </li>
+    ))}
+  </ul>
+
+  <dialog class="coach-lightbox" aria-label={t(lang, 'media.viewer')}>
+    <button class="coach-lightbox-close" type="button" aria-label={t(lang, 'media.close')}>×</button>
+    <div class="coach-lightbox-stage"></div>
+  </dialog>
+</div>
+
+<script>
+  const roots = document.querySelectorAll<HTMLElement>('[data-coach-media]');
+
+  roots.forEach((root) => {
+    if (root.dataset.ready) return;
+    root.dataset.ready = '1';
+
+    const dialog = root.querySelector<HTMLDialogElement>('.coach-lightbox')!;
+    const stage = root.querySelector<HTMLElement>('.coach-lightbox-stage')!;
+    let playing: HTMLVideoElement | null = null;
+
+    const reset = () => {
+      if (playing) {
+        playing.pause();
+        playing.removeAttribute('src');
+        playing.load();
+        playing = null;
+      }
+      stage.replaceChildren();
+      document.documentElement.classList.remove('lightbox-open');
+    };
+
+    root.querySelectorAll<HTMLButtonElement>('.coach-media-tile[data-media-src]').forEach((tile) => {
+      tile.addEventListener('click', () => {
+        reset();
+
+        if (tile.dataset.mediaType === 'video') {
+          const video = document.createElement('video');
+          video.src = tile.dataset.mediaSrc!;
+          if (tile.dataset.mediaPoster) video.poster = tile.dataset.mediaPoster;
+          video.controls = true;
+          video.playsInline = true;
+          video.autoplay = true;
+          video.loop = true;
+          stage.append(video);
+          playing = video;
+          void video.play().catch(() => {});
+        } else {
+          const img = document.createElement('img');
+          img.src = tile.dataset.mediaSrc!;
+          img.alt = tile.dataset.mediaAlt ?? '';
+          stage.append(img);
+        }
+
+        dialog.showModal();
+        document.documentElement.classList.add('lightbox-open');
+      });
+    });
+
+    dialog.querySelector('.coach-lightbox-close')!.addEventListener('click', () => dialog.close());
+    // Click on the blurred area (not the media itself) closes the viewer.
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog || event.target === stage) dialog.close();
+    });
+    dialog.addEventListener('close', reset);
+  });
+</script>

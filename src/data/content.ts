@@ -1,4 +1,5 @@
 import type { Lang } from '../i18n/ui';
+import type { Contact } from '../lib/contacts';
 
 // Shape mirrors the future Directus collections. Every text field is per-language.
 export type Local<T> = Record<Lang, T>;
@@ -7,6 +8,10 @@ export interface MediaSlot {
   // What the owner should shoot/collect for this slot. Shown inside the placeholder.
   hint: Local<string>;
   kind: 'photo' | 'video' | 'map' | 'logo';
+  // Real asset path (public/...). Once set, it replaces the placeholder box.
+  src?: string;
+  // Video only: still frame shown before playback (public/...).
+  poster?: string;
 }
 
 export interface Skater {
@@ -34,7 +39,7 @@ export interface Post {
   cover: MediaSlot;
 }
 
-export interface Community {
+export interface Partner {
   slug: string;
   name: string;
   intro: Local<string>;
@@ -226,56 +231,19 @@ export const posts: Post[] = [
   },
 ];
 
-export const communities: Community[] = [
+export const partners: Partner[] = [
   {
-    slug: 'flyover-family',
-    name: 'Flyover Family',
+    slug: 'tup',
+    name: 'TUP Skateboard',
     intro: {
-      id: 'Kru reguler harian Pasupati. Paling sering terlihat pagi dan sore.',
-      en: 'Pasupati’s daily regulars crew. Most often seen mornings and afternoons.',
+      id: 'Partner taman. Sewa papan dan para pengajar komunitas datang dari TUP Skateboard.',
+      en: 'The park’s partner. The board rental and the community coaches come from TUP Skateboard.',
     },
-    link: 'https://instagram.com/',
+    link: 'https://www.instagram.com/tup.storre/',
     logo: {
       kind: 'logo',
-      hint: { id: 'LOGO: logo/stiker Flyover Family, PNG transparan', en: 'LOGO: Flyover Family logo/sticker, transparent PNG' },
-    },
-  },
-  {
-    slug: 'skena-putri',
-    name: 'Skena Putri Bandung',
-    intro: {
-      id: 'Komunitas skater perempuan Bandung. Klinik pemula tiap Sabtu pagi.',
-      en: 'Bandung’s women skaters community. Beginner clinic every Saturday morning.',
-    },
-    link: 'https://instagram.com/',
-    logo: {
-      kind: 'logo',
-      hint: { id: 'LOGO: logo Skena Putri Bandung, PNG transparan', en: 'LOGO: Skena Putri Bandung logo, transparent PNG' },
-    },
-  },
-  {
-    slug: 'pasupati-old-school',
-    name: 'Pasupati Old School',
-    intro: {
-      id: 'Para senior yang bermain sejak taman pertama dibuka.',
-      en: 'The seniors who have skated here since the park first opened.',
-    },
-    logo: {
-      kind: 'logo',
-      hint: { id: 'LOGO: logo atau foto kru Pasupati Old School', en: 'LOGO: Pasupati Old School logo or crew photo' },
-    },
-  },
-  {
-    slug: 'bandung-skate-scene',
-    name: 'Bandung Skate Scene',
-    intro: {
-      id: 'Kanal dokumentasi skate seluruh Bandung, sering meliput di Pasupati.',
-      en: 'Bandung-wide skate documentation channel, often filming at Pasupati.',
-    },
-    link: 'https://youtube.com/',
-    logo: {
-      kind: 'logo',
-      hint: { id: 'LOGO: logo Bandung Skate Scene', en: 'LOGO: Bandung Skate Scene logo' },
+      src: '/images/tup-logo.webp',
+      hint: { id: 'LOGO: logo TUP', en: 'LOGO: TUP logo' },
     },
   },
 ];
@@ -402,14 +370,6 @@ export const timeline: { year: string; text: Local<string> }[] = [
     text: { id: 'Situs ini diluncurkan untuk mencatat taman secara rutin.', en: 'This site launches to record the park regularly.' },
   },
 ];
-
-export const parkMapSlot: MediaSlot = {
-  kind: 'map',
-  hint: {
-    id: 'PETA: ilustrasi denah taman — posisi pilar, ledge, bank, quarter pipe, flatground; tandai lokasi isu kondisi',
-    en: 'MAP: illustrated park layout — pillars, ledges, banks, quarter pipe, flatground; mark condition issue spots',
-  },
-};
 
 // Slides for the "about this site" carousel on Home.
 export const aboutSlides: MediaSlot[] = [
@@ -555,11 +515,10 @@ export interface LessonProvider {
   age?: number; // published only if the provider wants it shown
   yearsSkating?: number;
   competition?: Local<string>; // competition experience, free text
+  specialty?: Local<string>; // e.g. Street, Bowl, Transition & bowl
+  partner?: string; // slug of the partner they are under (see partners)
   levels: Local<string>;
-  area: Local<string>;
-  contactKind: 'whatsapp' | 'instagram' | 'email';
-  contact: string;
-  languages: string[];
+  contacts: Contact[];
   rate?: Local<string>;
   consentOn: string;
   portrait: MediaSlot;
@@ -569,106 +528,104 @@ export interface LessonProvider {
 
 export const lessonProviders: LessonProvider[] = [
   {
-    slug: 'raka-jr',
-    name: 'Raka “JR” Pratama',
-    age: 31,
-    yearsSkating: 9,
-    competition: {
-      id: 'Juara 2 Bandung Street Series 2024 · Finalis Indo Skate Open 2023',
-      en: '2nd place, Bandung Street Series 2024 · Finalist, Indo Skate Open 2023',
-    },
-    levels: { id: 'Pemula & remaja', en: 'Beginners & teens' },
-    area: { id: 'Pasupati, Sabtu pagi', en: 'Pasupati, Saturday mornings' },
-    contactKind: 'whatsapp',
-    contact: '+62 812-0000-0000',
-    languages: ['id', 'en'],
-    rate: { id: 'Sukarela / negotiable', en: 'Sliding scale / negotiable' },
-    consentOn: '2026-10-01',
-    portrait: {
-      kind: 'photo',
-      hint: { id: 'FOTO: JR sedang mengajar, hitam-putih', en: 'PHOTO: JR mid-lesson, black and white' },
-    },
-    trainingVideo: {
-      kind: 'video',
-      hint: {
-        id: 'VIDEO: sesi mengajar — JR mengoreksi posisi kaki pemula, 30–60 detik, rekaman HP cukup',
-        en: 'VIDEO: teaching session — JR correcting a beginner’s foot placement, 30–60 seconds, phone footage is fine',
-      },
-    },
-    trickVideo: {
-      kind: 'video',
-      hint: {
-        id: 'VIDEO: trik andalan JR — satu line bersih, boleh dari dua sudut, 15–30 detik',
-        en: 'VIDEO: JR’s signature trick — one clean line, two angles if possible, 15–30 seconds',
-      },
-    },
-  },
-  {
-    slug: 'sinta-maheswari',
-    name: 'Sinta Maheswari',
-    age: 24,
+    slug: 'arif-ajah',
+    name: 'Arif ajah',
+    age: 19,
     yearsSkating: 4,
-    competition: {
-      id: 'Juara 3 Skena Putri Jam 2025',
-      en: '3rd place, Skena Putri Jam 2025',
-    },
-    levels: { id: 'Anak 6 tahun ke atas, pemula dewasa', en: 'Kids 6+, adult beginners' },
-    area: { id: 'Pasupati, Sabtu pagi', en: 'Pasupati, Saturday mornings' },
-    contactKind: 'instagram',
-    contact: 'instagram.com/skenaputri',
-    languages: ['id'],
-    rate: { id: 'Gratis untuk pemula', en: 'Free for beginners' },
-    consentOn: '2026-09-20',
+    specialty: { id: 'Street', en: 'Street' },
+    partner: 'tup',
+    levels: { id: 'Beginner to Intermediate', en: 'Beginner to Intermediate' },
+    contacts: [
+      { kind: 'instagram', value: 'arif_ibdr' },
+      { kind: 'whatsapp', value: '0895418294397' },
+      { kind: 'tiktok', value: 'arif_skateboards' },
+    ],
+    consentOn: '2026-10-21',
     portrait: {
       kind: 'photo',
-      hint: { id: 'FOTO: klinik pemula Sabtu, anak-anak dengan papan', en: 'PHOTO: Saturday beginner clinic, kids with boards' },
+      hint: { id: 'FOTO: Arif, potret di lapangan terbuka', en: 'PHOTO: Arif, portrait outdoors' },
+      src: '/media/coaches/arif-ajah/portrait.webp',
     },
     trainingVideo: {
       kind: 'video',
       hint: {
-        id: 'VIDEO: sesi mengajar — Sinta memandu anak-anak pemula, 30–60 detik',
-        en: 'VIDEO: teaching session — Sinta guiding beginner kids, 30–60 seconds',
+        id: 'VIDEO: sesi mengajar — Arif memandu pemula, 30–60 detik, rekaman HP cukup',
+        en: 'VIDEO: teaching session — Arif guiding a beginner, 30–60 seconds, phone footage is fine',
       },
     },
     trickVideo: {
       kind: 'video',
       hint: {
-        id: 'VIDEO: trik andalan Sinta — satu line bersih di flatground atau bank',
-        en: 'VIDEO: Sinta’s signature trick — one clean line on the flatground or bank',
+        id: 'VIDEO: trik andalan Arif — satu line bersih, 15–30 detik',
+        en: 'VIDEO: Arif’s signature trick — one clean line, 15–30 seconds',
+      },
+      src: '/media/coaches/arif-ajah/riding.mp4',
+      poster: '/media/coaches/arif-ajah/riding-poster.webp',
+    },
+  },
+  {
+    slug: 'hadi-baik',
+    name: 'Hadi Baik',
+    age: 21,
+    yearsSkating: 2,
+    specialty: { id: 'Street', en: 'Street' },
+    partner: 'tup',
+    levels: { id: 'Beginner to Intermediate', en: 'Beginner to Intermediate' },
+    contacts: [
+      { kind: 'instagram', value: '_hadibaik' },
+      { kind: 'whatsapp', value: '087784878716' },
+      { kind: 'tiktok', value: 'sjajejdjdnej' },
+    ],
+    consentOn: '2026-10-21',
+    portrait: {
+      kind: 'photo',
+      hint: { id: 'FOTO: Potret Hadi', en: 'PHOTO: Portrait of Hadi' },
+    },
+    trainingVideo: {
+      kind: 'video',
+      hint: {
+        id: 'VIDEO: sesi mengajar — Hadi memandu pemula, 30–60 detik, rekaman HP cukup',
+        en: 'VIDEO: teaching session — Hadi guiding a beginner, 30–60 seconds, phone footage is fine',
+      },
+      src: '/media/coaches/hadi-baik/teaching.mp4',
+      poster: '/media/coaches/hadi-baik/teaching-poster.webp',
+    },
+    trickVideo: {
+      kind: 'video',
+      hint: {
+        id: 'VIDEO: trik andalan Hadi — satu line bersih, 15–30 detik',
+        en: 'VIDEO: Hadi’s signature trick — one clean line, 15–30 seconds',
       },
     },
   },
   {
-    slug: 'pasupati-old-school',
-    name: 'Pasupati Old School',
-    age: 39,
-    yearsSkating: 18,
-    competition: {
-      id: 'Juara 1 Bowl Pasupati Open 2018 (Bang Udin)',
-      en: '1st place, Bowl, Pasupati Open 2018 (Bang Udin)',
-    },
-    levels: { id: 'Menengah ke atas', en: 'Intermediate and up' },
-    area: { id: 'Pasupati, sore hari', en: 'Pasupati, afternoons' },
-    contactKind: 'whatsapp',
-    contact: '+62 813-0000-0000',
-    languages: ['id'],
-    consentOn: '2026-09-05',
+    slug: 'udin',
+    name: 'Udin',
+    age: 19,
+    yearsSkating: 6,
+    specialty: { id: 'Transisi & Bowl', en: 'Transition & bowl' },
+    levels: { id: 'Beginner to Intermediate', en: 'Beginner to Intermediate' },
+    contacts: [
+      { kind: 'instagram', value: '_3rrrrrrr' },
+      { kind: 'tiktok', value: 'ernazhiem' },
+    ],
+    consentOn: '2026-10-22',
     portrait: {
       kind: 'photo',
-      hint: { id: 'FOTO: sesi transisi bersama senior', en: 'PHOTO: transition session with the seniors' },
+      hint: { id: 'FOTO: Potret Udin', en: 'PHOTO: Portrait of Udin' },
     },
     trainingVideo: {
       kind: 'video',
       hint: {
-        id: 'VIDEO: sesi mengajar — pendampingan drop-in pertama seorang pemula, 30–60 detik',
-        en: 'VIDEO: teaching session — walking a beginner through their first drop-in, 30–60 seconds',
+        id: 'VIDEO: sesi mengajar — Udin memandu pemula, 30–60 detik, rekaman HP cukup',
+        en: 'VIDEO: teaching session — Udin guiding a beginner, 30–60 seconds, phone footage is fine',
       },
     },
     trickVideo: {
       kind: 'video',
       hint: {
-        id: 'VIDEO: trik andalan — run bowl atau line transisi, 15–30 detik',
-        en: 'VIDEO: signature riding — a bowl run or transition line, 15–30 seconds',
+        id: 'VIDEO: trik andalan Udin — satu line bersih, 15–30 detik',
+        en: 'VIDEO: Udin’s signature trick — one clean line, 15–30 seconds',
       },
     },
   },
@@ -678,14 +635,33 @@ export const lessonProviders: LessonProvider[] = [
 // section on Home and as FAQ entries, so newcomers find it either way.
 export const boardRental = {
   label: { id: 'Sewa Papan', en: 'Board Rental' },
+  partner: 'tup', // the rental is run by TUP — logo shown on the callout
   title: { id: 'Sewa papan & pendamping', en: 'Board rental & a buddy' },
   body: {
     id: 'Kita sedia sewa papan. Semisal butuh pendamping saat pertama kali mencoba, kita sedia juga.',
     en: 'We rent boards out. And if you want someone beside you the first time, we can provide a buddy too.',
   },
+  rates: [
+    {
+      label: { id: 'Sewa papan', en: 'Board rental' },
+      price: { id: 'Rp15.000 / jam', en: 'Rp15,000 / hour' },
+    },
+    {
+      label: { id: 'Pendamping · 15 tahun ke atas', en: 'Buddy · 15 and over' },
+      price: { id: 'Rp50.000 / jam', en: 'Rp50,000 / hour' },
+    },
+  ],
+  underFifteen: {
+    id: 'Di bawah 15 tahun langsung private.',
+    en: 'Under 15 goes straight to private.',
+  },
   note: {
     id: 'Tidak perlu beli papan dulu. Sewa ini ada untuk yang masih penasaran dan ingin coba-coba.',
     en: 'No need to buy a board first. The rental exists for people who are curious and want to try it out.',
+  },
+  buddyTip: {
+    id: 'Pendamping menemani, mengajarkan dasar-dasar skateboard, dan menjaga kamu saat mencoba bersama skater lain di taman.',
+    en: 'A buddy stays with you, teaches the skateboarding basics, and keeps an eye on you while you try it out with the other skaters at the park.',
   },
   cta: { id: 'Tanya soal sewa', en: 'Ask about rentals' },
 };
@@ -702,8 +678,8 @@ export const faqs: { q: Local<string>; a: Local<string> }[] = [
   {
     q: { id: 'Apakah bisa sewa papan?', en: 'Can I rent a board?' },
     a: {
-      id: 'Bisa. Kita sedia sewa papan juga, dan semisal butuh pendamping saat mencoba, kita sedia juga.',
-      en: 'Yes. We rent boards out, and if you want someone with you while you try it, we can provide a buddy too.',
+      id: 'Bisa. Sewa papan Rp15.000 per jam. Kalau butuh pendamping saat mencoba, Rp50.000 per jam (15 tahun ke atas). Di bawah 15 tahun langsung private.',
+      en: 'Yes. Board rental is Rp15,000 per hour. If you want a buddy while you try it, it is Rp50,000 per hour (15 and over). Under 15 goes straight to private.',
     },
   },
   {

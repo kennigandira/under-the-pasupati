@@ -8,20 +8,36 @@ interface Props {
   lang: Lang;
   variant?: string; // extra data-kind e.g. 'portrait'
   mini?: boolean; // ledger-thumb: hint moves to the tooltip, box shrinks
+  link?: string; // wrap a real asset in an anchor (e.g. a partner's page)
   class?: string;
 }
-const { slot, lang, variant, mini, class: cls } = Astro.props;
+const { slot, lang, variant, mini, link, class: cls } = Astro.props;
 const hint = slot.hint[lang];
 // The hint doubles as the intended alt text once a real asset replaces this box.
 ---
 
-<div
-  class:list={['media-slot', { 'media-mini': mini }, cls]}
-  data-kind={variant ?? slot.kind}
-  role="img"
-  aria-label={hint}
-  title={hint}
->
-  <span class="media-tag">{t(lang, 'media.placeholder')} · {slot.kind}</span>
-  <span class="media-hint">{hint}</span>
-</div>
+{slot.src ? (
+  <div
+    class:list={['media-slot', 'media-real', { 'media-mini': mini }, cls]}
+    data-kind={variant ?? slot.kind}
+  >
+    {link ? (
+      <a href={link} rel="noopener noreferrer">
+        <img class="media-img" src={slot.src} alt={hint} loading="lazy" />
+      </a>
+    ) : (
+      <img class="media-img" src={slot.src} alt={hint} loading="lazy" />
+    )}
+  </div>
+) : (
+  <div
+    class:list={['media-slot', { 'media-mini': mini }, cls]}
+    data-kind={variant ?? slot.kind}
+    role="img"
+    aria-label={hint}
+    title={hint}
+  >
+    <span class="media-tag">{t(lang, 'media.placeholder')} · {slot.kind}</span>
+    <span class="media-hint">{hint}</span>
+  </div>
+)}

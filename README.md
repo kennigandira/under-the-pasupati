@@ -19,15 +19,15 @@ All content lives in `src/data/content.ts` (stub for the future Directus collect
 | --------------- | ------------------ | ------------------------------ |
 | `skaters`       | `Skater`           | Hall of Fame + Home skater of the month |
 | `posts`         | `Post`             | Journal + Home latest          |
-| `communities`   | `Community`        | Communities page               |
+| `partners`      | `Partner`          | Partners page                  |
 | `events`        | `EventItem`        | Events page (split by `past`)  |
 | `conditionEntries` | `ConditionEntry`| The Park + Home status         |
 | `obstacles`     | `Obstacle`         | The Park obstacle gallery      |
 | `lessonProviders` | `LessonProvider` | Home instructors section + `/coaches/<slug>` |
-| `boardRental`   | `{ label, title, body, note, cta }` | Home rental callout + FAQ |
+| `boardRental`   | `{ label, title, body, note, cta, partner }` | Home rental callout + FAQ |
 | `faqs`          | `{ q, a }`         | Home FAQ                       |
 | `aboutSlides`   | `MediaSlot[]`      | Home about carousel            |
-| `usageSnapshot`, `timeline`, `parkMapSlot` | — | The Park |
+| `usageSnapshot`, `timeline` | — | The Park |
 
 ### Home section order
 
@@ -41,13 +41,15 @@ All content lives in `src/data/content.ts` (stub for the future Directus collect
 ### Publishing an instructor
 
 Append a `LessonProvider` to `lessonProviders` in `src/data/content.ts` and only
-after the provider agreed in writing. `consentOn` is the date they agreed and is
-printed on the card; leave the entry out until you have it.
+after the provider agreed in writing. `consentOn` is the internal date they agreed
+(it is not rendered); leave the entry out until you have it.
 
-Each card shows, in order: name, age, years skating, competition experience,
-levels, area, rate, contact and languages. `age`, `yearsSkating`, `competition`
-and `rate` are optional — omit any of them and the row simply doesn't render, so
-a provider can be listed without publishing their age or record.
+Each card shows, in order: name, specialty, age, years skating, competition experience,
+levels, rate and contacts. `specialty`, `age`, `yearsSkating`,
+`competition` and `rate` are optional — omit any of them and the row
+simply doesn't render, so a provider can be listed without publishing their age or
+record. Contacts are a list (`contacts: [{ kind, value }]`) so a provider can publish
+WhatsApp, Instagram and TikTok together; local `08…` numbers are converted to `wa.me` links.
 
 ### Coach detail pages
 
@@ -65,7 +67,10 @@ automatically creates their page at build time.
 
 The rental offer (boards to rent, plus a buddy for first-timers) lives in
 `boardRental` — one highlighted callout at the top of the instructors section,
-and two FAQ entries that point at it. Its CTA links to the contact route on
+and a FAQ entry that points at it. Rates: board Rp15,000/hour; buddy Rp50,000/hour
+for 15 and over; under 15 goes straight to private. `buddyTip` is the buddy
+explanation, rendered as a tooltip on every `pendamping`/`buddy` mention by
+`withBuddyTip` in `src/lib/terms.ts`. Its CTA links to the contact route on
 `/about`; keep that contact address current, since it is where rental and
 listing requests land.
 
@@ -77,7 +82,28 @@ tags: `ok`, `repair`, `hazard`.
 
 ## Media placeholders
 
-Every photo/video/map/logo slot renders a dashed placeholder box whose text says **exactly what asset to shoot and its intended alt text** (bilingual). Replace a `<MediaSlot>` with a real `<img>`/embed when the asset exists; copy the hint into the `alt` attribute. Photos should be black-and-white (the CSS already applies `grayscale(1)` to all images as a safety net).
+Every photo/video/map/logo slot renders a dashed placeholder box whose text says **exactly what asset to shoot and its intended alt text** (bilingual). Put the asset under `public/images/` (or `public/media/`) and set `src` on the slot; `<MediaSlot>` then renders the real `<img>` (hint becomes the alt text) instead of the placeholder. Photos should be black-and-white (the CSS already applies `grayscale(1)` to all images as a safety net).
+
+### Coach photo + videos
+
+`/coaches/<slug>` lays the description out above three columns: portrait, teaching
+video, riding-alone video (`LessonProvider.portrait` / `trainingVideo` /
+`trickVideo`). Clicking a real asset opens it full-screen over a blurred,
+non-scrollable backdrop with the media fitted between equal gaps. A video slot
+takes `src` (`.mp4`, `-movflags +faststart`) plus `poster` (a still frame); without
+a poster the tile falls back to loading the first frame. Video tiles also carry a
+yellow barcode tag top-left (`coach.media.teaching.tape` / `coach.media.riding.tape`,
+e.g. "Sesi Mengajar" / "Sesi Solo"). Assets live in `public/media/coaches/<slug>/`.
+Coach media is exempt from the grayscale filter — colour reads body position better
+while instructing. A slot without `src` stays a placeholder in the row, so partial
+coach media is fine.
+
+Posters are made with `ffmpeg -ss <seconds> -i clip.mp4 -frames:v 1 frame.png`
+(pick a sharp beat — phone footage is often motion-blurred), then optionally
+`scale=1152:-2:flags=lanczos,unsharp=7:7:1.6,cas=0.5` for a 2x sharpened still, and
+`cwebp -q 88 frame.png -o poster.webp`.
+
+Partners carry a real `logo` slot with `src`, and every `LessonProvider` can point at one via `partner: '<partner slug>'` — coach cards and profile pages then show that partner's logo as a linked chip. `boardRental.partner` does the same for the rental callout.
 
 ## Accounts: three Cloudflare logins
 
