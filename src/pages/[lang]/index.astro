@@ -229,7 +229,7 @@ const fmt = (iso: string) =>
             <div class="grid grid-3">
                 {latest.map((p) => (
                     <article class="card tape">
-                        <MediaSlot lang={lang} slot={p.cover} />
+                        <MediaSlot lang={lang} slot={p.cover} class="journal-photo" />
                         <p class="meta" style="margin-top: 0.75rem;">
                             <span>{fmt(p.date)}</span>
                             <span>{p.category}</span>

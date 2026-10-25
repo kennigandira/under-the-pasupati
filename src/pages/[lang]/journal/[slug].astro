@@ -18,11 +18,21 @@ const fmt = (iso: string) =>
     <div class="wrap" style="max-width: 720px;">
       <a class="mono" href={localeHref(lang, '/journal')}>← {t(lang, 'journal.title')}</a>
       <h1 style="margin: 1rem 0 0.5rem;">{p.title[lang]}</h1>
-      <p class="meta"><span>{fmt(p.date)}</span><span>{p.category}</span><span>{p.author}</span></p>
+      <p class="meta"><span>{fmt(p.date)}</span><span>{p.category}</span></p>
       <div class="tape" style="margin: 2rem 0;">
-        <MediaSlot lang={lang} slot={p.cover} />
+        <MediaSlot lang={lang} slot={p.cover} class="journal-photo" />
       </div>
-      {p.body[lang].split('\n\n').map((para) => <p style="margin-bottom: 1.25rem; font-size: 1.05rem;">{para}</p>)}
+      {p.body[lang].split('\n\n').map((para, i) => (
+        <>
+          <p style="margin-bottom: 1.25rem; font-size: 1.05rem;">{para}</p>
+          {p.inline?.filter((m) => m.afterParagraph === i + 1).map((m) => (
+            <figure class="tape" style="margin: 2.25rem 0;">
+              <MediaSlot lang={lang} slot={m.slot} class="journal-photo" />
+            </figure>
+          ))}
+        </>
+      ))}
+      <p class="post-author">{t(lang, 'post.writtenBy')} <strong>{p.author}</strong></p>
     </div>
   </article>
 </Base>

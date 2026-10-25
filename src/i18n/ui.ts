@@ -87,6 +87,7 @@ export const ui = {
     'ticker.facts': 'Skatepark Pasupati · Bandung · Catatan publik',
     'lang.switch': 'EN',
     'read.more': 'Baca selengkapnya',
+    'post.writtenBy': 'Ditulis oleh',
     'see.all': 'Lihat semua',
   },
   en: {
@@ -173,6 +174,7 @@ export const ui = {
     'ticker.facts': 'Pasupati Skatepark · Bandung · Public record · Updated monthly',
     'lang.switch': 'ID',
     'read.more': 'Read more',
+    'post.writtenBy': 'Written by',
     'see.all': 'See all',
   },
 } as const;
