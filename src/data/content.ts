@@ -236,8 +236,8 @@ export const partners: Partner[] = [
     slug: 'tup',
     name: 'TUP Skateboard',
     intro: {
-      id: 'Partner taman. Menjual papan bekas, menyewakan papan, menjual streetwear, dan juga membuka les privat.',
-      en: 'The park’s partner. Sells secondhand boards, rents boards, sells streetwear, and also runs private lessons.',
+      id: 'Jual papan bekas, sewa papan, streetwear, dan les privat — semua di satu tempat.',
+      en: 'Secondhand boards, rentals, streetwear, and private lessons — all under one roof.',
     },
     link: 'https://www.instagram.com/tup.storre/',
     logo: {
