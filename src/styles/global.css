@@ -991,6 +991,9 @@ main { flex: 1; padding-bottom: 4rem; }
 }
 .specialty-sep { color: var(--muted); }
 .specialty-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.28rem;
   margin: 0;
   padding: 0;
   border: 0;
