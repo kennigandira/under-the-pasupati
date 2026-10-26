@@ -14,18 +14,20 @@ export interface MediaSlot {
   poster?: string;
 }
 
+// SOTM entry. One per month; the archive keeps every past pick.
 export interface Skater {
   slug: string;
   name: string;
   alias?: string;
+  month: string; // ISO date inside the featured month, e.g. '2026-10-01'
+  age: number; // the only fact the cards carry
+  discipline: string; // skate terms stay untranslated: Street, Bowl, Transition
   yearsSkating: number;
-  crew: string;
-  discipline: 'street' | 'bowl' | 'beginner';
-  featuredFrom: string; // ISO date, start of the 2-week slot
-  bio: Local<string>;
-  favorites: Local<string>;
-  portrait: MediaSlot;
-  clip: MediaSlot;
+  bio: Local<string>; // why this skater, in the site's voice
+  quote: Local<string>; // the skater's own words
+  favorites: string[]; // signature tricks
+  photo: MediaSlot; // card shot, also the video poster source
+  video: MediaSlot;
 }
 
 export interface Post {
@@ -71,94 +73,36 @@ export interface ConditionEntry {
 
 export const skaters: Skater[] = [
   {
-    slug: 'raka-jr',
-    name: 'Raka Pratama',
-    alias: 'JR',
-    yearsSkating: 9,
-    crew: 'Flyover Family',
-    discipline: 'street',
-    featuredFrom: '2026-10-05',
-    bio: {
-      id: 'Reguler pagi sejak 2017. Dikenal karena kickflip backside 50-50 di ledge panjang sisi barat.',
-      en: 'Morning regular since 2017. Known for a kickflip backside 50-50 on the long west ledge.',
-    },
-    favorites: {
-      id: 'Ledge barat, flatground tengah, manual pad dekat pilar 4.',
-      en: 'West ledge, center flatground, manual pad near pillar 4.',
-    },
-    portrait: {
-      kind: 'photo',
-      hint: {
-        id: 'FOTO: potret vertikal JR dengan papan, latar pilar beton, hitam-putih',
-        en: 'PHOTO: vertical portrait of JR holding his board, concrete pillar backdrop, black and white',
-      },
-    },
-    clip: {
-      kind: 'video',
-      hint: {
-        id: 'VIDEO: embed Instagram/YouTube — line terbaik JR di ledge barat, 15-30 detik',
-        en: 'VIDEO: Instagram/YouTube embed — JR’s best line on the west ledge, 15-30 seconds',
-      },
-    },
-  },
-  {
-    slug: 'sinta-maheswari',
-    name: 'Sinta Maheswari',
+    slug: 'ael',
+    name: 'Ael',
+    month: '2026-10-01',
+    age: 16,
+    discipline: 'Street',
     yearsSkating: 4,
-    crew: 'Skena Putri Bandung',
-    discipline: 'street',
-    featuredFrom: '2026-09-21',
     bio: {
-      id: 'Mulai dari flatground 2022, sekarang rajin mengajari pemula tiap Sabtu pagi.',
-      en: 'Started on flatground in 2022, now teaches beginners every Saturday morning.',
+      id: 'Kolong tak pernah luput dari kehadiran Ael. Tak hanya hadir, Ael konsisten dalam berproses dan berprogres.',
+      en: 'The underpass never misses Ael. And it is not just attendance: Ael keeps working, and keeps progressing.',
     },
-    favorites: {
-      id: 'Flatground tengah, bank kecil sisi timur.',
-      en: 'Center flatground, small bank on the east side.',
+    quote: {
+      id: 'Aku mah tiap hari ke sini. Kalau aku gak ke sini, berarti aku lagi sakit hehehe.',
+      en: 'I’m here every day. If I’m not here, it means I’m sick, hahaha.',
     },
-    portrait: {
+    favorites: ['Kickflip', 'BS Heelflip', '360 Flip', 'Layback', 'Crooked Grind'],
+    photo: {
       kind: 'photo',
+      src: '/media/sotm/ael/card.webp',
       hint: {
-        id: 'FOTO: Sinta saat mengajar anak-anak pemula, candid, hitam-putih',
-        en: 'PHOTO: Sinta teaching beginner kids, candid, black and white',
+        id: 'Ael melayang di atas transisi taman pada sesi malam, papan di depan lensa.',
+        en: 'Ael floating over the park’s transition on a night session, board right in front of the lens.',
       },
     },
-    clip: {
+    video: {
       kind: 'video',
+      src: '/media/sotm/ael/clip.mp4',
+      poster: '/media/sotm/ael/poster.webp',
       hint: {
-        id: 'VIDEO: sesi klinik pemula Sabtu pagi atau line street Sinta',
-        en: 'VIDEO: Saturday beginner clinic session or Sinta’s street line',
-      },
-    },
-  },
-  {
-    slug: 'bang-udin',
-    name: 'Udin Saepudin',
-    alias: 'Bang Udin',
-    yearsSkating: 18,
-    crew: 'Pasupati Old School',
-    discipline: 'bowl',
-    featuredFrom: '2026-09-07',
-    bio: {
-      id: 'Salah satu skater paling senior di Pasupati. Saksi perubahan taman dari awal.',
-      en: 'One of the most senior skaters at Pasupati. Witnessed the park’s changes from the start.',
-    },
-    favorites: {
-      id: 'Quarter pipe besar, bowl corner.',
-      en: 'Big quarter pipe, bowl corner.',
-    },
-    portrait: {
-      kind: 'photo',
-      hint: {
-        id: 'FOTO: potret Bang Udin duduk di coping quarter pipe, senyum, hitam-putih',
-        en: 'PHOTO: Bang Udin sitting on the quarter pipe coping, smiling, black and white',
-      },
-    },
-    clip: {
-      kind: 'video',
-      hint: {
-        id: 'VIDEO: run bowl Bang Udin, atau wawancara singkat soal sejarah taman',
-        en: 'VIDEO: Bang Udin’s bowl run, or a short interview about the park’s history',
+        id: 'Video sesi Ael — line dan trik di taman, direkam vertikal.',
+        en: 'Ael’s session clip — lines and tricks at the park, shot vertically.',
       },
     },
   },
@@ -338,22 +282,196 @@ export const usageSnapshot = {
   },
 };
 
-export const timeline: { year: string; text: Local<string> }[] = [
+// Opening hours. The park has no gate and no staff — this is when it is lit and
+// used, not an enforced window.
+export const parkHours: Local<string> = {
+  id: '06.00 – 01.00 WIB, tiap hari',
+  en: '6 AM – 1 AM, every day',
+};
+
+// The park's observed rhythm. NOT an official schedule: nobody runs these slots,
+// they are the patterns that repeat week after week. Kept next to
+// `usageSnapshot` because both answer "when is the park alive?".
+export interface RhythmSlot {
+  who: Local<string>;
+  when: Local<string>;
+  note: Local<string>;
+}
+
+export const parkRhythm: RhythmSlot[] = [
   {
-    year: '2009',
-    text: { id: 'Jalan layang Pasupati selesai; ruang bawahnya mulai dipakai skater.', en: 'Pasupati flyover completed; the space below starts attracting skaters.' },
+    who: { id: 'Pemula', en: 'Beginners' },
+    when: { id: 'Tiap hari, 08.00–12.00', en: 'Every day, 8 AM–12 PM' },
+    note: {
+      id: 'Paling lengang. Flatground kosong buat belajar berdiri, dorong, dan jatuh.',
+      en: 'The quietest stretch. Flatground is empty for learning to stand, push and fall.',
+    },
   },
   {
-    year: '2014',
-    text: { id: 'Obstacle beton pertama dibangun bersama oleh komunitas.', en: 'First concrete obstacles built together by the community.' },
+    who: { id: 'Anak-anak', en: 'Kids' },
+    when: { id: 'Sabtu–Minggu, 12.00–maghrib', en: 'Weekends, 12 PM–dusk' },
+    note: {
+      id: 'Ramai setelah sekolah. Papan kecil, orang tua menunggu di bangku.',
+      en: 'Busy after school. Small boards, parents waiting on the benches.',
+    },
   },
   {
-    year: '2019',
-    text: { id: 'Renovasi area oleh kota; beberapa obstacle ditambah.', en: 'Area renovated by the city; several obstacles added.' },
+    who: { id: 'Sesi cewek', en: 'Women’s session' },
+    when: { id: 'Kamis, 12.00–maghrib', en: 'Thursdays, 12 PM–dusk' },
+    note: {
+      id: 'Flatground buat skater perempuan. Yang baru pertama ikut biasanya mulai di sini.',
+      en: 'The flatground belongs to women skaters. First-timers usually start here.',
+    },
   },
   {
-    year: '2026',
-    text: { id: 'Situs ini diluncurkan untuk mencatat taman secara rutin.', en: 'This site launches to record the park regularly.' },
+    who: { id: 'Oldskul', en: 'Old school' },
+    when: { id: 'Minggu, 15.00–maghrib', en: 'Sundays, 3 PM–dusk' },
+    note: {
+      id: 'Papan lebar, jalur panjang, lagu lama. Senior yang main sejak taman ini dibuka.',
+      en: 'Wide boards, long lines, old songs. The seniors who have skated here since it opened.',
+    },
+  },
+  {
+    who: { id: 'Lanjutan', en: 'Advanced' },
+    when: {
+      id: 'Senin–Jumat, 15.00–maghrib & 21.00–24.00',
+      en: 'Mon–Fri, 3 PM–dusk & 9 PM–midnight',
+    },
+    note: {
+      id: 'Sesi cepat sebelum gelap, lalu sesi malam begitu jalan layang sepi.',
+      en: 'A fast session before dark, then a night session once the traffic thins out.',
+    },
+  },
+  {
+    who: { id: 'Nongkrong', en: 'Hanging out' },
+    when: { id: 'Tiap hari, 16.00–21.00', en: 'Every day, 4–9 PM' },
+    note: {
+      id: 'Bukan sesi latihan. Tukar papan, ngobrol, nonton — bangku dan warung penuh.',
+      en: 'Not a practice session. Boards get swapped, stories get told — benches and warung fill up.',
+    },
+  },
+];
+
+// Photos that sit next to the park description on The Park page.
+export const parkAboutShots: MediaSlot[] = [
+  {
+    kind: 'photo',
+    src: '/images/park/entrance.webp',
+    hint: {
+      id: 'Taman dari arah masuk: bank biru, box kuning, dan flatground yang membentang ke dalam.',
+      en: 'The park from the entrance: blue bank, yellow box, and the flatground running inward.',
+    },
+  },
+  {
+    kind: 'photo',
+    src: '/images/park/tagged-pad.webp',
+    hint: {
+      id: 'Pad yang penuh tag, dengan rail merah di depannya.',
+      en: 'A pad covered in tags, with a red rail in front of it.',
+    },
+  },
+  {
+    kind: 'photo',
+    src: '/images/park/platform-pillar.webp',
+    hint: {
+      id: 'Panggung beton di depan pilar, setinggi lutut orang dewasa.',
+      en: 'The concrete platform by the pillar, knee high.',
+    },
+  },
+  {
+    kind: 'photo',
+    src: '/images/park/transition-edge.webp',
+    hint: {
+      id: 'Transisi beton di tepi taman, menghadap rimbun pohon.',
+      en: 'The concrete transition at the park’s edge, facing the trees.',
+    },
+  },
+];
+
+// Photo tour of the park — the un-skated half of it: the warung, the benches,
+// the walls. `hint` doubles as the alt text and the visible caption.
+export interface ParkPhoto {
+  slug: string;
+  photo: MediaSlot;
+}
+
+export const parkPhotos: ParkPhoto[] = [
+  {
+    slug: 'obstacles-blue',
+    photo: {
+      kind: 'photo',
+      src: '/images/park/obstacles-blue.webp',
+      hint: {
+        id: 'Box dan pad biru di flatground — catnya masih tebal.',
+        en: 'The blue boxes and pad on the flatground — the paint is still thick.',
+      },
+    },
+  },
+  {
+    slug: 'pad-blue-bank',
+    photo: {
+      kind: 'photo',
+      src: '/images/park/pad-blue-bank.webp',
+      hint: {
+        id: 'Manual pad panjang dan bank biru dengan dua rail merah.',
+        en: 'The long manual pad and the blue bank with its two red rails.',
+      },
+    },
+  },
+  {
+    slug: 'flatground',
+    photo: {
+      kind: 'photo',
+      src: '/images/park/flatground.webp',
+      hint: {
+        id: 'Flatground utama dilihat dari bawah dek flyover, dengan rail bulat di tengahnya.',
+        en: 'The main flatground from under the deck, with a round rail in the middle.',
+      },
+    },
+  },
+  {
+    slug: 'bank-pillar',
+    photo: {
+      kind: 'photo',
+      src: '/images/park/bank-pillar.webp',
+      hint: {
+        id: 'Bank panjang yang menyambung ke pilar beton, dindingnya penuh grafiti.',
+        en: 'The long bank running into the concrete pillar, its wall covered in graffiti.',
+      },
+    },
+  },
+  {
+    slug: 'stall-inside',
+    photo: {
+      kind: 'photo',
+      src: '/images/park/stall-inside.webp',
+      hint: {
+        id: 'Isi warung: meja lipat, kulkas minuman, dan camilan.',
+        en: 'Inside the warung: folding tables, a drinks fridge and snacks.',
+      },
+    },
+  },
+  {
+    slug: 'sticker-wall',
+    photo: {
+      kind: 'photo',
+      src: '/images/park/sticker-wall.webp',
+      hint: {
+        id: 'Dinding stiker TUP SECOND. Tiap kru yang mampir meninggalkan satu.',
+        en: 'The TUP SECOND sticker wall. Every crew that passes through leaves one.',
+      },
+    },
+  },
+  {
+    slug: 'picnic-corner',
+    photo: {
+      kind: 'photo',
+      src: '/images/park/picnic-corner.webp',
+      hint: {
+        id: 'Bangku piknik merah dan box beton biru di sisi warung.',
+        en: 'The red picnic bench and blue concrete box on the warung side.',
+      },
+    },
   },
 ];
 
@@ -361,30 +479,34 @@ export const timeline: { year: string; text: Local<string> }[] = [
 export const aboutSlides: MediaSlot[] = [
   {
     kind: 'photo',
+    src: '/images/park/basecamp-bench.webp',
     hint: {
-      id: 'SLIDE 1: foto lebar taman dari atas jalan layang, hitam-putih',
-      en: 'SLIDE 1: wide shot of the park from the flyover, black and white',
+      id: 'Bangku kayu di bawah dinding grafiti — tempat istirahat di antara sesi.',
+      en: 'Wooden benches under the graffiti wall — where you rest between sessions.',
     },
   },
   {
     kind: 'photo',
+    src: '/images/park/graffiti-wall.webp',
     hint: {
-      id: 'SLIDE 2: kerja bakti — orang menyapu flatground, candid',
-      en: 'SLIDE 2: clean-up day — people sweeping the flatground, candid',
+      id: 'Dinding grafiti di tepi taman, ditempeli poster Go Skateboarding Day.',
+      en: 'The graffiti wall at the park’s edge, with Go Skateboarding Day posters pasted on it.',
     },
   },
   {
     kind: 'photo',
+    src: '/images/park/stall-front.webp',
     hint: {
-      id: 'SLIDE 3: sesi pemula Sabtu pagi, anak-anak dengan helm',
-      en: 'SLIDE 3: Saturday beginner session, kids wearing helmets',
+      id: 'Lapak TUP SECOND di sisi warung: stiker, kaos, dan barang kru.',
+      en: 'The TUP SECOND stall on the warung side: stickers, shirts and crew goods.',
     },
   },
   {
     kind: 'photo',
+    src: '/images/park/benches-wall.webp',
     hint: {
-      id: 'SLIDE 4: sesi malam di bawah lampu jalan layang',
-      en: 'SLIDE 4: night session under the flyover lights',
+      id: 'Deretan bangku kayu di sepanjang dinding, tempat melepas papan dan menonton.',
+      en: 'A row of wooden benches along the wall — where boards come off and the watching starts.',
     },
   },
 ];

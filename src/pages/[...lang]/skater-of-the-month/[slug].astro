@@ -1,0 +1,95 @@
+---
+import Base from '../../../layouts/Base.astro';
+import MediaSlot from '../../../components/MediaSlot.astro';
+import { localeHref, localeRoutes, routeLang, t } from '../../../i18n/ui';
+import { skaters } from '../../../data/content';
+import { monthTag, years } from '../../../lib/format';
+
+export function getStaticPaths() {
+  return localeRoutes().flatMap(({ params }) =>
+    skaters.map((s) => ({ params: { ...params, slug: s.slug } })),
+  );
+}
+const { slug } = Astro.params as { slug: string };
+const lang = routeLang(Astro.params.lang);
+const s = skaters.find((x) => x.slug === slug)!;
+---
+
+<Base lang={lang} title={s.name} description={s.bio[lang]} path={`/skater-of-the-month/${slug}`}>
+  <section class="section">
+    <div class="wrap">
+      <a class="mono" href={localeHref(lang, '/skater-of-the-month')}>← {t(lang, 'sotm.title')}</a>
+
+      <div class="sotm">
+        <header class="sotm-head">
+          <span class="sotm-month">{monthTag(s.month, lang)}</span>
+          <h1>{s.alias ? `${s.name} “${s.alias}”` : s.name}</h1>
+          <p class="meta">
+            <span>{t(lang, 'skater.discipline')}: {s.discipline}</span>
+            <span>{t(lang, 'skater.age')}: {years(s.age, lang)}</span>
+            <span>{t(lang, 'skater.years')}: {years(s.yearsSkating, lang)}</span>
+          </p>
+        </header>
+
+        <div class="sotm-video">
+          {s.video.src ? (
+            <>
+              <video
+                controls
+                playsinline
+                preload="none"
+                poster={s.video.poster}
+                aria-label={s.video.hint[lang]}
+              >
+                <source src={s.video.src} type="video/mp4" />
+              </video>
+              <div class="sotm-video-hit"></div>
+            </>
+          ) : (
+            <MediaSlot lang={lang} slot={s.video} />
+          )}
+        </div>
+
+        <div class="sotm-body">
+          <section class="sotm-block">
+            <h2 class="sotm-label">
+              {lang === 'id' ? `Kenapa ${s.name}?` : `Why ${s.name}?`}
+            </h2>
+            <p class="sotm-lead">{s.bio[lang]}</p>
+          </section>
+          <section class="sotm-block">
+            <h2 class="sotm-label">{t(lang, 'sotm.tricks')}</h2>
+            <ul class="sotm-tricks">
+              {s.favorites.map((trick) => <li>{trick}</li>)}
+            </ul>
+          </section>
+
+          <figure class="sotm-quote">
+            <span class="sotm-label">{lang === 'id' ? `Kata ${s.name}` : `In ${s.name}’s words`}</span>
+            <blockquote>“{s.quote[lang]}”</blockquote>
+            <figcaption>— {s.name}</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Click anywhere in the frame to toggle playback, YouTube-style. A transparent
+  // layer covers the video so the browser's own click handling can't double
+  // toggle; it stops 44px short of the bottom so the native control bar (seek,
+  // volume, fullscreen) still receives its clicks. Pointer-only shortcut: the
+  // native controls already expose play/pause to keyboards and screen readers.
+  document.querySelectorAll<HTMLElement>('.sotm-video').forEach((wrap) => {
+    const video = wrap.querySelector('video');
+    if (!video) return;
+    wrap.querySelector('.sotm-video-hit')?.addEventListener('click', () => {
+      if (video.paused) {
+        void video.play();
+      } else {
+        video.pause();
+      }
+    });
+  });
+</script>

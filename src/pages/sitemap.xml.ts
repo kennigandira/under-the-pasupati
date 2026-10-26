@@ -7,7 +7,7 @@ import { posts, skaters, lessonProviders } from '../data/content';
 const staticPaths = [
   '',
   '/the-park',
-  '/hall-of-fame',
+  '/skater-of-the-month',
   '/journal',
   '/partners',
   '/events',
@@ -17,7 +17,7 @@ const staticPaths = [
 
 const detailPaths = [
   ...posts.map((p) => ({ path: `/journal/${p.slug}`, lastmod: p.date })),
-  ...skaters.map((s) => ({ path: `/hall-of-fame/${s.slug}`, lastmod: undefined })),
+  ...skaters.map((s) => ({ path: `/skater-of-the-month/${s.slug}`, lastmod: undefined })),
   ...lessonProviders.map((c) => ({ path: `/coaches/${c.slug}`, lastmod: undefined })),
 ];
 

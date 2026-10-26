@@ -10,3 +10,9 @@
 /communities /partners/ 301
 /en/communities/ /en/partners/ 301
 /en/communities /en/partners/ 301
+
+# Hall of Fame is now Skater of the Month (SOTM).
+/hall-of-fame/* /skater-of-the-month/:splat 301
+/hall-of-fame /skater-of-the-month/ 301
+/en/hall-of-fame/* /en/skater-of-the-month/:splat 301
+/en/hall-of-fame /en/skater-of-the-month/ 301

@@ -19,7 +19,7 @@ import {
 } from "../../data/content";
 import { contactHref, contactLabel } from "../../lib/contacts";
 import { withBuddyTip } from "../../lib/terms";
-import { years } from "../../lib/format";
+import { monthTag, years } from "../../lib/format";
 
 export function getStaticPaths() {
     return localeRoutes();
@@ -29,7 +29,7 @@ const partnerBySlug = (slug?: string) => partners.find((p) => p.slug === slug);
 const rentalPartner = partnerBySlug(boardRental.partner);
 
 const featured = [...skaters].sort((a, b) =>
-    b.featuredFrom.localeCompare(a.featuredFrom),
+    b.month.localeCompare(a.month),
 )[0];
 const latest = [...posts]
     .sort((a, b) => b.date.localeCompare(a.date))
@@ -84,7 +84,7 @@ const latest = [...posts]
             </div>
             <div class="grid grid-2" style="align-items: start;">
                 <div
-                    class="carousel"
+                    class="carousel carousel--feature"
                     role="group"
                     aria-label={t(lang, "home.about.title")}
                 >
@@ -121,34 +121,36 @@ const latest = [...posts]
             <div>
                 <div class="section-head">
                     <h2>{t(lang, "home.featured")}</h2>
-                    <a class="mono" href={localeHref(lang, "/hall-of-fame")}>
+                    <a class="mono" href={localeHref(lang, "/skater-of-the-month")}>
                         {t(lang, "see.all")} →
                     </a>
                 </div>
-                <article class="card card-accent">
+                <article class="card card-accent sotm-card">
                     <MediaSlot
                         lang={lang}
-                        slot={featured.portrait}
+                        slot={featured.photo}
                         variant="portrait"
+                        class="sotm-card-photo"
                     />
-                    <h3 style="margin-top: 0.75rem;">
+                    <span class="sotm-month">{monthTag(featured.month, lang)}</span>
+                    <h3 style="margin-top: 0.6rem;">
                         {featured.alias
                             ? `${featured.name} “${featured.alias}”`
                             : featured.name}
                     </h3>
                     <p class="meta">
-                        <span>{featured.crew}</span>
-                        <span>{featured.discipline}</span>
-                        <span>
-                            {t(lang, "hof.years")}: {years(featured.yearsSkating, lang)}
-                        </span>
+                        <span>{t(lang, "skater.age")}: {years(featured.age, lang)}</span>
                     </p>
-                    <p>{featured.bio[lang]}</p>
+                    <ul class="sotm-tricks">
+                        {featured.favorites.slice(0, 3).map((trick) => (
+                            <li>{trick}</li>
+                        ))}
+                    </ul>
                     <a
                         class="mono"
                         href={localeHref(
                             lang,
-                            `/hall-of-fame/${featured.slug}`,
+                            `/skater-of-the-month/${featured.slug}`,
                         )}
                     >
                         {t(lang, "read.more")} →
@@ -336,7 +338,7 @@ const latest = [...posts]
                             )}
                             {p.yearsSkating !== undefined && (
                                 <div>
-                                    <dt>{t(lang, "hof.years")}</dt>
+                                    <dt>{t(lang, "skater.years")}</dt>
                                     <dd>{years(p.yearsSkating, lang)}</dd>
                                 </div>
                             )}

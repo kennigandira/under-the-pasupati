@@ -13,3 +13,13 @@ export const coachSummary = (specialty: string | undefined, levels: string, lang
   lang === 'en'
     ? `${specialty ?? 'Skateboard'} skateboard coach, ${levels} level, in Bandung.`
     : `Coach skateboard${specialty ? ` ${specialty}` : ''} level ${levels} di Bandung.`;
+
+// Short stamp for the sticker on cards: "OKT ’26" / "OCT ’26".
+export const monthTag = (iso: string, lang: Lang): string => {
+  const d = new Date(`${iso.slice(0, 7)}-01T00:00:00Z`);
+  const month = d
+    .toLocaleDateString(lang === 'id' ? 'id-ID' : 'en-GB', { month: 'short', timeZone: 'UTC' })
+    .replace('.', '')
+    .toUpperCase();
+  return `${month} ’${String(d.getUTCFullYear()).slice(2)}`;
+};

@@ -2,7 +2,15 @@
 import Base from '../../layouts/Base.astro';
 import MediaSlot from '../../components/MediaSlot.astro';
 import { localeRoutes, routeLang, t } from '../../i18n/ui';
-import { conditionEntries, usageSnapshot, timeline, obstacles } from '../../data/content';
+import {
+  conditionEntries,
+  parkAboutShots,
+  parkHours,
+  parkPhotos,
+  parkRhythm,
+  usageSnapshot,
+  obstacles,
+} from '../../data/content';
 
 export function getStaticPaths() {
   return localeRoutes();
@@ -16,9 +24,10 @@ const lang = routeLang(Astro.params.lang);
       lang={lang}
       slot={{
         kind: 'photo',
+        src: '/images/park/hero-park.webp',
         hint: {
-          id: 'FOTO UTAMA: panorama taman dari atas jalan layang, hitam-putih, sisakan ruang gelap di bagian bawah untuk judul',
-          en: 'HERO PHOTO: panorama of the park from the flyover, black and white, keep the lower area dark for the title',
+          id: 'Taman dilihat dari dalam, di bawah dek flyover: panggung beton, bank biru, dan flatground.',
+          en: 'The park seen from inside, under the flyover deck: the concrete platform, the blue bank, and the flatground.',
         },
       }}
     />
@@ -35,25 +44,43 @@ const lang = routeLang(Astro.params.lang);
 
   <section class="section">
     <div class="wrap">
-      <h2 style="margin-bottom: 1rem;">{t(lang, 'park.history')}</h2>
-      <div class="grid grid-2" style="align-items: start;">
-        <p>
-          {lang === 'id'
-            ? 'Ruang di bawah jalan layang Pasupati berubah dari lahan kosong menjadi salah satu skatepark paling ramai di Bandung. Halaman ini mencatat sejarahnya, aturannya, dan kondisinya — apa adanya, dengan tanggal.'
-            : 'The space under the Pasupati flyover turned from an empty lot into one of Bandung’s busiest skateparks. This page records its history, its rules, and its condition — as it is, with dates.'}
-        </p>
-        <div class="card">
-          <h3 class="mono" style="margin-bottom: 0.75rem;">{t(lang, 'park.timeline')}</h3>
-          <ul class="entry-list">
-            {timeline.map((e) => (
-              <li>
-                <span class="stamp">{e.year}</span>
-                <p>{e.text[lang]}</p>
-              </li>
-            ))}
-          </ul>
+      <div class="section-head">
+        <h2>{t(lang, 'park.about')}</h2>
+      </div>
+      <div class="park-about">
+        <div class="park-about-copy">
+          <p>{t(lang, 'park.about.body1')}</p>
+          <p>{t(lang, 'park.about.body2')}</p>
+          <p>{t(lang, 'park.about.body3')}</p>
+        </div>
+        <div class="park-about-shots">
+          {parkAboutShots.map((shot) => <MediaSlot lang={lang} slot={shot} />)}
         </div>
       </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap rhythm-grid">
+      <div>
+        <div class="section-head">
+          <h2>{t(lang, 'park.rhythm')}</h2>
+        </div>
+        <p class="rhythm-hours">
+          <span class="mono">{t(lang, 'park.rhythm.hours')}</span>
+          <strong>{parkHours[lang]}</strong>
+        </p>
+        <p class="rhythm-disclaimer">{t(lang, 'park.rhythm.note')}</p>
+      </div>
+      <ul class="rhythm" aria-label={t(lang, 'park.rhythm')}>
+        {parkRhythm.map((slot) => (
+          <li class="rhythm-row">
+            <span class="rhythm-who">{slot.who[lang]}</span>
+            <span class="rhythm-when">{slot.when[lang]}</span>
+            <span class="rhythm-does">{slot.note[lang]}</span>
+          </li>
+        ))}
+      </ul>
     </div>
   </section>
 
@@ -143,6 +170,23 @@ const lang = routeLang(Astro.params.lang);
       <p class="map-meta">
         <span>{t(lang, 'park.map.credit')}</span>
       </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>{t(lang, 'park.photos')}</h2>
+      </div>
+      <p class="mono" style="margin-bottom: 1.5rem;">{t(lang, 'park.photos.note')}</p>
+      <div class="park-shots">
+        {parkPhotos.map((p) => (
+          <figure class="park-shot">
+            <MediaSlot lang={lang} slot={p.photo} />
+            <figcaption>{p.photo.hint[lang]}</figcaption>
+          </figure>
+        ))}
+      </div>
     </div>
   </section>
 

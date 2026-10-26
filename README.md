@@ -17,7 +17,7 @@ All content lives in `src/data/content.ts` (stub for the future Directus collect
 
 | Collection      | Content model      | Used by                        |
 | --------------- | ------------------ | ------------------------------ |
-| `skaters`       | `Skater`           | Hall of Fame + Home skater of the month |
+| `skaters`       | `Skater`           | SOTM (archive + `/skater-of-the-month/<slug>`) + Home card |
 | `posts`         | `Post`             | Journal + Home latest          |
 | `partners`      | `Partner`          | Partners page                  |
 | `events`        | `EventItem`        | Events page (split by `past`)  |
@@ -27,7 +27,7 @@ All content lives in `src/data/content.ts` (stub for the future Directus collect
 | `aboutSlides`   | `MediaSlot[]`      | Home about carousel            |
 | `boardRental`   | `{ label, title, body, note, cta, partner }` | Home rental callout + FAQ |
 | `faqs`          | `{ q, a }`         | Home FAQ                       |
-| `usageSnapshot`, `timeline` | — | The Park |
+| `usageSnapshot`, `parkRhythm`, `parkHours`, `parkAboutShots`, `parkPhotos` | — | The Park |
 
 Journal `title`, `excerpt` and `body` support one inline mark: `*italic*` —
 carried over from the author's Google Docs (loanwords like *skateboard*). Render
@@ -39,7 +39,7 @@ other markup (bold, links, headings) exists in the grammar.
 
 1. Hero
 2. About the park — carousel (`aboutSlides`) + copy + ownership note (city land, not city-run) + link to `/the-park`
-3. Skater of the month (newest `featuredFrom`) alongside the park condition ledger
+3. Skater of the month (newest `month`) alongside the park condition ledger
 4. Journal — 3 latest posts
 5. Skateboard instructors (`lessonProviders`, anchored at `#pengajar`)
 6. FAQ (`faqs`)
@@ -88,9 +88,65 @@ Each `Obstacle` carries a fixed photo hint — shoot the same angle every time s
 before/after comparisons stay honest. `condition` (optional) reuses the severity
 tags: `ok`, `repair`, `hazard`.
 
+### Park page
+
+Order: full-bleed hero photo → park description with four photos
+(`parkAboutShots`) → opening hours + the observed timetable (`parkHours`,
+`parkRhythm`) → maps → photo tour (`parkPhotos`) → obstacle gallery → condition
+ledger → usage snapshot.
+
+`parkRhythm` is **not an official schedule** and the page says so: the park has no
+staff, no gate and no session bookings. The slots are habits the community sees
+repeat (beginners in the morning, kids on weekends, the women's session on
+Thursdays, old school on Sunday afternoons, advanced after 3 PM and again at
+night, hanging out from 4 to 9). Keep the wording observational — if the pattern
+shifts, edit the copy rather than turning it into a bookings calendar.
+
+`parkPhotos` is the non-skating half of the park (warung, benches, walls). Each
+entry's `hint` doubles as the `alt` text and as the visible `<figcaption>`, so it
+must read as a caption too — not as a shooting brief. Photos live in
+`public/images/park/` (portrait phone shots, 4:5 crops are applied by CSS).
+
+### Home about carousel
+
+`aboutSlides` on Home uses the same park photos; the slide frame crops each one
+to 4:5, so pick shots that survive a centre crop.
+
+### Skater of the Month (SOTM)
+
+One `Skater` per month in `skaters`; `month` (`YYYY-MM-01`) is the slot, so the
+newest entry is the current pick and everything older becomes the archive. The
+archive is `/skater-of-the-month/` and each pick lives at
+`/skater-of-the-month/<slug>/` (both languages; the old `/hall-of-fame/…` URLs
+301 to it via `public/_redirects`).
+
+The month appears only as the yellow sticker (`monthTag()` → "OKT '26" /
+"OCT '26"), on the card and the detail page — no spelled-out date, no crew field.
+Cards carry exactly one fact, `age`; `bio` and `quote` live on the detail page.
+
+The detail page shows the pick's vertical clip beside the "Why <name>?" note, the
+trick list and the skater's own quote (`quote`, printed as a pull-quote card);
+there is no separate portrait. The clip's poster is the same photo
+used on the card, so the card and the video frame match. Assets live in
+`public/media/sotm/<slug>/`:
+
+| File | Role | Source |
+| --- | --- | --- |
+| `card.webp` | card photo (4:5 crop, ~880 wide) | supplied portrait photo |
+| `poster.webp` | video poster (9:16 crop, 720×1280) | same photo |
+| `clip.mp4` | vertical clip, H.264, `+faststart` | supplied video |
+
+Phone clips are 20 MB+ straight out of the camera, so re-encode before adding:
+`ffmpeg -i in.mp4 -vf "hqdn3d=3:3:8:8,scale=540:960:flags=lanczos" -r 24 -c:v libx264
+-preset slow -crf 33 -x264-params aq-mode=3 -profile:v main -pix_fmt yuv420p
+-c:a aac -b:a 64k -ac 1 -movflags +faststart clip.mp4`. Night footage is noisy and
+expensive to compress; 540×960 / 24 fps / CRF 33 keeps a 60-second clip near 4 MB.
+The `<video>` uses `preload="none"`, so the 4 MB only downloads when someone
+presses play.
+
 ## Media placeholders
 
-Every photo/video/map/logo slot renders a dashed placeholder box whose text says **exactly what asset to shoot and its intended alt text** (bilingual). Put the asset under `public/images/` (or `public/media/`) and set `src` on the slot; `<MediaSlot>` then renders the real `<img>` (hint becomes the alt text) instead of the placeholder. Photos should be black-and-white (the CSS already applies `grayscale(1)` to all images as a safety net).
+Every photo/video/map/logo slot renders a dashed placeholder box whose text says **exactly what asset to shoot and its intended alt text** (bilingual). Put the asset under `public/images/` (or `public/media/`) and set `src` on the slot; `<MediaSlot>` then renders the real `<img>` (hint becomes the alt text) instead of the placeholder.
 
 ### Coach photo + videos
 
@@ -102,9 +158,7 @@ takes `src` (`.mp4`, `-movflags +faststart`) plus `poster` (a still frame); with
 a poster the tile falls back to loading the first frame. Video tiles also carry a
 yellow barcode tag top-left (`coach.media.teaching.tape` / `coach.media.riding.tape`,
 e.g. "Sesi Mengajar" / "Sesi Solo"). Assets live in `public/media/coaches/<slug>/`.
-Coach media is exempt from the grayscale filter — colour reads body position better
-while instructing. A slot without `src` stays a placeholder in the row, so partial
-coach media is fine.
+A slot without `src` stays a placeholder in the row, so partial coach media is fine.
 
 Posters are made with `ffmpeg -ss <seconds> -i clip.mp4 -frames:v 1 frame.png`
 (pick a sharp beat — phone footage is often motion-blurred), then optionally

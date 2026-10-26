@@ -1,0 +1,59 @@
+---
+import Base from '../../../layouts/Base.astro';
+import MediaSlot from '../../../components/MediaSlot.astro';
+import { localeHref, localeRoutes, routeLang, t } from '../../../i18n/ui';
+import { skaters } from '../../../data/content';
+import { monthTag, years } from '../../../lib/format';
+
+export function getStaticPaths() {
+  return localeRoutes();
+}
+const lang = routeLang(Astro.params.lang);
+const sorted = [...skaters].sort((a, b) => b.month.localeCompare(a.month));
+const [current, ...archive] = sorted;
+---
+
+<Base lang={lang} title={t(lang, 'sotm.title')} path="/skater-of-the-month">
+  <section class="section">
+    <div class="wrap">
+      <h1>{t(lang, 'sotm.title')}</h1>
+      <p style="max-width: 56ch; margin: 0.75rem 0 2rem;">{t(lang, 'sotm.subtitle')}</p>
+
+      {current && (
+        <article class="sotm-feature">
+          <div class="sotm-feature-photo">
+            <MediaSlot lang={lang} slot={current.photo} variant="portrait" class="tape" />
+            <span class="sotm-month">{monthTag(current.month, lang)}</span>
+          </div>
+          <div>
+            <h2>{current.alias ? `${current.name} “${current.alias}”` : current.name}</h2>
+            <p class="meta" style="margin-top: 0.5rem;">
+              <span>{t(lang, 'skater.age')}: {years(current.age, lang)}</span>
+            </p>
+            <p style="margin-top: 1.5rem;">
+              <a class="btn" href={localeHref(lang, `/skater-of-the-month/${current.slug}`)}>
+                {t(lang, 'read.more')} →
+              </a>
+            </p>
+          </div>
+        </article>
+      )}
+
+      {archive.length > 0 && (
+        <div class="grid grid-3" style="margin-top: 3rem;">
+          {archive.map((s) => (
+            <article class="card tape sotm-card">
+              <MediaSlot lang={lang} slot={s.photo} variant="portrait" />
+              <span class="sotm-month">{monthTag(s.month, lang)}</span>
+              <h3 style="margin-top: 0.5rem;">{s.alias ? `${s.name} “${s.alias}”` : s.name}</h3>
+              <p class="meta">
+                <span>{t(lang, 'skater.age')}: {years(s.age, lang)}</span>
+              </p>
+              <a class="mono" href={localeHref(lang, `/skater-of-the-month/${s.slug}`)}>{t(lang, 'read.more')} →</a>
+            </article>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+</Base>
