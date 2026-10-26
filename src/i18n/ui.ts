@@ -17,7 +17,7 @@ export const ui = {
     'home.latest': 'Jurnal Terbaru',
     'home.about.title': 'Tentang Skate Park Pasupati',
     'home.about.body':
-      'Skatepark Pasupati menempati kolong jalan layang Pasupati di Bandung. Gratis, terbuka setiap hari, dan dipakai puluhan skater — dari yang baru pertama kali naik papan sampai senior yang main sejak taman ini dibuka. Obstacle-nya beton: ledge, bank, manual pad, quarter pipe, dan bowl corner.',
+      'Skatepark Pasupati menempati kolong jalan layang Pasupati di Bandung. Gratis, terbuka setiap hari, dan dipakai puluhan skater — dari yang baru pertama kali naik papan sampai senior yang main sejak taman ini dibuka.',
     'home.about.ownership':
       'Tanah dan jalan layangnya milik pemerintah kota, tapi taman ini luput dari perhatian dan pengelolaan mereka. Yang merawat, menjaga, dan menghidupkannya adalah para skater yang main di sini.',
     'home.about.cta': 'Selengkapnya soal taman',
@@ -116,7 +116,7 @@ export const ui = {
     'home.latest': 'Latest from the Journal',
     'home.about.title': 'About Pasupati Skatepark',
     'home.about.body':
-      'Pasupati Skatepark sits under the Pasupati flyover in Bandung. It is free, open every day, and used by dozens of skaters — from people on a board for the first time to seniors who have skated here since the park opened. The obstacles are concrete: ledges, banks, a manual pad, a quarter pipe and a bowl corner.',
+      'Pasupati Skatepark sits under the Pasupati flyover in Bandung. It is free, open every day, and used by dozens of skaters — from people on a board for the first time to seniors who have skated here since the park opened.',
     'home.about.ownership':
       'The land and flyover belong to the city government, but the park has slipped off its radar — unmanaged and unmaintained by the city. The skaters who ride here are the ones keeping it alive.',
     'home.about.cta': 'More about the park',
