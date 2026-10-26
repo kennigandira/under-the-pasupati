@@ -139,7 +139,7 @@ const latest = [...posts]
                             : featured.name}
                     </h3>
                     <p class="meta">
-                        <span>{t(lang, "skater.age")}: {years(featured.age, lang)}</span>
+                        <span>{years(featured.age, lang)}</span>
                     </p>
                     <ul class="sotm-tricks">
                         {featured.favorites.slice(0, 3).map((trick) => (

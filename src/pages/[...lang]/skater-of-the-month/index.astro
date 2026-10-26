@@ -28,7 +28,7 @@ const [current, ...archive] = sorted;
           <div>
             <h2>{current.alias ? `${current.name} “${current.alias}”` : current.name}</h2>
             <p class="meta" style="margin-top: 0.5rem;">
-              <span>{t(lang, 'skater.age')}: {years(current.age, lang)}</span>
+              <span>{years(current.age, lang)}</span>
             </p>
             <p style="margin-top: 1.5rem;">
               <a class="btn" href={localeHref(lang, `/skater-of-the-month/${current.slug}`)}>
@@ -47,7 +47,7 @@ const [current, ...archive] = sorted;
               <span class="sotm-month">{monthTag(s.month, lang)}</span>
               <h3 style="margin-top: 0.5rem;">{s.alias ? `${s.name} “${s.alias}”` : s.name}</h3>
               <p class="meta">
-                <span>{t(lang, 'skater.age')}: {years(s.age, lang)}</span>
+                <span>{years(s.age, lang)}</span>
               </p>
               <a class="mono" href={localeHref(lang, `/skater-of-the-month/${s.slug}`)}>{t(lang, 'read.more')} →</a>
             </article>
