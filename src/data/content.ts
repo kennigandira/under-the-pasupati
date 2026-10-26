@@ -612,6 +612,7 @@ export const lessonProviders: LessonProvider[] = [
     portrait: {
       kind: 'photo',
       hint: { id: 'FOTO: Potret Hadi', en: 'PHOTO: Portrait of Hadi' },
+      src: '/media/coaches/hadi-baik/portrait.webp',
     },
     trainingVideo: {
       kind: 'video',
@@ -628,6 +629,8 @@ export const lessonProviders: LessonProvider[] = [
         id: 'VIDEO: trik andalan Hadi — satu line bersih, 15–30 detik',
         en: 'VIDEO: Hadi’s signature trick — one clean line, 15–30 seconds',
       },
+      src: '/media/coaches/hadi-baik/riding.mp4',
+      poster: '/media/coaches/hadi-baik/riding-poster.webp',
     },
   },
   {
