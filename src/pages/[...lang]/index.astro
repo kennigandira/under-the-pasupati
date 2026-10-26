@@ -404,4 +404,36 @@ const latest = [...posts]
         </div>
     </section>
     <SpecialtyVideoDialog lang={lang} />
+    <script>
+        // Glossary tooltips hang off their term's left edge, so a term near the
+        // right edge would push its tooltip past the viewport. Nudge it back
+        // inside when it opens, and again if the viewport changes under it.
+        // Only this page renders `.term` (see withBuddyTip in lib/terms).
+        const EDGE = 12;
+
+        const place = (term: HTMLElement) => {
+            const tip = term.querySelector<HTMLElement>(".tip");
+            if (!tip || !tip.offsetWidth) return; // not displayed: nothing to measure
+            term.style.removeProperty("--tip-shift");
+            const overflow =
+                tip.getBoundingClientRect().right - (window.innerWidth - EDGE);
+            if (overflow > 0) {
+                term.style.setProperty(
+                    "--tip-shift",
+                    `${-Math.ceil(overflow)}px`,
+                );
+            }
+        };
+
+        const openTerms = () =>
+            document.querySelectorAll<HTMLElement>(
+                ".term:hover, .term:focus-visible",
+            );
+
+        document.querySelectorAll<HTMLElement>(".term").forEach((term) => {
+            term.addEventListener("pointerenter", () => place(term));
+            term.addEventListener("focusin", () => place(term));
+        });
+        addEventListener("resize", () => openTerms().forEach(place));
+    </script>
 </Base>

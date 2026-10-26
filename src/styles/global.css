@@ -982,18 +982,21 @@ main { flex: 1; padding-bottom: 4rem; }
 }
 .rental-rates li:last-child { border-bottom: 0; }
 .rental-rates .mono { white-space: nowrap; }
-/* Inline glossary term with a focusable tooltip. */
+/* Inline glossary term with a focusable tooltip. The tooltip is a real child
+   that only lays out while it is being inspected: an always-rendered box is up
+   to 280px wide, and terms near the right edge pushed the page's scroll width
+   past the viewport (horizontal scroll on phones). */
 .term {
   position: relative;
   border-bottom: 1px dotted currentColor;
   cursor: help;
 }
-.term::after {
-  content: attr(data-tip);
+.term .tip {
   position: absolute;
   left: 0;
   bottom: calc(100% + 0.4rem);
   z-index: 20;
+  display: none;
   width: max-content;
   max-width: min(280px, 70vw);
   padding: 0.45rem 0.6rem;
@@ -1007,18 +1010,14 @@ main { flex: 1; padding-bottom: 4rem; }
   text-align: left;
   text-transform: none;
   letter-spacing: 0;
-  opacity: 0;
+  user-select: none;
   pointer-events: none;
-  transform: translateY(0.25rem);
-  transition: opacity 120ms ease, transform 120ms ease;
+  /* Nudged left by the home page script when the term sits near the edge. */
+  transform: translate(var(--tip-shift, 0px), 0);
 }
-.term:hover::after,
-.term:focus-visible::after {
-  opacity: 1;
-  transform: none;
-}
-@media (prefers-reduced-motion: reduce) {
-  .term::after { transition: none; }
+.term:hover .tip,
+.term:focus-visible .tip {
+  display: block;
 }
 @media (min-width: 760px) {
   .rental-callout {
