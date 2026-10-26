@@ -1632,3 +1632,13 @@ html.lightbox-open body { overflow: hidden; }
 @media (min-width: 760px) {
   .carousel--feature > * { flex-basis: 84%; }
 }
+
+/* A section heading that wraps: hand the marker to an inline span so it hugs
+   each line instead of painting a bar across the whole line box. */
+.section-head h2.no-mark { background-image: none; padding-inline: 0; }
+.hl {
+  display: inline;
+  padding-inline: 0.1em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
