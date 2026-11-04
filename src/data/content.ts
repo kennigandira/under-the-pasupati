@@ -110,6 +110,57 @@ export const skaters: Skater[] = [
 
 export const posts: Post[] = [
   {
+    slug: 'roda-roda-perlawanan',
+    title: { id: 'Roda-roda perlawanan', en: 'Wheels of resistance' },
+    date: '2026-10-27',
+    author: 'AESR',
+    category: 'culture',
+    excerpt: {
+      id: 'Di bawah guncangan jembatan, mereka yang tak punya tempat pulang membangun kehidupan, ruang, dan gelombang perlawanan di atas roda.',
+      en: 'Beneath the shaking of the bridge, those with nowhere to go home build a life, a space, and waves of resistance on wheels.',
+    },
+    body: {
+      // Line breaks are the author's: every line in this piece ends on its own
+      // line. Paragraph gaps are blank lines; renderInline turns single
+      // newlines into <br>.
+      id: [
+        'Di tengah hirup pikuknya kota dan di bawah guncangan jembatan,',
+        'mereka menciptakan kehidupan di sana,',
+        'menciptakan gelombang-gelombang perlawanan disana, dan menciptakan ruang bagi siapapun di sana.',
+        '',
+        'Mereka yang tidak punya tempat untuk pulang,',
+        'mereka yang tidak punya tempat untuk bermain,',
+        'semua berkumpul di sana.',
+        '',
+        'Melaju dengan roda-roda kehidupan,',
+        'melaju dengan roda-roda perjuangan, dan melaju dengan roda-roda penuh harapan.',
+        '',
+        'Bandung, 27 Oktober 2026.',
+      ].join('\n'),
+      en: [
+        'In the middle of the city’s bustle and beneath the shaking of the bridge,',
+        'they create a life there,',
+        'create waves of resistance there, and create space for anyone there.',
+        '',
+        'Those with no place to return to,',
+        'those with no place to play,',
+        'all gather there.',
+        '',
+        'Rolling on the wheels of life,',
+        'rolling on the wheels of struggle, and rolling on the wheels full of hope.',
+        '',
+        'Bandung, 27 October 2026.',
+      ].join('\n'),
+    },
+    cover: {
+      kind: 'photo',
+      hint: {
+        id: 'Roda papan melaju di kolong Pasupati pada sesi malam',
+        en: 'Board wheels rolling under the Pasupati flyover on a night session',
+      },
+    },
+  },
+  {
     slug: 'meet-arif',
     title: { id: '*Meet* Arif: Hidup dengan Makna *Punk*-nya Sendiri', en: 'Meet Arif: Living Life on His Own Punk Terms' },
     date: '2026-10-25',
@@ -524,93 +575,201 @@ export interface Obstacle {
 
 export const obstacles: Obstacle[] = [
   {
-    slug: 'ledge-barat',
-    name: { id: 'Ledge Barat', en: 'West Ledge' },
-    type: { id: 'Ledge', en: 'Ledge' },
-    note: {
-      id: 'Ledge beton panjang ±12 m, tinggi sedang. Spot paling ramai saat sore.',
-      en: 'Long concrete ledge, roughly 12 m, medium height. Busiest spot in the afternoon.',
-    },
-    condition: 'ok',
-    lastChecked: '2026-10-08',
-    photo: {
-      kind: 'photo',
-      hint: { id: 'FOTO: ledge barat dari samping, sertakan skater untuk skala', en: 'PHOTO: west ledge from the side, include a skater for scale' },
-    },
-  },
-  {
-    slug: 'bank-timur',
-    name: { id: 'Bank Timur', en: 'East Bank' },
+    slug: 'bank-grafiti',
+    name: { id: 'Bank Grafiti', en: 'Graffiti Bank' },
     type: { id: 'Bank / Transisi', en: 'Bank / Transition' },
     note: {
-      id: 'Transisi landai menuju pilar. Ada retakan yang melebar sejak Oktober.',
-      en: 'Gentle transition into the pillar. Has a crack that has been widening since October.',
+      id: 'Bank beton miring dengan permukaan penuh coretan, menghadap flatground.',
+      en: 'Sloped concrete bank covered in tags, facing the flatground.',
     },
-    condition: 'hazard',
-    lastChecked: '2026-10-08',
+    lastChecked: '2026-11-04',
     photo: {
       kind: 'photo',
-      hint: { id: 'FOTO: bank timur wide + close-up retakan', en: 'PHOTO: wide shot of the east bank + close-up of the crack' },
+      src: '/media/obstacles/1.webp',
+      hint: {
+        id: 'Bank beton bergrafiti di flatground, jalan layang di belakangnya.',
+        en: 'Graffiti-covered concrete bank on the flatground, the flyover behind it.',
+      },
     },
   },
   {
-    slug: 'manual-pad-pilar-4',
-    name: { id: 'Manual Pad Pilar 4', en: 'Manual Pad, Pillar 4' },
+    slug: 'kicker-hitam',
+    name: { id: 'Kicker Hitam', en: 'Black Kicker' },
+    type: { id: 'Kicker', en: 'Kicker' },
+    note: {
+      id: 'Kicker kayu hitam berlogo, berdiri bebas di tengah flatground.',
+      en: 'Black wooden kicker with a painted logo, freestanding on the flatground.',
+    },
+    lastChecked: '2026-11-04',
+    photo: {
+      kind: 'photo',
+      src: '/media/obstacles/2.webp',
+      hint: {
+        id: 'Kicker kayu hitam dengan logo lingkaran putih, quarter kuning di belakang.',
+        en: 'Black wooden kicker with a white circle logo, the yellow quarter behind it.',
+      },
+    },
+  },
+  {
+    slug: 'bank-beton-tepi',
+    name: { id: 'Bank Beton Tepi', en: 'Edge Concrete Bank' },
+    type: { id: 'Bank / Transisi', en: 'Bank / Transition' },
+    note: {
+      id: 'Bank beton rendah di tepi flatground, permukaan retak di sekelilingnya.',
+      en: 'Low concrete bank at the edge of the flatground, with cracked surface around it.',
+    },
+    lastChecked: '2026-11-04',
+    photo: {
+      kind: 'photo',
+      src: '/media/obstacles/3.webp',
+      hint: {
+        id: 'Bank beton rendah dilihat dari balik tiang, motor terparkir di belakangnya.',
+        en: 'Low concrete bank seen past a pole, parked motorbikes behind it.',
+      },
+    },
+  },
+  {
+    slug: 'quarter-perak',
+    name: { id: 'Quarter Perak', en: 'Silver Quarter' },
+    type: { id: 'Quarter pipe', en: 'Quarter pipe' },
+    note: {
+      id: 'Quarter pipe berangka baja biru dengan permukaan logam, di samping pilar.',
+      en: 'Blue steel-framed quarter pipe with a metal surface, beside the pillar.',
+    },
+    lastChecked: '2026-11-04',
+    photo: {
+      kind: 'photo',
+      src: '/media/obstacles/4.webp',
+      hint: {
+        id: 'Quarter pipe berpermukaan perak di samping pilar bergrafiti, genangan air di kiri.',
+        en: 'Silver-surfaced quarter pipe beside the graffiti pillar, a puddle on the left.',
+      },
+    },
+  },
+  {
+    slug: 'ledge-merah',
+    name: { id: 'Ledge Merah', en: 'Red Ledge' },
+    type: { id: 'Ledge', en: 'Ledge' },
+    note: {
+      id: 'Ledge beton panjang dengan sisi merah, berdiri bebas di flatground.',
+      en: 'Long concrete ledge with a red-painted side, freestanding on the flatground.',
+    },
+    lastChecked: '2026-11-04',
+    photo: {
+      kind: 'photo',
+      src: '/media/obstacles/5.webp',
+      hint: {
+        id: 'Ledge beton panjang bersisi merah, quarter dan bank biru di kejauhan.',
+        en: 'Long red-sided concrete ledge, with the quarters and the blue bank in the distance.',
+      },
+    },
+  },
+  {
+    slug: 'quarter-biru',
+    name: { id: 'Quarter Biru', en: 'Blue Quarter' },
+    type: { id: 'Quarter pipe', en: 'Quarter pipe' },
+    note: {
+      id: 'Quarter pipe berangka biru dengan coping kuning, dekat pilar.',
+      en: 'Blue-framed quarter pipe with yellow coping, near the pillar.',
+    },
+    lastChecked: '2026-11-04',
+    photo: {
+      kind: 'photo',
+      src: '/media/obstacles/6.webp',
+      hint: {
+        id: 'Quarter pipe berangka biru bercoping kuning, quarter lain di belakang.',
+        en: 'Blue-framed quarter pipe with yellow coping, another quarter behind it.',
+      },
+    },
+  },
+  {
+    slug: 'quarter-pilar',
+    name: { id: 'Quarter Pilar', en: 'Pillar Quarter' },
+    type: { id: 'Quarter pipe', en: 'Quarter pipe' },
+    note: {
+      id: 'Quarter pipe besar di kaki pilar dengan mural, platform atas untuk drop-in.',
+      en: 'Large quarter pipe at the foot of the muralled pillar, with a top platform for drop-ins.',
+    },
+    lastChecked: '2026-11-04',
+    photo: {
+      kind: 'photo',
+      src: '/media/obstacles/7.webp',
+      hint: {
+        id: 'Skater berdiri di platform atas quarter pipe besar, pilar bermural di belakangnya.',
+        en: 'A skater on the top platform of the large quarter pipe, the muralled pillar behind.',
+      },
+    },
+  },
+  {
+    slug: 'manual-pad',
+    name: { id: 'Manual Pad', en: 'Manual Pad' },
     type: { id: 'Manual pad', en: 'Manual pad' },
     note: {
-      id: 'Pad rendah di kaki pilar 4. Coping mulai longgar.',
-      en: 'Low pad at the base of pillar 4. The coping is starting to loosen.',
+      id: 'Box beton rendah bertepi kuning, penuh stiker dan coretan.',
+      en: 'Low concrete box with yellow edges, covered in stickers and tags.',
     },
-    condition: 'repair',
-    lastChecked: '2026-10-08',
+    lastChecked: '2026-11-04',
     photo: {
       kind: 'photo',
-      hint: { id: 'FOTO: manual pad pilar 4, tunjukkan coping', en: 'PHOTO: manual pad at pillar 4, show the coping' },
+      src: '/media/obstacles/8.webp',
+      hint: {
+        id: 'Manual pad beton bertepi kuning di flatground, funbox biru di sisi kanan.',
+        en: 'Yellow-edged concrete manual pad on the flatground, the blue funbox on the right.',
+      },
     },
   },
   {
-    slug: 'quarter-pipe',
-    name: { id: 'Quarter Pipe', en: 'Quarter Pipe' },
-    type: { id: 'Transition', en: 'Transition' },
+    slug: 'funbox-biru',
+    name: { id: 'Funbox Biru', en: 'Blue Funbox' },
+    type: { id: 'Funbox', en: 'Funbox' },
     note: {
-      id: 'Transisi terbesar di taman, menghadap ke utara. Permukaan masih mulus.',
-      en: 'The park’s biggest transition, facing north. Surface is still smooth.',
+      id: 'Funbox biru dengan bank di kedua sisi dan rail merah di atasnya.',
+      en: 'Blue funbox with banks on both sides and a red rail along the top.',
     },
-    condition: 'ok',
-    lastChecked: '2026-10-08',
+    lastChecked: '2026-11-04',
     photo: {
       kind: 'photo',
-      hint: { id: 'FOTO: quarter pipe, sudut rendah dari bawah', en: 'PHOTO: quarter pipe, low angle from the bottom' },
+      src: '/media/obstacles/9.webp',
+      hint: {
+        id: 'Funbox biru berstiker dengan rail merah, dilihat dari depan.',
+        en: 'Blue funbox with stickers and a red rail, seen from the front.',
+      },
     },
   },
   {
-    slug: 'flatground-tengah',
-    name: { id: 'Flatground Tengah', en: 'Center Flatground' },
-    type: { id: 'Flatground', en: 'Flatground' },
+    slug: 'flat-rail',
+    name: { id: 'Flat Rail', en: 'Flat Rail' },
+    type: { id: 'Rail', en: 'Rail' },
     note: {
-      id: 'Area datar utama untuk warm-up. Dibersihkan tiap kerja bakti bulanan.',
-      en: 'Main flat area for warm-ups. Swept at every monthly clean-up.',
+      id: 'Flat rail pipa baja pendek, ditanam di flatground.',
+      en: 'Short steel-pipe flat rail, bolted into the flatground.',
     },
-    condition: 'ok',
-    lastChecked: '2026-10-08',
+    lastChecked: '2026-11-04',
     photo: {
       kind: 'photo',
-      hint: { id: 'FOTO: flatground tengah, wide shot dari ujung timur', en: 'PHOTO: center flatground, wide shot from the east end' },
+      src: '/media/obstacles/10.webp',
+      hint: {
+        id: 'Flat rail dengan funbox biru di latar kiri.',
+        en: 'Flat rail with the blue funbox in the background on the left.',
+      },
     },
   },
   {
-    slug: 'bowl-corner',
-    name: { id: 'Bowl Corner', en: 'Bowl Corner' },
-    type: { id: 'Bowl', en: 'Bowl' },
+    slug: 'wave-ramp',
+    name: { id: 'Wave Ramp', en: 'Wave Ramp' },
+    type: { id: 'Ramp', en: 'Ramp' },
     note: {
-      id: 'Sudut bowl dengan coping paling tebal. Favorit para senior.',
-      en: 'Bowl corner with the thickest coping. A senior favourite.',
+      id: 'Ramp kayu lengkung berangka baja hitam, naik membentuk gelombang.',
+      en: 'Curved wooden ramp on a black steel frame, rising in a wave shape.',
     },
-    condition: 'ok',
-    lastChecked: '2026-10-08',
+    lastChecked: '2026-11-04',
     photo: {
       kind: 'photo',
-      hint: { id: 'FOTO: bowl corner, tunjukkan coping dan dinding', en: 'PHOTO: bowl corner, show the coping and the wall' },
+      src: '/media/obstacles/11.webp',
+      hint: {
+        id: 'Ramp kayu lengkung berangka baja, skater berlatih di sebelahnya.',
+        en: 'Curved wooden ramp on a steel frame, skaters hanging out beside it.',
+      },
     },
   },
 ];
