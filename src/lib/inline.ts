@@ -11,10 +11,13 @@ const HTML_ESCAPES: Record<string, string> = {
 };
 
 // Escapes first, then turns *…* into <em>…</em>. Safe for set:html.
+// Single newlines are the author's line breaks (prose poems); blank lines are
+// paragraph gaps, handled by the caller's split.
 export function renderInline(text: string): string {
   return text
     .replace(/[&<>"']/g, (c) => HTML_ESCAPES[c])
-    .replace(/\*([^*\n]+)\*/g, '<em>$1</em>');
+    .replace(/\*([^*\n]+)\*/g, '<em>$1</em>')
+    .replace(/\n/g, '<br>');
 }
 
 // Plain text for <title>, meta descriptions, OG cards and share messages.
