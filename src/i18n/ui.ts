@@ -49,6 +49,7 @@ export const ui = {
     'park.about.body3':
       'Pagi taman ini kosong dan tenang — waktu paling aman untuk belajar. Sore jadi ramai: sesi bergantian, papan dipinjam-pinjamkan, bangku kayu dan warung penuh. Malam, lampu jalan layang yang mengambil alih.',
     'park.photos': 'Sekitar Taman',
+    'park.people': 'Orang-orang',
     'park.photos.note':
       'Sisi lain taman: obstacle yang dipakai tiap hari, warung, bangku, dan dinding yang mencatat siapa saja yang pernah mampir.',
     'park.rhythm': 'Kebiasaan Main',
@@ -161,6 +162,7 @@ export const ui = {
     'park.about.body3':
       'In the morning the park is empty and quiet — the safest window to learn. By late afternoon it fills up: sessions take turns, boards get passed around, and the wooden benches and the warung are full. At night the flyover lights take over.',
     'park.photos': 'Around the Park',
+    'park.people': 'The People',
     'park.photos.note':
       'The other half of the park: the obstacles people ride, the warung, the benches, and the walls that track who has passed through.',
     'park.rhythm': 'Park Rhythm',

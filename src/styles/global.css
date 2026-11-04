@@ -819,6 +819,14 @@ main { flex: 1; padding-bottom: 4rem; }
   color: var(--muted);
 }
 
+/* ---- The Park: the people (masonry — photos keep their own aspect ratio) ---- */
+.people-shots { columns: 1; column-gap: 1.5rem; }
+@media (min-width: 560px) { .people-shots { columns: 2; } }
+@media (min-width: 900px) { .people-shots { columns: 3; } }
+.people-shot { break-inside: avoid; margin: 0 0 1.5rem; }
+.people-shot .media-slot.media-real { padding: 0.4rem; box-shadow: 3px 4px 0 rgba(16, 16, 16, 0.9); }
+.people-shot .media-slot.media-real img { width: 100%; height: auto; display: block; }
+
 /* ---- The Park: opening hours + observed rhythm ---- */
 .rhythm-grid { display: grid; gap: 1.75rem; }
 @media (min-width: 900px) {

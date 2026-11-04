@@ -3,10 +3,10 @@ import Base from '../../layouts/Base.astro';
 import MediaSlot from '../../components/MediaSlot.astro';
 import { localeRoutes, routeLang, t } from '../../i18n/ui';
 import {
-  conditionEntries,
   parkAboutShots,
   parkHours,
   parkPhotos,
+  parkPeople,
   parkRhythm,
   usageSnapshot,
   obstacles,
@@ -183,7 +183,21 @@ const lang = routeLang(Astro.params.lang);
         {parkPhotos.map((p) => (
           <figure class="park-shot">
             <MediaSlot lang={lang} slot={p.photo} />
-            <figcaption>{p.photo.hint[lang]}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>{t(lang, 'park.people')}</h2>
+      </div>
+      <div class="people-shots">
+        {parkPeople.map((p) => (
+          <figure class="people-shot">
+            <MediaSlot lang={lang} slot={p.photo} />
           </figure>
         ))}
       </div>
@@ -203,36 +217,6 @@ const lang = routeLang(Astro.params.lang);
           </article>
         ))}
       </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="wrap">
-      <h2 style="margin-bottom: 1rem;">{t(lang, 'park.condition')}</h2>
-      <div class="ledger ledger--photo">
-        <div class="ledger-head">
-          <span>{lang === 'id' ? 'Tgl' : 'Date'}</span>
-          <span>{lang === 'id' ? 'Foto' : 'Photo'}</span>
-          <span>{lang === 'id' ? 'Lokasi & catatan' : 'Spot & note'}</span>
-          <span>Status</span>
-        </div>
-        {conditionEntries.map((c) => (
-          <div class="ledger-row">
-            <span class="ledger-date">{c.date.slice(8)}.{c.date.slice(5, 7)}.{c.date.slice(2, 4)}</span>
-            <span class="ledger-thumb"><MediaSlot lang={lang} slot={c.photo} mini /></span>
-            <div>
-              <span class="ledger-spot">{c.spot[lang]}</span>
-              <p style="font-size: 0.85rem; margin-top: 0.15rem;">{c.note[lang]}</p>
-            </div>
-            <span class={`badge badge-${c.severity} ledger-badge`}>{t(lang, `condition.${c.severity}` as any)}</span>
-          </div>
-        ))}
-      </div>
-      <p class="mono" style="margin-top: 0.75rem;">
-        {lang === 'id'
-          ? 'Sudut foto yang sama diambil ulang tiap bulan untuk perbandingan sebelum/sesudah.'
-          : 'The same photo angles are retaken monthly for before/after comparison.'}
-      </p>
     </div>
   </section>
 

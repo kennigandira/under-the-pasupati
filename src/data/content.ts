@@ -562,6 +562,147 @@ export const aboutSlides: MediaSlot[] = [
   },
 ];
 
+// The people of the park — a photo wall under its own heading. `hint` is the alt text only.
+export interface ParkPerson {
+  slug: string;
+  photo: MediaSlot;
+}
+
+export const parkPeople: ParkPerson[] = [
+  {
+    slug: 'people-1',
+    photo: {
+      kind: 'photo',
+      src: '/media/people/1.webp',
+      hint: {
+        id: 'Sekelompok skater duduk berfoto di flatground.',
+        en: 'A group of skaters sitting together for a photo on the flatground.',
+      },
+    },
+  },
+  {
+    slug: 'people-2',
+    photo: {
+      kind: 'photo',
+      src: '/media/people/2.webp',
+      hint: {
+        id: 'Teman-teman ngobrol di meja warung.',
+        en: 'Friends chatting around a warung table.',
+      },
+    },
+  },
+  {
+    slug: 'people-3',
+    photo: {
+      kind: 'photo',
+      src: '/media/people/3.webp',
+      hint: {
+        id: 'Skater berbaris santai di flatground.',
+        en: 'Skaters lined up casually on the flatground.',
+      },
+    },
+  },
+  {
+    slug: 'people-4',
+    photo: {
+      kind: 'photo',
+      src: '/media/people/4.webp',
+      hint: {
+        id: 'Sepasang pemilik warung berdiri di depan kiosnya.',
+        en: 'A couple of warung owners standing at their stall.',
+      },
+    },
+  },
+  {
+    slug: 'people-5',
+    photo: {
+      kind: 'photo',
+      src: '/media/people/5.webp',
+      hint: {
+        id: 'Ibu warung duduk di bangku depan gerobaknya.',
+        en: 'A warung owner sitting on a bench in front of her cart.',
+      },
+    },
+  },
+  {
+    slug: 'people-6',
+    photo: {
+      kind: 'photo',
+      src: '/media/people/6.webp',
+      hint: {
+        id: 'Penjaga warung jongkok tersenyum di depan kiosnya.',
+        en: 'A warung keeper crouching and smiling in front of her stall.',
+      },
+    },
+  },
+  {
+    slug: 'people-7',
+    photo: {
+      kind: 'photo',
+      src: '/media/people/7.webp',
+      hint: {
+        id: 'Tiga anak kecil dengan papan skate.',
+        en: 'Three small kids with their skateboards.',
+      },
+    },
+  },
+  {
+    slug: 'people-8',
+    photo: {
+      kind: 'photo',
+      src: '/media/people/8.webp',
+      hint: {
+        id: 'Rombongan besar skater berfoto di bawah jalan layang.',
+        en: 'A big crowd of skaters posing under the flyover.',
+      },
+    },
+  },
+  {
+    slug: 'people-9',
+    photo: {
+      kind: 'photo',
+      src: '/media/people/9.webp',
+      hint: {
+        id: 'Dua teman berpelukan di malam hari.',
+        en: 'Two friends hugging at night.',
+      },
+    },
+  },
+  {
+    slug: 'people-10',
+    photo: {
+      kind: 'photo',
+      src: '/media/people/10.webp',
+      hint: {
+        id: 'Tiga teman duduk bersama di malam hari.',
+        en: 'Three friends sitting together at night.',
+      },
+    },
+  },
+  {
+    slug: 'people-11',
+    photo: {
+      kind: 'photo',
+      src: '/media/people/11.webp',
+      hint: {
+        id: 'Anak kecil duduk di atas papan skate di dekat quarter.',
+        en: 'A small kid sitting on a skateboard near the quarter.',
+      },
+    },
+  },
+  {
+    slug: 'people-12',
+    photo: {
+      kind: 'photo',
+      src: '/media/people/12.webp',
+      hint: {
+        id: 'Sekelompok anak duduk di atas papan skate mereka.',
+        en: 'A group of kids sitting on their skateboards.',
+      },
+    },
+  },
+];
+
 // Obstacles: used by the gallery on The Park page.
 export interface Obstacle {
   slug: string;
