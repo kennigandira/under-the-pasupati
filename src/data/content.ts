@@ -566,41 +566,25 @@ export const aboutSlides: MediaSlot[] = [
 export interface Obstacle {
   slug: string;
   name: Local<string>;
-  type: Local<string>;
-  note: Local<string>;
-  condition?: Severity;
-  lastChecked: string;
   photo: MediaSlot;
 }
 
 export const obstacles: Obstacle[] = [
   {
-    slug: 'bank-grafiti',
-    name: { id: 'Bank Ramp Grafiti', en: 'Graffiti Bank Ramp' },
-    type: { id: 'Bank ramp', en: 'Bank ramp' },
-    note: {
-      id: 'Bank ramp beton berdiri bebas, permukaan miring penuh coretan. Berhadapan dengan bank ramp satunya.',
-      en: 'Freestanding concrete bank ramp with a sloped, tagged surface. Faces the other bank ramp.',
-    },
-    lastChecked: '2026-11-04',
+    slug: 'bank-ramp-1',
+    name: { id: 'Bank Ramp 1', en: 'Bank Ramp 1' },
     photo: {
       kind: 'photo',
       src: '/media/obstacles/1.webp',
       hint: {
         id: 'Bank ramp beton bergrafiti di flatground, jalan layang di belakangnya.',
-        en: 'Graffiti-covered concrete bank ramp on the flatground, the flyover behind it.',
+        en: 'Concrete bank ramp on the flatground, the flyover behind it.',
       },
     },
   },
   {
     slug: 'kicker-hitam',
     name: { id: 'Kicker Hitam', en: 'Black Kicker' },
-    type: { id: 'Kicker', en: 'Kicker' },
-    note: {
-      id: 'Kicker kayu hitam berlogo, berdiri bebas di tengah flatground.',
-      en: 'Black wooden kicker with a painted logo, freestanding on the flatground.',
-    },
-    lastChecked: '2026-11-04',
     photo: {
       kind: 'photo',
       src: '/media/obstacles/2.webp',
@@ -611,14 +595,8 @@ export const obstacles: Obstacle[] = [
     },
   },
   {
-    slug: 'bank-beton-tepi',
-    name: { id: 'Bank Ramp Tepi', en: 'Edge Bank Ramp' },
-    type: { id: 'Bank ramp', en: 'Bank ramp' },
-    note: {
-      id: 'Bank ramp beton rendah di tepi flatground, berhadapan dengan bank ramp grafiti.',
-      en: 'Low concrete bank ramp at the edge of the flatground, facing the graffiti bank ramp.',
-    },
-    lastChecked: '2026-11-04',
+    slug: 'bank-ramp-2',
+    name: { id: 'Bank Ramp 2', en: 'Bank Ramp 2' },
     photo: {
       kind: 'photo',
       src: '/media/obstacles/3.webp',
@@ -631,48 +609,30 @@ export const obstacles: Obstacle[] = [
   {
     slug: 'quarter-perak',
     name: { id: 'Quarter Perak', en: 'Silver Quarter' },
-    type: { id: 'Quarter pipe', en: 'Quarter pipe' },
-    note: {
-      id: 'Quarter pipe berangka baja biru dengan permukaan logam, di samping pilar.',
-      en: 'Blue steel-framed quarter pipe with a metal surface, beside the pillar.',
-    },
-    lastChecked: '2026-11-04',
     photo: {
       kind: 'photo',
       src: '/media/obstacles/4.webp',
       hint: {
-        id: 'Quarter pipe berpermukaan perak di samping pilar bergrafiti, genangan air di kiri.',
-        en: 'Silver-surfaced quarter pipe beside the graffiti pillar, a puddle on the left.',
+        id: 'Quarter pipe berpermukaan perak di samping pilar, genangan air di kiri.',
+        en: 'Silver-surfaced quarter pipe beside the pillar, a puddle on the left.',
       },
     },
   },
   {
     slug: 'ledge-merah',
     name: { id: 'Ledge Merah', en: 'Red Ledge' },
-    type: { id: 'Ledge', en: 'Ledge' },
-    note: {
-      id: 'Ledge beton panjang dengan sisi merah, berdiri bebas di flatground.',
-      en: 'Long concrete ledge with a red-painted side, freestanding on the flatground.',
-    },
-    lastChecked: '2026-11-04',
     photo: {
       kind: 'photo',
       src: '/media/obstacles/5.webp',
       hint: {
         id: 'Ledge beton panjang bersisi merah, quarter dan bank biru di kejauhan.',
-        en: 'Long red-sided concrete ledge, with the quarters and the blue bank in the distance.',
+        en: 'Long red-sided concrete ledge, with the quarters and the blue pyramid in the distance.',
       },
     },
   },
   {
     slug: 'quarter-biru',
     name: { id: 'Quarter Biru', en: 'Blue Quarter' },
-    type: { id: 'Quarter pipe', en: 'Quarter pipe' },
-    note: {
-      id: 'Quarter pipe berangka biru dengan coping kuning, dekat pilar.',
-      en: 'Blue-framed quarter pipe with yellow coping, near the pillar.',
-    },
-    lastChecked: '2026-11-04',
     photo: {
       kind: 'photo',
       src: '/media/obstacles/6.webp',
@@ -685,12 +645,6 @@ export const obstacles: Obstacle[] = [
   {
     slug: 'quarter-pilar',
     name: { id: 'Quarter Pilar', en: 'Pillar Quarter' },
-    type: { id: 'Quarter pipe', en: 'Quarter pipe' },
-    note: {
-      id: 'Quarter pipe besar di kaki pilar dengan mural, platform atas untuk drop-in.',
-      en: 'Large quarter pipe at the foot of the muralled pillar, with a top platform for drop-ins.',
-    },
-    lastChecked: '2026-11-04',
     photo: {
       kind: 'photo',
       src: '/media/obstacles/7.webp',
@@ -703,66 +657,42 @@ export const obstacles: Obstacle[] = [
   {
     slug: 'manual-pad',
     name: { id: 'Manual Pad', en: 'Manual Pad' },
-    type: { id: 'Manual pad', en: 'Manual pad' },
-    note: {
-      id: 'Box beton rendah bertepi kuning, penuh stiker dan coretan.',
-      en: 'Low concrete box with yellow edges, covered in stickers and tags.',
-    },
-    lastChecked: '2026-11-04',
     photo: {
       kind: 'photo',
       src: '/media/obstacles/8.webp',
       hint: {
-        id: 'Manual pad beton bertepi kuning di flatground, funbox biru di sisi kanan.',
-        en: 'Yellow-edged concrete manual pad on the flatground, the blue funbox on the right.',
+        id: 'Manual pad beton bertepi kuning di flatground, pyramid biru di sisi kanan.',
+        en: 'Yellow-edged concrete manual pad on the flatground, the blue pyramid on the right.',
       },
     },
   },
   {
-    slug: 'funbox-biru',
-    name: { id: 'Funbox Biru', en: 'Blue Funbox' },
-    type: { id: 'Funbox', en: 'Funbox' },
-    note: {
-      id: 'Funbox biru dengan bank di kedua sisi dan rail merah di atasnya.',
-      en: 'Blue funbox with banks on both sides and a red rail along the top.',
-    },
-    lastChecked: '2026-11-04',
+    slug: 'pyramid-biru',
+    name: { id: 'Pyramid Biru', en: 'Blue Pyramid' },
     photo: {
       kind: 'photo',
       src: '/media/obstacles/9.webp',
       hint: {
-        id: 'Funbox biru berstiker dengan rail merah, dilihat dari depan.',
-        en: 'Blue funbox with stickers and a red rail, seen from the front.',
+        id: 'Pyramid biru berstiker dengan rail merah, dilihat dari depan.',
+        en: 'Blue pyramid with stickers and a red rail, seen from the front.',
       },
     },
   },
   {
     slug: 'flat-rail',
     name: { id: 'Flat Rail', en: 'Flat Rail' },
-    type: { id: 'Rail', en: 'Rail' },
-    note: {
-      id: 'Flat rail pipa baja pendek, ditanam di flatground.',
-      en: 'Short steel-pipe flat rail, bolted into the flatground.',
-    },
-    lastChecked: '2026-11-04',
     photo: {
       kind: 'photo',
       src: '/media/obstacles/10.webp',
       hint: {
-        id: 'Flat rail dengan funbox biru di latar kiri.',
-        en: 'Flat rail with the blue funbox in the background on the left.',
+        id: 'Flat rail dengan pyramid biru di latar kiri.',
+        en: 'Flat rail with the blue pyramid in the background on the left.',
       },
     },
   },
   {
     slug: 'wave-ramp',
     name: { id: 'Wave Ramp', en: 'Wave Ramp' },
-    type: { id: 'Ramp', en: 'Ramp' },
-    note: {
-      id: 'Ramp kayu lengkung berangka baja hitam, naik membentuk gelombang.',
-      en: 'Curved wooden ramp on a black steel frame, rising in a wave shape.',
-    },
-    lastChecked: '2026-11-04',
     photo: {
       kind: 'photo',
       src: '/media/obstacles/11.webp',

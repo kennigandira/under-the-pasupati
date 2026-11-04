@@ -199,16 +199,8 @@ const lang = routeLang(Astro.params.lang);
       <div class="grid grid-3">
         {obstacles.map((o) => (
           <article class="card tape">
-            <span class="obstacle-type">{o.type[lang]}</span>
-            <div style="margin-top: 0.6rem;">
-              <MediaSlot lang={lang} slot={o.photo} />
-            </div>
+            <MediaSlot lang={lang} slot={o.photo} />
             <h3 style="margin-top: 0.75rem;">{o.name[lang]}</h3>
-            <p>{o.note[lang]}</p>
-            <p class="meta" style="margin-top: 0.5rem;">
-              {o.condition && <span class={`badge badge-${o.condition}`}>{t(lang, `condition.${o.condition}` as any)}</span>}
-              <span>{t(lang, 'park.lastChecked')}: {o.lastChecked}</span>
-            </p>
           </article>
         ))}
       </div>
