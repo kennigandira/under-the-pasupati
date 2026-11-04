@@ -571,14 +571,14 @@ export interface Obstacle {
 
 export const obstacles: Obstacle[] = [
   {
-    slug: 'bank-ramp-1',
-    name: { id: 'Bank Ramp 1', en: 'Bank Ramp 1' },
+    slug: 'bank-ramp',
+    name: { id: 'Bank Ramp', en: 'Bank Ramp' },
     photo: {
       kind: 'photo',
-      src: '/media/obstacles/1.webp',
+      src: '/media/obstacles/12.webp',
       hint: {
-        id: 'Bank ramp beton bergrafiti di flatground, jalan layang di belakangnya.',
-        en: 'Concrete bank ramp on the flatground, the flyover behind it.',
+        id: 'Dua bank ramp beton saling berhadapan di kedua ujung flatground, dilihat dari atas.',
+        en: 'Two concrete bank ramps facing each other at either end of the flatground, seen from above.',
       },
     },
   },
@@ -591,18 +591,6 @@ export const obstacles: Obstacle[] = [
       hint: {
         id: 'Kicker kayu hitam dengan logo lingkaran putih, quarter kuning di belakang.',
         en: 'Black wooden kicker with a white circle logo, the yellow quarter behind it.',
-      },
-    },
-  },
-  {
-    slug: 'bank-ramp-2',
-    name: { id: 'Bank Ramp 2', en: 'Bank Ramp 2' },
-    photo: {
-      kind: 'photo',
-      src: '/media/obstacles/3.webp',
-      hint: {
-        id: 'Bank ramp beton rendah dilihat dari balik tiang, motor terparkir di belakangnya.',
-        en: 'Low concrete bank ramp seen past a pole, parked motorbikes behind it.',
       },
     },
   },
