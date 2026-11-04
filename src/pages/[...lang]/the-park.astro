@@ -1,234 +1,272 @@
 ---
-import Base from '../../layouts/Base.astro';
-import MediaSlot from '../../components/MediaSlot.astro';
-import { localeRoutes, routeLang, t } from '../../i18n/ui';
+import Base from "../../layouts/Base.astro";
+import MediaSlot from "../../components/MediaSlot.astro";
+import { localeRoutes, routeLang, t } from "../../i18n/ui";
 import {
-  parkAboutShots,
-  parkHours,
-  parkPhotos,
-  parkPeople,
-  parkRhythm,
-  usageSnapshot,
-  obstacles,
-} from '../../data/content';
+    parkAboutShots,
+    parkHours,
+    parkPhotos,
+    parkPeople,
+    parkRhythm,
+    usageSnapshot,
+    obstacles,
+} from "../../data/content";
 
 export function getStaticPaths() {
-  return localeRoutes();
+    return localeRoutes();
 }
 const lang = routeLang(Astro.params.lang);
 ---
 
-<Base lang={lang} title={t(lang, 'nav.park')} path="/the-park">
-  <section class="hero-full">
-    <MediaSlot
-      lang={lang}
-      slot={{
-        kind: 'photo',
-        src: '/images/park/hero-park.webp',
-        hint: {
-          id: 'Taman dilihat dari dalam, di bawah dek flyover: panggung beton, bank biru, dan flatground.',
-          en: 'The park seen from inside, under the flyover deck: the concrete platform, the blue bank, and the flatground.',
-        },
-      }}
-    />
-    <div class="hero-full-inner">
-      <span class="stamp">Pasupati Flyover, Bandung</span>
-      <h1>{t(lang, 'nav.park')}</h1>
-      <p class="hero-full-tagline">{t(lang, 'park.hero.tagline')}</p>
-      <p class="hero-scroll">
-        <span>{t(lang, 'park.hero.scroll')}</span>
-        <span>↓</span>
-      </p>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="wrap">
-      <div class="section-head">
-        <h2>{t(lang, 'park.about')}</h2>
-      </div>
-      <div class="park-about">
-        <div class="park-about-copy">
-          <p>{t(lang, 'park.about.body1')}</p>
-          <p>{t(lang, 'park.about.body2')}</p>
-          <p>{t(lang, 'park.about.body3')}</p>
+<Base lang={lang} title={t(lang, "nav.park")} path="/the-park">
+    <section class="hero-full">
+        <MediaSlot
+            lang={lang}
+            slot={{
+                kind: "photo",
+                src: "/images/park/hero-park.webp",
+                hint: {
+                    id: "Taman dilihat dari dalam, di bawah dek flyover: panggung beton, bank biru, dan flatground.",
+                    en: "The park seen from inside, under the flyover deck: the concrete platform, the blue bank, and the flatground.",
+                },
+            }}
+        />
+        <div class="hero-full-inner">
+            <span class="stamp">Pasupati Flyover, Bandung</span>
+            <h1>{t(lang, "nav.park")}</h1>
+            <p class="hero-full-tagline">{t(lang, "park.hero.tagline")}</p>
+            <p class="hero-scroll">
+                <span>{t(lang, "park.hero.scroll")}</span>
+                <span>↓</span>
+            </p>
         </div>
-        <div class="park-about-shots">
-          {parkAboutShots.map((shot) => <MediaSlot lang={lang} slot={shot} />)}
+    </section>
+
+    <section class="section">
+        <div class="wrap">
+            <div class="section-head">
+                <h2>{t(lang, "park.about")}</h2>
+            </div>
+            <div class="park-about">
+                <div class="park-about-copy">
+                    <p>{t(lang, "park.about.body1")}</p>
+                    <p>{t(lang, "park.about.body2")}</p>
+                </div>
+                <div class="park-about-shots">
+                    {parkAboutShots.map((shot) => (
+                        <MediaSlot lang={lang} slot={shot} />
+                    ))}
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="section">
-    <div class="wrap rhythm-grid">
-      <div>
-        <div class="section-head">
-          <h2>{t(lang, 'park.rhythm')}</h2>
+    <section class="section">
+        <div class="wrap rhythm-grid">
+            <div class="rhythm-intro">
+                <div class="section-head">
+                    <h2>{t(lang, "park.rhythm")}</h2>
+                </div>
+                <p class="rhythm-hours">
+                    <span class="mono">{t(lang, "park.rhythm.hours")}</span>
+                    <strong>{parkHours[lang]}</strong>
+                </p>
+                <p class="rhythm-disclaimer">{t(lang, "park.rhythm.note")}</p>
+            </div>
+            <ul class="rhythm" aria-label={t(lang, "park.rhythm")}>
+                {parkRhythm.map((slot) => (
+                    <li class="rhythm-card">
+                        <MediaSlot lang={lang} slot={slot.photo} />
+                        <span class="rhythm-who">{slot.who[lang]}</span>
+                        <span class="rhythm-when">{slot.when[lang]}</span>
+                    </li>
+                ))}
+            </ul>
         </div>
-        <p class="rhythm-hours">
-          <span class="mono">{t(lang, 'park.rhythm.hours')}</span>
-          <strong>{parkHours[lang]}</strong>
-        </p>
-        <p class="rhythm-disclaimer">{t(lang, 'park.rhythm.note')}</p>
-      </div>
-      <ul class="rhythm" aria-label={t(lang, 'park.rhythm')}>
-        {parkRhythm.map((slot) => (
-          <li class="rhythm-row">
-            <span class="rhythm-who">{slot.who[lang]}</span>
-            <span class="rhythm-when">{slot.when[lang]}</span>
-            <span class="rhythm-does">{slot.note[lang]}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </section>
+    </section>
 
-  <section class="section">
-    <div class="wrap">
-      <h2 style="margin-bottom: 1rem;">{t(lang, 'park.map')}</h2>
-      <div class="map-grid">
-        <div>
-          <h3>{t(lang, 'park.map.entry')}</h3>
-          <div class="map-embed">
-            <iframe
-              title={`${t(lang, 'park.map.title')} — ${t(lang, 'park.map.entry')}`}
-              src="https://www.openstreetmap.org/export/embed.html?bbox=107.60756%2C-6.89870%2C107.60996%2C-6.89710&amp;layer=mapnik&amp;marker=-6.8979049%2C107.60876"
-              referrerpolicy="no-referrer-when-downgrade"
-            ></iframe>
-          </div>
-          <p class="map-link">
-            <a
-              href="https://maps.app.goo.gl/RmR6oV1J8JAJQbQw8"
-              rel="noopener noreferrer"
-              aria-label={`${t(lang, 'park.map.open')} — ${t(lang, 'park.map.entry')}`}
-            >{t(lang, 'park.map.open')} ↗</a>
-          </p>
-          <p class="map-note">{t(lang, 'park.map.entry.note')}</p>
-          <figure class="map-figure">
-            <img
-              class="map-photo"
-              src="/images/park-access-motor-pedestrian.webp"
-              width="1600"
-              height="664"
-              loading="lazy"
-              decoding="async"
-              alt={t(lang, 'park.map.entry.alt')}
-            />
-            <figcaption>{t(lang, 'park.map.google')}</figcaption>
-          </figure>
+    <section class="section">
+        <div class="wrap">
+            <h2 style="margin-bottom: 1rem;">{t(lang, "park.map")}</h2>
+            <div class="map-grid">
+                <div>
+                    <h3>{t(lang, "park.map.entry")}</h3>
+                    <div class="map-embed">
+                        <iframe
+                            title={`${t(lang, "park.map.title")} — ${t(lang, "park.map.entry")}`}
+                            src="https://www.openstreetmap.org/export/embed.html?bbox=107.60756%2C-6.89870%2C107.60996%2C-6.89710&amp;layer=mapnik&amp;marker=-6.8979049%2C107.60876"
+                            referrerpolicy="no-referrer-when-downgrade"
+                        ></iframe>
+                    </div>
+                    <p class="map-link">
+                        <a
+                            href="https://maps.app.goo.gl/RmR6oV1J8JAJQbQw8"
+                            rel="noopener noreferrer"
+                            aria-label={`${t(lang, "park.map.open")} — ${t(lang, "park.map.entry")}`}
+                        >
+                            {t(lang, "park.map.open")} ↗
+                        </a>
+                    </p>
+                    <p class="map-note">{t(lang, "park.map.entry.note")}</p>
+                    <figure class="map-figure">
+                        <img
+                            class="map-photo"
+                            src="/images/park-access-motor-pedestrian.webp"
+                            width="1600"
+                            height="664"
+                            loading="lazy"
+                            decoding="async"
+                            alt={t(lang, "park.map.entry.alt")}
+                        />
+                        <figcaption>{t(lang, "park.map.google")}</figcaption>
+                    </figure>
+                </div>
+                <div>
+                    <h3>{t(lang, "park.map.car1")}</h3>
+                    <div class="map-embed">
+                        <iframe
+                            title={`${t(lang, "park.map.title")} — ${t(lang, "park.map.car1")}`}
+                            src="https://www.openstreetmap.org/export/embed.html?bbox=107.60712%2C-6.89880%2C107.60952%2C-6.89720&amp;layer=mapnik&amp;marker=-6.8980009%2C107.6083175"
+                            referrerpolicy="no-referrer-when-downgrade"
+                        ></iframe>
+                    </div>
+                    <p class="map-link">
+                        <a
+                            href="https://maps.app.goo.gl/47TGyDF8Ce78v7Uy9"
+                            rel="noopener noreferrer"
+                            aria-label={`${t(lang, "park.map.open")} — ${t(lang, "park.map.car1")}`}
+                        >
+                            {t(lang, "park.map.open")} ↗
+                        </a>
+                    </p>
+                    <p class="map-note">{t(lang, "park.map.car1.note")}</p>
+                    <figure class="map-figure">
+                        <img
+                            class="map-photo"
+                            src="/images/park-access-car.webp"
+                            width="1600"
+                            height="603"
+                            loading="lazy"
+                            decoding="async"
+                            alt={t(lang, "park.map.car1.alt")}
+                        />
+                        <figcaption>{t(lang, "park.map.google")}</figcaption>
+                    </figure>
+                </div>
+                <div>
+                    <h3>{t(lang, "park.map.car2")}</h3>
+                    <div class="map-embed">
+                        <iframe
+                            title={`${t(lang, "park.map.title")} — ${t(lang, "park.map.car2")}`}
+                            src="https://www.openstreetmap.org/export/embed.html?bbox=107.60734%2C-6.89953%2C107.60974%2C-6.89793&amp;layer=mapnik&amp;marker=-6.8987329%2C107.6085366"
+                            referrerpolicy="no-referrer-when-downgrade"
+                        ></iframe>
+                    </div>
+                    <p class="map-link">
+                        <a
+                            href="https://maps.app.goo.gl/7v3aoHCeKGujgRC2A"
+                            rel="noopener noreferrer"
+                            aria-label={`${t(lang, "park.map.open")} — ${t(lang, "park.map.car2")}`}
+                        >
+                            {t(lang, "park.map.open")} ↗
+                        </a>
+                    </p>
+                    <p class="map-note">{t(lang, "park.map.car2.note")}</p>
+                </div>
+            </div>
+            <p class="map-meta">
+                <span>{t(lang, "park.map.credit")}</span>
+            </p>
         </div>
-        <div>
-          <h3>{t(lang, 'park.map.car1')}</h3>
-          <div class="map-embed">
-            <iframe
-              title={`${t(lang, 'park.map.title')} — ${t(lang, 'park.map.car1')}`}
-              src="https://www.openstreetmap.org/export/embed.html?bbox=107.60712%2C-6.89880%2C107.60952%2C-6.89720&amp;layer=mapnik&amp;marker=-6.8980009%2C107.6083175"
-              referrerpolicy="no-referrer-when-downgrade"
-            ></iframe>
-          </div>
-          <p class="map-link">
-            <a
-              href="https://maps.app.goo.gl/47TGyDF8Ce78v7Uy9"
-              rel="noopener noreferrer"
-              aria-label={`${t(lang, 'park.map.open')} — ${t(lang, 'park.map.car1')}`}
-            >{t(lang, 'park.map.open')} ↗</a>
-          </p>
-          <p class="map-note">{t(lang, 'park.map.car1.note')}</p>
-          <figure class="map-figure">
-            <img
-              class="map-photo"
-              src="/images/park-access-car.webp"
-              width="1600"
-              height="603"
-              loading="lazy"
-              decoding="async"
-              alt={t(lang, 'park.map.car1.alt')}
-            />
-            <figcaption>{t(lang, 'park.map.google')}</figcaption>
-          </figure>
+    </section>
+
+    <section class="section">
+        <div class="wrap">
+            <div class="section-head">
+                <h2>{t(lang, "park.photos")}</h2>
+            </div>
+            <p class="mono" style="margin-bottom: 1.5rem;">
+                {t(lang, "park.photos.note")}
+            </p>
+            <div class="park-shots">
+                {parkPhotos.map((p) => (
+                    <figure class="park-shot">
+                        <MediaSlot lang={lang} slot={p.photo} />
+                    </figure>
+                ))}
+            </div>
         </div>
-        <div>
-          <h3>{t(lang, 'park.map.car2')}</h3>
-          <div class="map-embed">
-            <iframe
-              title={`${t(lang, 'park.map.title')} — ${t(lang, 'park.map.car2')}`}
-              src="https://www.openstreetmap.org/export/embed.html?bbox=107.60734%2C-6.89953%2C107.60974%2C-6.89793&amp;layer=mapnik&amp;marker=-6.8987329%2C107.6085366"
-              referrerpolicy="no-referrer-when-downgrade"
-            ></iframe>
-          </div>
-          <p class="map-link">
-            <a
-              href="https://maps.app.goo.gl/7v3aoHCeKGujgRC2A"
-              rel="noopener noreferrer"
-              aria-label={`${t(lang, 'park.map.open')} — ${t(lang, 'park.map.car2')}`}
-            >{t(lang, 'park.map.open')} ↗</a>
-          </p>
-          <p class="map-note">{t(lang, 'park.map.car2.note')}</p>
+    </section>
+
+    <section class="section">
+        <div class="wrap">
+            <div class="section-head">
+                <h2>{t(lang, "park.people")}</h2>
+            </div>
+            <div class="people-shots">
+                {parkPeople.map((p) => (
+                    <figure class="people-shot">
+                        <MediaSlot lang={lang} slot={p.photo} />
+                    </figure>
+                ))}
+            </div>
         </div>
-      </div>
-      <p class="map-meta">
-        <span>{t(lang, 'park.map.credit')}</span>
-      </p>
-    </div>
-  </section>
+    </section>
 
-  <section class="section">
-    <div class="wrap">
-      <div class="section-head">
-        <h2>{t(lang, 'park.photos')}</h2>
-      </div>
-      <p class="mono" style="margin-bottom: 1.5rem;">{t(lang, 'park.photos.note')}</p>
-      <div class="park-shots">
-        {parkPhotos.map((p) => (
-          <figure class="park-shot">
-            <MediaSlot lang={lang} slot={p.photo} />
-          </figure>
-        ))}
-      </div>
-    </div>
-  </section>
+    <section class="section">
+        <div class="wrap">
+            <div class="section-head">
+                <h2>{t(lang, "park.gallery")}</h2>
+            </div>
+            <div class="grid grid-3">
+                {obstacles.map((o) => (
+                    <article class="card tape">
+                        <MediaSlot lang={lang} slot={o.photo} />
+                        <h3 style="margin-top: 0.75rem;">{o.name[lang]}</h3>
+                    </article>
+                ))}
+            </div>
+        </div>
+    </section>
 
-  <section class="section">
-    <div class="wrap">
-      <div class="section-head">
-        <h2>{t(lang, 'park.people')}</h2>
-      </div>
-      <div class="people-shots">
-        {parkPeople.map((p) => (
-          <figure class="people-shot">
-            <MediaSlot lang={lang} slot={p.photo} />
-          </figure>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="wrap">
-      <div class="section-head">
-        <h2>{t(lang, 'park.gallery')}</h2>
-      </div>
-      <div class="grid grid-3">
-        {obstacles.map((o) => (
-          <article class="card tape">
-            <MediaSlot lang={lang} slot={o.photo} />
-            <h3 style="margin-top: 0.75rem;">{o.name[lang]}</h3>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="wrap">
-      <h2 style="margin-bottom: 1rem;">{t(lang, 'park.usage')}</h2>
-      <div class="stats" style="margin-bottom: 1rem;">
-        <div class="stat"><div class="num">{usageSnapshot.avgPerDay}</div><div class="mono">{lang === 'id' ? 'rata-rata skater / hari' : 'avg skaters / day'}</div></div>
-        <div class="stat"><div class="num" style="font-size: 1.2rem; padding-top: 0.4rem;">{usageSnapshot.peakHours[lang]}</div><div class="mono">{lang === 'id' ? 'jam puncak' : 'peak hours'}</div></div>
-        <div class="stat"><div class="num" style="font-size: 1.2rem; padding-top: 0.4rem;">{usageSnapshot.busiestDay[lang]}</div><div class="mono">{lang === 'id' ? 'hari teramai' : 'busiest day'}</div></div>
-      </div>
-      <p class="mono">{usageSnapshot.period[lang]} — {usageSnapshot.note[lang]}</p>
-    </div>
-  </section>
+    <section class="section">
+        <div class="wrap">
+            <h2 style="margin-bottom: 1rem;">{t(lang, "park.usage")}</h2>
+            <div class="stats" style="margin-bottom: 1rem;">
+                <div class="stat">
+                    <div class="num">{usageSnapshot.avgPerDay}</div>
+                    <div class="mono">
+                        {lang === "id"
+                            ? "rata-rata skater / hari"
+                            : "avg skaters / day"}
+                    </div>
+                </div>
+                <div class="stat">
+                    <div
+                        class="num"
+                        style="font-size: 1.2rem; padding-top: 0.4rem;"
+                    >
+                        {usageSnapshot.peakHours[lang]}
+                    </div>
+                    <div class="mono">
+                        {lang === "id" ? "jam puncak" : "peak hours"}
+                    </div>
+                </div>
+                <div class="stat">
+                    <div
+                        class="num"
+                        style="font-size: 1.2rem; padding-top: 0.4rem;"
+                    >
+                        {usageSnapshot.busiestDay[lang]}
+                    </div>
+                    <div class="mono">
+                        {lang === "id" ? "hari teramai" : "busiest day"}
+                    </div>
+                </div>
+            </div>
+            <p class="mono">
+                {usageSnapshot.period[lang]} — {usageSnapshot.note[lang]}
+            </p>
+        </div>
+    </section>
 </Base>

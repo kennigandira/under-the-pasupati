@@ -43,18 +43,16 @@ export const ui = {
     'home.hero.alt': 'VIDEO: aksi skateboard pagi hari di bawah jalan layang, sudut rendah dari lantai beton',
     'park.about': 'Tentang Taman Ini',
     'park.about.body1':
-      'Skatepark Pasupati ada di kolong jalan layang Pasupati, di tengah Bandung. Gratis, tanpa tiket, tanpa jam sewa: datang, turun, main.',
+      'Skatepark Pasupati (Kolong) ada di bawah jalan layang Pasupati, dekat Baltos. Gratis, tanpa tiket.',
     'park.about.body2':
-      'Tidak ada pengelola resmi. Bank, pad, dan papan manual di sini dibangun dan ditambal bergiliran oleh skater yang memakainya. Yang menyapu flatground dan mengecat ulang dinding adalah orang yang sama yang tiap sore ada di sana.',
-    'park.about.body3':
-      'Pagi taman ini kosong dan tenang — waktu paling aman untuk belajar. Sore jadi ramai: sesi bergantian, papan dipinjam-pinjamkan, bangku kayu dan warung penuh. Malam, lampu jalan layang yang mengambil alih.',
+      'Tidak ada pengelola resmi. Obstacle di sini dibangun dan dirawat bergiliran oleh pengguna taman ini.',
     'park.photos': 'Sekitar Taman',
-    'park.people': 'Orang-orang',
+    'park.people': 'Peoples',
     'park.photos.note':
       'Sisi lain taman: obstacle yang dipakai tiap hari, warung, bangku, dan dinding yang mencatat siapa saja yang pernah mampir.',
     'park.rhythm': 'Kebiasaan Main',
     'park.rhythm.note':
-      'Tidak ada jadwal resmi di taman ini. Tabel ini kami susun dari pola yang berulang — siapa yang biasanya datang, dan jam berapa. Kalau mau ikut, datang saja; jamnya bisa bergeser.',
+      'Tidak ada jadwal resmi di taman ini. Tabel ini kami susun dari kebiasaan skaters di kolong — siapa yang biasanya datang, dan jam berapa.',
     'park.rhythm.hours': 'Jam buka',
     'park.map': 'Peta Taman',
     'park.gallery': 'Galeri Obstacle',
@@ -156,18 +154,16 @@ export const ui = {
     'home.hero.alt': 'VIDEO: morning skate action under the flyover, low angle from the concrete floor',
     'park.about': 'About This Park',
     'park.about.body1':
-      'Pasupati Skatepark sits under the Pasupati flyover, in the middle of Bandung. Free, ticketless, no hourly rate: show up, drop in, skate.',
+      'Pasupati Skatepark (Kolong) sits under the Pasupati flyover, near Baltos. Free, no ticket.',
     'park.about.body2':
-      'Nobody officially runs it. The banks, pads and manual pads here were built and patched in turns by the skaters who use them. The people who sweep the flatground and repaint the walls are the same people who are here every afternoon.',
-    'park.about.body3':
-      'In the morning the park is empty and quiet — the safest window to learn. By late afternoon it fills up: sessions take turns, boards get passed around, and the wooden benches and the warung are full. At night the flyover lights take over.',
+      'Nobody officially runs it. The obstacles here are built and maintained in turns by the people who use the park.',
     'park.photos': 'Around the Park',
-    'park.people': 'The People',
+    'park.people': 'Peoples',
     'park.photos.note':
       'The other half of the park: the obstacles people ride, the warung, the benches, and the walls that track who has passed through.',
     'park.rhythm': 'Park Rhythm',
     'park.rhythm.note':
-      'There is no official schedule here. This table is built from patterns that repeat — who usually shows up, and when. If you want to join, just come; the hours drift.',
+      'There is no official schedule here. This table is built from the habits of the skaters at the Kolong — who usually shows up, and when.',
     'park.rhythm.hours': 'Park hours',
     'park.map': 'Park Map',
     'park.gallery': 'Obstacle Gallery',

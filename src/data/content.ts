@@ -346,59 +346,78 @@ export const parkHours: Local<string> = {
 export interface RhythmSlot {
   who: Local<string>;
   when: Local<string>;
-  note: Local<string>;
+  photo: MediaSlot; // no `src` yet = placeholder box
 }
 
 export const parkRhythm: RhythmSlot[] = [
   {
     who: { id: 'Pemula', en: 'Beginners' },
     when: { id: 'Tiap hari, 08.00–12.00', en: 'Every day, 8 AM–12 PM' },
-    note: {
-      id: 'Paling lengang. Flatground kosong buat belajar berdiri, dorong, dan jatuh.',
-      en: 'The quietest stretch. Flatground is empty for learning to stand, push and fall.',
+    photo: {
+      kind: 'photo',
+      hint: {
+        id: 'FOTO: sesi pemula pagi di flatground',
+        en: 'PHOTO: the morning beginner session on the flatground',
+      },
     },
   },
   {
     who: { id: 'Anak-anak', en: 'Kids' },
     when: { id: 'Sabtu–Minggu, 12.00–maghrib', en: 'Weekends, 12 PM–dusk' },
-    note: {
-      id: 'Ramai setelah sekolah. Papan kecil, orang tua menunggu di bangku.',
-      en: 'Busy after school. Small boards, parents waiting on the benches.',
+    photo: {
+      kind: 'photo',
+      src: '/media/rhythm/anak-anak.webp',
+      hint: {
+        id: 'Anak-anak duduk berfoto bersama papan skate mereka.',
+        en: 'Kids sitting together with their skateboards.',
+      },
     },
   },
   {
     who: { id: 'Sesi cewek', en: 'Women’s session' },
     when: { id: 'Kamis, 12.00–maghrib', en: 'Thursdays, 12 PM–dusk' },
-    note: {
-      id: 'Flatground buat skater perempuan. Yang baru pertama ikut biasanya mulai di sini.',
-      en: 'The flatground belongs to women skaters. First-timers usually start here.',
+    photo: {
+      kind: 'photo',
+      src: '/media/rhythm/sesi-cewek.webp',
+      hint: {
+        id: 'Peserta sesi cewek berfoto bersama di depan dinding stiker.',
+        en: 'Women’s session crew posing together in front of the sticker wall.',
+      },
     },
   },
   {
     who: { id: 'Oldskul', en: 'Old school' },
     when: { id: 'Minggu, 15.00–maghrib', en: 'Sundays, 3 PM–dusk' },
-    note: {
-      id: 'Papan lebar, jalur panjang, lagu lama. Senior yang main sejak taman ini dibuka.',
-      en: 'Wide boards, long lines, old songs. The seniors who have skated here since it opened.',
+    photo: {
+      kind: 'photo',
+      src: '/media/rhythm/oldskul.webp',
+      hint: {
+        id: 'Para skater oldskul berdiri berbaris dengan papan masing-masing.',
+        en: 'The old-school skaters lined up with their boards.',
+      },
     },
   },
   {
-    who: { id: 'Lanjutan', en: 'Advanced' },
-    when: {
-      id: 'Senin–Jumat, 15.00–maghrib & 21.00–24.00',
-      en: 'Mon–Fri, 3 PM–dusk & 9 PM–midnight',
-    },
-    note: {
-      id: 'Sesi cepat sebelum gelap, lalu sesi malam begitu jalan layang sepi.',
-      en: 'A fast session before dark, then a night session once the traffic thins out.',
+    who: { id: 'Advanced', en: 'Advanced' },
+    when: { id: 'Senin–Jumat, 15.00–maghrib & 21.00–24.00', en: 'Mon–Fri, 3 PM–dusk & 9 PM–midnight' },
+    photo: {
+      kind: 'photo',
+      hint: {
+        id: 'FOTO: sesi advanced sore atau malam',
+        en: 'PHOTO: the advanced session, late afternoon or at night',
+      },
     },
   },
   {
     who: { id: 'Nongkrong', en: 'Hanging out' },
     when: { id: 'Tiap hari, 16.00–21.00', en: 'Every day, 4–9 PM' },
-    note: {
-      id: 'Bukan sesi latihan. Tukar papan, ngobrol, nonton — bangku dan warung penuh.',
-      en: 'Not a practice session. Boards get swapped, stories get told — benches and warung fill up.',
+    photo: {
+      kind: 'photo',
+      src: '/media/rhythm/nongkrong.webp',
+      hint: {
+        id: 'Teman-teman ngobrol di meja warung.',
+        en: 'Friends chatting around a warung table.',
+      },
     },
   },
 ];
