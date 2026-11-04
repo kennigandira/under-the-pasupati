@@ -576,19 +576,19 @@ export interface Obstacle {
 export const obstacles: Obstacle[] = [
   {
     slug: 'bank-grafiti',
-    name: { id: 'Bank Grafiti', en: 'Graffiti Bank' },
-    type: { id: 'Bank / Transisi', en: 'Bank / Transition' },
+    name: { id: 'Bank Ramp Grafiti', en: 'Graffiti Bank Ramp' },
+    type: { id: 'Bank ramp', en: 'Bank ramp' },
     note: {
-      id: 'Bank beton miring dengan permukaan penuh coretan, menghadap flatground.',
-      en: 'Sloped concrete bank covered in tags, facing the flatground.',
+      id: 'Bank ramp beton berdiri bebas, permukaan miring penuh coretan. Berhadapan dengan bank ramp satunya.',
+      en: 'Freestanding concrete bank ramp with a sloped, tagged surface. Faces the other bank ramp.',
     },
     lastChecked: '2026-11-04',
     photo: {
       kind: 'photo',
       src: '/media/obstacles/1.webp',
       hint: {
-        id: 'Bank beton bergrafiti di flatground, jalan layang di belakangnya.',
-        en: 'Graffiti-covered concrete bank on the flatground, the flyover behind it.',
+        id: 'Bank ramp beton bergrafiti di flatground, jalan layang di belakangnya.',
+        en: 'Graffiti-covered concrete bank ramp on the flatground, the flyover behind it.',
       },
     },
   },
@@ -612,19 +612,19 @@ export const obstacles: Obstacle[] = [
   },
   {
     slug: 'bank-beton-tepi',
-    name: { id: 'Bank Beton Tepi', en: 'Edge Concrete Bank' },
-    type: { id: 'Bank / Transisi', en: 'Bank / Transition' },
+    name: { id: 'Bank Ramp Tepi', en: 'Edge Bank Ramp' },
+    type: { id: 'Bank ramp', en: 'Bank ramp' },
     note: {
-      id: 'Bank beton rendah di tepi flatground, permukaan retak di sekelilingnya.',
-      en: 'Low concrete bank at the edge of the flatground, with cracked surface around it.',
+      id: 'Bank ramp beton rendah di tepi flatground, berhadapan dengan bank ramp grafiti.',
+      en: 'Low concrete bank ramp at the edge of the flatground, facing the graffiti bank ramp.',
     },
     lastChecked: '2026-11-04',
     photo: {
       kind: 'photo',
       src: '/media/obstacles/3.webp',
       hint: {
-        id: 'Bank beton rendah dilihat dari balik tiang, motor terparkir di belakangnya.',
-        en: 'Low concrete bank seen past a pole, parked motorbikes behind it.',
+        id: 'Bank ramp beton rendah dilihat dari balik tiang, motor terparkir di belakangnya.',
+        en: 'Low concrete bank ramp seen past a pole, parked motorbikes behind it.',
       },
     },
   },
