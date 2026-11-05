@@ -13,6 +13,7 @@ const staticPaths = [
   '/events',
   '/about',
   '/support',
+  '/privacy',
 ];
 
 const detailPaths = [

@@ -1,0 +1,185 @@
+---
+import Base from '../../layouts/Base.astro';
+import { localeRoutes, routeLang, type Lang } from '../../i18n/ui';
+
+export function getStaticPaths() {
+  return localeRoutes();
+}
+const lang: Lang = routeLang(Astro.params.lang);
+
+const email = 'underthepasupati@gmail.com';
+
+// Plain-language policy for the check-in app at underthepasupati.org/p/.
+// It must match what the app and database really do (see the app repo,
+// docs/TRD-MVP.md). Change both together.
+const copy = {
+  id: {
+    title: 'Kebijakan Privasi',
+    updated: 'Diperbarui 5 November 2026',
+    intro:
+      'Halaman ini menjelaskan data apa yang dikumpulkan aplikasi absen Under the Pasupati (underthepasupati.org/p/), untuk apa, dan berapa lama disimpan. Situs ini dikelola komunitas skater Taman Skateboard Pasupati, Bandung, bukan oleh pemerintah kota.',
+    sections: [
+      {
+        h: 'Data yang kami kumpulkan',
+        items: [
+          'Nama panggilan yang kamu ketik saat absen. Terlihat oleh orang yang sedang absen di taman.',
+          'Untuk Pemain: akun Google yang dipakai untuk login (alamat email, nama, dan foto profil Google yang diberikan Google kepada kami lewat login).',
+          'Selfie, kalau kamu memilih menambahkannya. Fotonya kecil (96 piksel) dan opsional.',
+          'Catatan absen: kapan kamu absen dan pulang, serta jarak ke taman dan tingkat akurasi lokasi saat absen. Koordinat lokasimu tidak disimpan.',
+          'Kode acak per perangkat untuk membatasi penyalahgunaan. Kode ini bukan identitas pribadi.',
+          'Catatan percobaan absen (berhasil atau gagal) berisi jarak dan akurasi, tanpa koordinat.',
+        ],
+      },
+      {
+        h: 'Lokasi',
+        items: [
+          'Lokasi dibaca satu kali saat kamu menekan Absen, hanya untuk memastikan kamu berada di taman. Setelah itu lokasimu tidak dilacak, baik di latar belakang maupun saat aplikasi ditutup.',
+        ],
+      },
+      {
+        h: 'Untuk apa data dipakai',
+        items: [
+          'Memastikan absen berasal dari taman, dan menampilkan siapa yang sedang ada di taman kepada orang yang juga sedang absen.',
+          'Angka agregat di situs ini (jumlah orang di taman sekarang, total pengguna, pengunjung per 4 jam). Angka itu tidak memuat nama, foto, atau data pribadi.',
+          'Mencegah penyalahgunaan dan menyetel batas jarak serta akurasi lokasi.',
+          'Kami tidak menjual data, tidak memasang iklan, dan tidak membagikannya untuk tujuan pemasaran.',
+        ],
+      },
+      {
+        h: 'Siapa yang bisa melihat apa',
+        items: [
+          'Jumlah orang di taman terlihat oleh siapa saja.',
+          'Nama panggilan dan selfie hanya terlihat oleh orang yang sedang absen di taman. Mode hantu menyembunyikan nama dan selfiemu dari orang lain, tetapi kamu tetap dihitung di jumlah orang.',
+          'Email dan data akun Google hanya terlihat oleh pengelola. Tidak ditampilkan kepada pengguna lain.',
+        ],
+      },
+      {
+        h: 'Berapa lama data disimpan',
+        items: [
+          'Selfie Tamu ("Cuma nongkrong aja") dihapus otomatis 24 jam setelah ditambahkan.',
+          'Selfie Pemain disimpan sampai kamu menggantinya atau menghapusnya.',
+          'Absen yang lupa ditutup otomatis berakhir setelah 5 jam.',
+          'Catatan percobaan absen dihapus setelah 90 hari.',
+          'Catatan absen dan profil disimpan selama aplikasi berjalan, dan kamu bisa meminta penghapusan kapan saja.',
+        ],
+      },
+      {
+        h: 'Pihak yang memproses data',
+        items: [
+          'Supabase (basis data dan login), server di Singapura.',
+          'Cloudflare (hosting situs dan aplikasi).',
+          'Google (login untuk Pemain). Penggunaan data akun Google mengikuti Kebijakan Data Pengguna Layanan API Google. Dari Google kami hanya memakai email, nama, dan foto profil untuk login.',
+        ],
+      },
+      {
+        h: 'Anak-anak',
+        items: [
+          'Aplikasi ini belum menyediakan profil anak. Orang tua atau wali sebaiknya mendampingi anak yang ingin absen. Kami tidak mengumpulkan data anak secara khusus. Profil anak dengan persetujuan orang tua direncanakan di tahap berikutnya.',
+        ],
+      },
+      {
+        h: 'Hak kamu',
+        items: [
+          'Kamu bisa meminta salinan atau penghapusan data, termasuk selfie, nama panggilan, dan catatan absenmu, dengan mengirim email ke alamat di bawah. Kami akan menanggapinya secepat mungkin.',
+        ],
+      },
+    ],
+    contact: 'Pertanyaan atau permintaan data',
+  },
+  en: {
+    title: 'Privacy Policy',
+    updated: 'Updated November 5, 2026',
+    intro:
+      'This page explains what data the Under the Pasupati check-in app (underthepasupati.org/p/) collects, why, and how long it is kept. The site is run by the skaters of Taman Skateboard Pasupati in Bandung, not by the city government.',
+    sections: [
+      {
+        h: 'What we collect',
+        items: [
+          'The nickname you type when you check in. Visible to people who are checked in at the park.',
+          'For Players: the Google account used to sign in (email address, name and Google profile picture, which Google gives us through sign-in).',
+          'A selfie, if you choose to add one. It is small (96 pixels) and optional.',
+          'Check-in records: when you checked in and out, plus the distance to the park and the location accuracy at check-in. Your coordinates are not stored.',
+          'A random per-device code used to limit abuse. It is not a personal identifier.',
+          'A log of check-in attempts (successful or not) with distance and accuracy, without coordinates.',
+        ],
+      },
+      {
+        h: 'Location',
+        items: [
+          'Your location is read once when you tap Absen, only to confirm that you are at the park. It is not tracked afterwards, in the background or when the app is closed.',
+        ],
+      },
+      {
+        h: 'What the data is used for',
+        items: [
+          'Confirming that a check-in comes from the park, and showing who is at the park to people who are also checked in.',
+          'The aggregate numbers on this site (people at the park now, total users, visitors per 4 hours). They contain no names, photos or personal data.',
+          'Preventing abuse and tuning the distance and accuracy limits.',
+          'We do not sell data, show ads, or share it for marketing.',
+        ],
+      },
+      {
+        h: 'Who can see what',
+        items: [
+          'The number of people at the park is visible to anyone.',
+          'Nicknames and selfies are visible only to people checked in at the park. Ghost mode hides your name and selfie from others, but you are still counted.',
+          'Email and Google account data are visible only to the administrators. They are never shown to other users.',
+        ],
+      },
+      {
+        h: 'How long we keep it',
+        items: [
+          'A Guest selfie ("Cuma nongkrong aja") is deleted automatically 24 hours after it was added.',
+          'A Player selfie is kept until you replace or remove it.',
+          'A check-in you forget to close ends automatically after 5 hours.',
+          'Check-in attempt logs are deleted after 90 days.',
+          'Check-in records and profiles are kept while the app runs, and you can ask for deletion at any time.',
+        ],
+      },
+      {
+        h: 'Who processes the data',
+        items: [
+          'Supabase (database and sign-in), servers in Singapore.',
+          'Cloudflare (hosting of the site and the app).',
+          'Google (sign-in for Players). Use of Google account data follows the Google API Services User Data Policy. From Google we only use email, name and profile picture for sign-in.',
+        ],
+      },
+      {
+        h: 'Children',
+        items: [
+          'The app does not yet offer child profiles. Parents or guardians should accompany children who want to check in. We do not knowingly collect children\u2019s data. Child profiles with parental consent are planned for a later phase.',
+        ],
+      },
+      {
+        h: 'Your rights',
+        items: [
+          'You can ask for a copy or the deletion of your data, including your selfie, nickname and check-in records, by emailing the address below. We will respond as soon as we can.',
+        ],
+      },
+    ],
+    contact: 'Questions or data requests',
+  },
+} as const;
+
+const c = copy[lang];
+---
+
+<Base lang={lang} title={c.title} path="/privacy">
+  <section class="section">
+    <div class="wrap" style="max-width: 720px;">
+      <h1 style="margin-bottom: 0.5rem;">{c.title}</h1>
+      <p class="mono" style="margin-bottom: 1.5rem;">{c.updated}</p>
+      <p style="margin-bottom: 2rem;">{c.intro}</p>
+      {c.sections.map((s) => (
+        <div style="margin-bottom: 1.75rem;">
+          <h2 style="margin-bottom: 0.6rem; font-size: 1.5rem;">{s.h}</h2>
+          <ul style="padding-left: 1.2rem; display: grid; gap: 0.5rem;">
+            {s.items.map((i) => <li>{i}</li>)}
+          </ul>
+        </div>
+      ))}
+      <h2 style="margin-bottom: 0.6rem; font-size: 1.5rem;">{c.contact}</h2>
+      <p><a href={`mailto:${email}`}>{email}</a></p>
+    </div>
+  </section>
+</Base>
