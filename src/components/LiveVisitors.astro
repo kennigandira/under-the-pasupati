@@ -27,7 +27,10 @@ const id = lang === "id";
         >
             <div class="stats live-visitors-stats">
                 <div class="stat">
-                    <div class="num" data-now>–</div>
+                    <div class="num">
+                        <span data-now>–</span>
+                        <span class="unit">{id ? "orang" : "people"}</span>
+                    </div>
                     <div class="mono">
                         <span class="heartbeat" data-heartbeat aria-hidden="true"></span>
                         {id ? "di taman sekarang" : "at the park now"}
@@ -72,6 +75,16 @@ const id = lang === "id";
     }
     .live-graph {
         margin: 0;
+    }
+    /* "orang" beside the big number: smaller, plain, no outline. */
+    .num .unit {
+        font-family: var(--font-mono);
+        font-size: 0.8rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--ink);
+        -webkit-text-stroke: 0;
+        margin-left: 0.2rem;
     }
     /* Heartbeat: a green dot with a ring that pulses out while someone is checked in.
        With nobody there it is a still, dim dot. */
