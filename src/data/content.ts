@@ -1168,8 +1168,8 @@ export const faqs: { q: Local<string>; a: Local<string> }[] = [
   {
     q: { id: 'Dari mana angka pengunjung taman berasal?', en: 'Where do the park visitor numbers come from?' },
     a: {
-      id: 'Dari absen lewat QR di gerbang taman. Lokasi dicek satu kali saat absen, jadi hanya yang benar-benar ada di taman yang terhitung. Angka "di taman sekarang" diperbarui tiap 30 detik; total pengguna dan grafik diperbarui tiap 4 jam. Hanya yang absen yang terhitung, jadi angkanya lebih kecil dari jumlah orang sebenarnya. Semuanya agregat — tanpa nama dan tanpa data pribadi.',
-      en: 'From check-ins through the QR code at the park gate. Location is checked once at check-in, so only people actually at the park are counted. "At the park now" refreshes every 30 seconds; total users and the graph refresh every 4 hours. Only people who check in are counted, so the numbers are lower than the real crowd. All aggregated — no names, no personal data.',
+      id: 'Dari absen lewat QR di gerbang taman. Lokasi dicek satu kali saat absen, jadi hanya yang benar-benar ada di taman yang terhitung. Angka "di taman sekarang" diperbarui tiap 30 detik; total pengguna dan grafik diperbarui tiap 4 jam. Hanya yang absen yang terhitung, jadi angkanya lebih kecil dari jumlah orang sebenarnya.',
+      en: 'From check-ins through the QR code at the park gate. Location is checked once at check-in, so only people actually at the park are counted. "At the park now" refreshes every 30 seconds; total users and the graph refresh every 4 hours. Only people who check in are counted, so the numbers are lower than the real crowd.',
     },
   },
   {
