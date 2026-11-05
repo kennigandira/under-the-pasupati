@@ -1,6 +1,7 @@
 ---
 import Base from "../../layouts/Base.astro";
 import MediaSlot from "../../components/MediaSlot.astro";
+import LiveVisitors from "../../components/LiveVisitors.astro";
 import { localeRoutes, routeLang, t } from "../../i18n/ui";
 import {
     parkAboutShots,
@@ -209,6 +210,15 @@ const lang = routeLang(Astro.params.lang);
                     </figure>
                 ))}
             </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="wrap">
+            <div class="section-head">
+                <h2>{lang === "id" ? "Pengunjung Taman" : "Park Visitors"}</h2>
+            </div>
+            <LiveVisitors lang={lang} variant="full" />
         </div>
     </section>
 

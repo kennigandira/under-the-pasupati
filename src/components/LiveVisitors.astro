@@ -1,0 +1,163 @@
+---
+// Visitor numbers from the App-UTP check-ins (Supabase `public_stats`, see that
+// repo's TRD section 7a). The site stays static: the browser fetches the
+// aggregates. Without the two PUBLIC_ env vars nothing renders.
+import type { Lang } from "../i18n/ui";
+
+interface Props {
+    lang: Lang;
+    // compact: the two numbers only. full: numbers plus the 7-day graph.
+    variant?: "compact" | "full";
+}
+const { lang, variant = "compact" } = Astro.props;
+const url = import.meta.env.PUBLIC_SUPABASE_URL;
+const key = import.meta.env.PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+const enabled = Boolean(url && key);
+const id = lang === "id";
+---
+
+{
+    enabled && (
+        <div
+            class="live-visitors"
+            data-url={url}
+            data-key={key}
+            data-lang={lang}
+            hidden
+        >
+            <div class="stats live-visitors-stats">
+                <div class="stat">
+                    <div class="num" data-now>–</div>
+                    <div class="mono">
+                        {id ? "di taman sekarang" : "at the park now"}
+                    </div>
+                </div>
+                <div class="stat">
+                    <div class="num" data-week>–</div>
+                    <div class="mono">
+                        {id ? "check-in minggu ini" : "check-ins this week"}
+                    </div>
+                </div>
+            </div>
+            {variant === "full" && (
+                <figure class="live-graph">
+                    <svg
+                        data-graph
+                        viewBox="0 0 420 120"
+                        preserveAspectRatio="none"
+                        role="img"
+                        aria-label={
+                            id
+                                ? "Pengunjung unik per 4 jam, 7 hari terakhir"
+                                : "Unique visitors per 4 hours, last 7 days"
+                        }
+                    />
+                    <figcaption class="mono">
+                        {id
+                            ? "Pengunjung unik per 4 jam, 7 hari terakhir"
+                            : "Unique visitors per 4 hours, last 7 days"}
+                        <span data-asof />
+                    </figcaption>
+                </figure>
+            )}
+        </div>
+    )
+}
+
+<style>
+    .live-visitors-stats {
+        grid-template-columns: repeat(2, 1fr);
+        margin-bottom: 1rem;
+    }
+    .live-graph {
+        margin: 0;
+    }
+    .live-graph svg {
+        width: 100%;
+        height: 9rem;
+        display: block;
+        background: var(--white);
+        border: var(--border);
+    }
+    .live-graph :global(rect) {
+        fill: var(--accent);
+    }
+    .live-graph figcaption {
+        margin-top: 0.4rem;
+    }
+</style>
+
+<script>
+    const POLL_MS = 30_000;
+
+    document
+        .querySelectorAll<HTMLElement>(".live-visitors")
+        .forEach((root) => {
+            const { url, key, lang } = root.dataset;
+            const now = root.querySelector<HTMLElement>("[data-now]")!;
+            const week = root.querySelector<HTMLElement>("[data-week]")!;
+            const graph = root.querySelector<SVGElement>("[data-graph]");
+            const asOf = root.querySelector<HTMLElement>("[data-asof]");
+
+            const fetchStats = async () => {
+                const res = await fetch(`${url}/rest/v1/rpc/public_stats`, {
+                    method: "POST",
+                    headers: {
+                        apikey: key!,
+                        Authorization: `Bearer ${key}`,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ p_slug: "pasupati", p_days: 7 }),
+                });
+                if (!res.ok) throw new Error(String(res.status));
+                return (await res.json()) as {
+                    now_present: number;
+                    as_of: string | null;
+                    series: { visitors: number; checkins: number }[];
+                } | null;
+            };
+
+            const draw = (series: { visitors: number }[]) => {
+                if (!graph) return;
+                const max = Math.max(1, ...series.map((s) => s.visitors));
+                const w = 420 / Math.max(series.length, 1);
+                graph.innerHTML = series
+                    .map((s, i) => {
+                        const h = (s.visitors / max) * 116;
+                        return `<rect x="${i * w + 0.5}" y="${120 - h}" width="${Math.max(w - 1, 1)}" height="${h}"/>`;
+                    })
+                    .join("");
+            };
+
+            const refresh = async () => {
+                try {
+                    const d = await fetchStats();
+                    if (!d) return;
+                    now.textContent = String(d.now_present);
+                    week.textContent = String(
+                        d.series.reduce((n, s) => n + s.checkins, 0),
+                    );
+                    draw(d.series);
+                    if (asOf && d.as_of) {
+                        const t = new Intl.DateTimeFormat(
+                            lang === "id" ? "id-ID" : "en-US",
+                            {
+                                dateStyle: "medium",
+                                timeStyle: "short",
+                                timeZone: "Asia/Jakarta",
+                            },
+                        ).format(new Date(d.as_of));
+                        asOf.textContent = ` · ${lang === "id" ? "per" : "as of"} ${t} WIB`;
+                    }
+                    root.hidden = false;
+                } catch {
+                    // Stats are a bonus: on failure keep the last values (or stay hidden).
+                }
+            };
+
+            void refresh();
+            setInterval(() => {
+                if (!document.hidden) void refresh();
+            }, POLL_MS);
+        });
+</script>

@@ -3,6 +3,7 @@ import Base from "../../layouts/Base.astro";
 import MediaSlot from "../../components/MediaSlot.astro";
 import JournalCard from "../../components/JournalCard.astro";
 import PartnerChip from "../../components/PartnerChip.astro";
+import LiveVisitors from "../../components/LiveVisitors.astro";
 import SpecialtyLink from "../../components/SpecialtyLink.astro";
 import SpecialtyVideoDialog from "../../components/SpecialtyVideoDialog.astro";
 import { localeHref, localeRoutes, routeLang, t } from "../../i18n/ui";
@@ -10,7 +11,6 @@ import {
     skaters,
     posts,
     parkRhythm,
-    usageSnapshot,
     aboutSlides,
     lessonProviders,
     boardRental,
@@ -37,8 +37,6 @@ const latest = [...posts]
 // Park rhythm slots in time order. Which ones show is decided per visitor's
 // day in the script below, so the static page never goes stale.
 const schedule = [...parkRhythm].sort((a, b) => a.startHour - b.startHour);
-// Weekly total: the counted daily average over a 7-day week.
-const weekTotal = usageSnapshot.avgPerDay * 7;
 ---
 
 <Base lang={lang} path="">
@@ -185,22 +183,7 @@ const weekTotal = usageSnapshot.avgPerDay * 7;
                         {t(lang, "see.all")} →
                     </a>
                 </div>
-                <div class="stats" style="margin-bottom: 1.25rem;">
-                    <div class="stat">
-                        <div class="num">{usageSnapshot.avgPerDay}</div>
-                        <div class="mono">
-                            {lang === "id" ? "di taman sekarang" : "at the park now"}
-                        </div>
-                    </div>
-                    <div class="stat">
-                        <div class="num">{weekTotal}</div>
-                        <div class="mono">
-                            {lang === "id"
-                                ? "skater minggu ini"
-                                : "skaters this week"}
-                        </div>
-                    </div>
-                </div>
+                <LiveVisitors lang={lang} />
                 <p class="mono" style="margin-bottom: 0.5rem;">
                     {lang === "id" ? "Jadwal hari ini" : "Today’s schedule"} ·
                     <span id="today-name"></span>

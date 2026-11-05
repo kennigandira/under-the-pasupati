@@ -327,17 +327,6 @@ export const conditionEntries: ConditionEntry[] = [
   },
 ];
 
-export const usageSnapshot = {
-  period: { id: '21 Sep – 11 Okt 2026', en: 'Sep 21 – Oct 11, 2026' },
-  avgPerDay: 34,
-  peakHours: { id: '16.00–18.30 WIB', en: '4:00–6:30 PM' },
-  busiestDay: { id: 'Sabtu', en: 'Saturday' },
-  note: {
-    id: 'Dihitung manual tiga kali sehari (pagi, sore, malam) selama tiga minggu. Agregat, tanpa data pribadi.',
-    en: 'Counted manually three times a day (morning, afternoon, evening) for three weeks. Aggregated, no personal data.',
-  },
-};
-
 // Opening hours. The park has no gate and no staff — this is when it is lit and
 // used, not an enforced window.
 export const parkHours: Local<string> = {
@@ -347,7 +336,7 @@ export const parkHours: Local<string> = {
 
 // The park's observed rhythm. NOT an official schedule: nobody runs these slots,
 // they are the patterns that repeat week after week. Kept next to
-// `usageSnapshot` because both answer "when is the park alive?".
+// the park's live numbers (see LiveVisitors) because both answer "when is the park alive?".
 export interface RhythmSlot {
   who: Local<string>;
   when: Local<string>;
