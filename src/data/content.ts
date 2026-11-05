@@ -28,6 +28,7 @@ export interface Skater {
   favorites: string[]; // signature tricks
   photo: MediaSlot; // card shot, also the video poster source
   video: MediaSlot;
+  contacts?: Contact[]; // the skater's own public socials
 }
 
 export interface Post {
@@ -105,6 +106,10 @@ export const skaters: Skater[] = [
         en: 'Ael’s session clip — lines and tricks at the park, shot vertically.',
       },
     },
+    contacts: [
+      { kind: 'instagram', value: 'spongebob.layback' },
+      { kind: 'tiktok', value: 'spongebob.layback' },
+    ],
   },
 ];
 
@@ -346,6 +351,9 @@ export const parkHours: Local<string> = {
 export interface RhythmSlot {
   who: Local<string>;
   when: Local<string>;
+  days: number[]; // weekdays it runs, 0 = Sunday … 6 = Saturday (Asia/Jakarta)
+  time: Local<string>; // the time window alone, for the day-view table on Home
+  startHour: number; // sort key for that table
   photo: MediaSlot; // no `src` yet = placeholder box
 }
 
@@ -353,6 +361,9 @@ export const parkRhythm: RhythmSlot[] = [
   {
     who: { id: 'Pemula', en: 'Beginners' },
     when: { id: 'Tiap hari, 08.00–12.00', en: 'Every day, 8 AM–12 PM' },
+    days: [0, 1, 2, 3, 4, 5, 6],
+    time: { id: '08.00–12.00', en: '8 AM–12 PM' },
+    startHour: 8,
     photo: {
       kind: 'photo',
       hint: {
@@ -364,6 +375,9 @@ export const parkRhythm: RhythmSlot[] = [
   {
     who: { id: 'Anak-anak', en: 'Kids' },
     when: { id: 'Sabtu–Minggu, 12.00–maghrib', en: 'Weekends, 12 PM–dusk' },
+    days: [0, 6],
+    time: { id: '12.00–maghrib', en: '12 PM–dusk' },
+    startHour: 12,
     photo: {
       kind: 'photo',
       src: '/media/rhythm/anak-anak.webp',
@@ -376,6 +390,9 @@ export const parkRhythm: RhythmSlot[] = [
   {
     who: { id: 'Sesi cewek', en: 'Women’s session' },
     when: { id: 'Kamis, 12.00–maghrib', en: 'Thursdays, 12 PM–dusk' },
+    days: [4],
+    time: { id: '12.00–maghrib', en: '12 PM–dusk' },
+    startHour: 12,
     photo: {
       kind: 'photo',
       src: '/media/rhythm/sesi-cewek.webp',
@@ -388,6 +405,9 @@ export const parkRhythm: RhythmSlot[] = [
   {
     who: { id: 'Oldskul', en: 'Old school' },
     when: { id: 'Minggu, 15.00–maghrib', en: 'Sundays, 3 PM–dusk' },
+    days: [0],
+    time: { id: '15.00–maghrib', en: '3 PM–dusk' },
+    startHour: 15,
     photo: {
       kind: 'photo',
       src: '/media/rhythm/oldskul.webp',
@@ -400,6 +420,9 @@ export const parkRhythm: RhythmSlot[] = [
   {
     who: { id: 'Advanced', en: 'Advanced' },
     when: { id: 'Senin–Jumat, 15.00–maghrib & 21.00–24.00', en: 'Mon–Fri, 3 PM–dusk & 9 PM–midnight' },
+    days: [1, 2, 3, 4, 5],
+    time: { id: '15.00–maghrib & 21.00–24.00', en: '3 PM–dusk & 9 PM–midnight' },
+    startHour: 15,
     photo: {
       kind: 'photo',
       hint: {
@@ -411,6 +434,9 @@ export const parkRhythm: RhythmSlot[] = [
   {
     who: { id: 'Nongkrong', en: 'Hanging out' },
     when: { id: 'Tiap hari, 16.00–21.00', en: 'Every day, 4–9 PM' },
+    days: [0, 1, 2, 3, 4, 5, 6],
+    time: { id: '16.00–21.00', en: '4–9 PM' },
+    startHour: 16,
     photo: {
       kind: 'photo',
       src: '/media/rhythm/nongkrong.webp',

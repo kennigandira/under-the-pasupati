@@ -8,7 +8,6 @@ import {
     parkPhotos,
     parkPeople,
     parkRhythm,
-    usageSnapshot,
     obstacles,
 } from "../../data/content";
 
@@ -226,47 +225,6 @@ const lang = routeLang(Astro.params.lang);
                     </article>
                 ))}
             </div>
-        </div>
-    </section>
-
-    <section class="section">
-        <div class="wrap">
-            <h2 style="margin-bottom: 1rem;">{t(lang, "park.usage")}</h2>
-            <div class="stats" style="margin-bottom: 1rem;">
-                <div class="stat">
-                    <div class="num">{usageSnapshot.avgPerDay}</div>
-                    <div class="mono">
-                        {lang === "id"
-                            ? "rata-rata skater / hari"
-                            : "avg skaters / day"}
-                    </div>
-                </div>
-                <div class="stat">
-                    <div
-                        class="num"
-                        style="font-size: 1.2rem; padding-top: 0.4rem;"
-                    >
-                        {usageSnapshot.peakHours[lang]}
-                    </div>
-                    <div class="mono">
-                        {lang === "id" ? "jam puncak" : "peak hours"}
-                    </div>
-                </div>
-                <div class="stat">
-                    <div
-                        class="num"
-                        style="font-size: 1.2rem; padding-top: 0.4rem;"
-                    >
-                        {usageSnapshot.busiestDay[lang]}
-                    </div>
-                    <div class="mono">
-                        {lang === "id" ? "hari teramai" : "busiest day"}
-                    </div>
-                </div>
-            </div>
-            <p class="mono">
-                {usageSnapshot.period[lang]} — {usageSnapshot.note[lang]}
-            </p>
         </div>
     </section>
 </Base>

@@ -39,7 +39,6 @@ export const ui = {
     'coach.contact': 'Hubungi langsung',
     'home.faq.title': 'Pertanyaan Umum',
     'home.featured': 'SOTM — Skater of the Month',
-    'home.status': 'Kondisi Taman',
     'home.hero.alt': 'VIDEO: aksi skateboard pagi hari di bawah jalan layang, sudut rendah dari lantai beton',
     'park.about': 'Tentang Taman Ini',
     'park.about.body1':
@@ -72,7 +71,6 @@ export const ui = {
     'park.map.open': 'Buka rute di Google Maps',
     'park.map.credit': 'Peta © kontributor OpenStreetMap',
     'park.condition': 'Catatan Kondisi',
-    'park.usage': 'Rekap Penggunaan',
     'condition.ok': 'OK',
     'condition.repair': 'Perlu Perbaikan',
     'condition.hazard': 'Berbahaya',
@@ -150,7 +148,6 @@ export const ui = {
     'coach.contact': 'Contact directly',
     'home.faq.title': 'FAQ',
     'home.featured': 'SOTM — Skater of the Month',
-    'home.status': 'Park Status',
     'home.hero.alt': 'VIDEO: morning skate action under the flyover, low angle from the concrete floor',
     'park.about': 'About This Park',
     'park.about.body1':
@@ -183,7 +180,6 @@ export const ui = {
     'park.map.open': 'Get directions in Google Maps',
     'park.map.credit': 'Map © OpenStreetMap contributors',
     'park.condition': 'Condition Record',
-    'park.usage': 'Usage Snapshot',
     'condition.ok': 'OK',
     'condition.repair': 'Needs Repair',
     'condition.hazard': 'Hazard',

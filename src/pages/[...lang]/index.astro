@@ -9,7 +9,7 @@ import { localeHref, localeRoutes, routeLang, t } from "../../i18n/ui";
 import {
     skaters,
     posts,
-    conditionEntries,
+    parkRhythm,
     usageSnapshot,
     aboutSlides,
     lessonProviders,
@@ -34,6 +34,11 @@ const featured = [...skaters].sort((a, b) =>
 const latest = [...posts]
     .sort((a, b) => b.date.localeCompare(a.date))
     .slice(0, 3);
+// Park rhythm slots in time order. Which ones show is decided per visitor's
+// day in the script below, so the static page never goes stale.
+const schedule = [...parkRhythm].sort((a, b) => a.startHour - b.startHour);
+// Weekly total: the counted daily average over a 7-day week.
+const weekTotal = usageSnapshot.avgPerDay * 7;
 ---
 
 <Base lang={lang} path="">
@@ -146,6 +151,20 @@ const latest = [...posts]
                             <li>{trick}</li>
                         ))}
                     </ul>
+                    {featured.contacts?.length ? (
+                        <p style="margin: 0.75rem 0; display: flex; flex-wrap: wrap; gap: 0.4rem;">
+                            {featured.contacts.map((c) => (
+                                <a
+                                    class="contact-pill"
+                                    href={contactHref(c)}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    {contactLabel(c.kind)} ↗
+                                </a>
+                            ))}
+                        </p>
+                    ) : null}
                     <a
                         class="mono"
                         href={localeHref(
@@ -161,7 +180,7 @@ const latest = [...posts]
             <!-- 4. Park condition -->
             <div>
                 <div class="section-head">
-                    <h2>{t(lang, "home.status")}</h2>
+                    <h2>Taman Now</h2>
                     <a class="mono" href={localeHref(lang, "/the-park")}>
                         {t(lang, "see.all")} →
                     </a>
@@ -170,43 +189,38 @@ const latest = [...posts]
                     <div class="stat">
                         <div class="num">{usageSnapshot.avgPerDay}</div>
                         <div class="mono">
-                            {lang === "id" ? "skater / hari" : "skaters / day"}
+                            {lang === "id" ? "di taman sekarang" : "at the park now"}
                         </div>
                     </div>
                     <div class="stat">
-                        <div
-                            class="num"
-                            style="font-size: 1.1rem; padding-top: 0.5rem;"
-                        >
-                            {usageSnapshot.peakHours[lang]}
-                        </div>
+                        <div class="num">{weekTotal}</div>
                         <div class="mono">
-                            {lang === "id" ? "jam ramai" : "peak hours"}
+                            {lang === "id"
+                                ? "skater minggu ini"
+                                : "skaters this week"}
                         </div>
                     </div>
                 </div>
-                <div class="ledger">
-                    <div class="ledger-head">
-                        <span>{lang === "id" ? "Tgl" : "Date"}</span>
-                        <span>{lang === "id" ? "Lokasi" : "Spot"}</span>
-                        <span>Status</span>
+                <p class="mono" style="margin-bottom: 0.5rem;">
+                    {lang === "id" ? "Jadwal hari ini" : "Today’s schedule"} ·
+                    <span id="today-name"></span>
+                </p>
+                <div class="ledger" id="today-schedule">
+                    <div
+                        class="ledger-head"
+                        style="grid-template-columns: 1fr auto;"
+                    >
+                        <span>{lang === "id" ? "Sesi" : "Session"}</span>
+                        <span>{lang === "id" ? "Jam" : "Time"}</span>
                     </div>
-                    {conditionEntries.map((c) => (
-                        <div class="ledger-row">
-                            <span class="ledger-date">
-                                {c.date.slice(8)}.{c.date.slice(5, 7)}
-                            </span>
-                            <div>
-                                <span class="ledger-spot">{c.spot[lang]}</span>
-                                <p style="font-size: 0.85rem; margin-top: 0.15rem;">
-                                    {c.note[lang]}
-                                </p>
-                            </div>
-                            <span
-                                class={`badge badge-${c.severity} ledger-badge`}
-                            >
-                                {t(lang, `condition.${c.severity}` as any)}
-                            </span>
+                    {schedule.map((s) => (
+                        <div
+                            class="ledger-row"
+                            style="grid-template-columns: 1fr auto;"
+                            data-days={s.days.join(",")}
+                        >
+                            <span class="ledger-spot">{s.who[lang]}</span>
+                            <span class="ledger-date">{s.time[lang]}</span>
                         </div>
                     ))}
                 </div>
@@ -406,6 +420,30 @@ const latest = [...posts]
         </div>
     </section>
     <SpecialtyVideoDialog lang={lang} />
+    <script is:inline define:vars={{ lang }}>
+        // Show only today's sessions (park time zone, not the visitor's).
+        const now = new Date();
+        const day = {
+            Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6,
+        }[
+            new Intl.DateTimeFormat("en-US", {
+                weekday: "short",
+                timeZone: "Asia/Jakarta",
+            }).format(now)
+        ];
+        document.querySelectorAll("#today-schedule [data-days]").forEach((row) => {
+            row.style.display = row.dataset.days.split(",").includes(String(day))
+                ? ""
+                : "none";
+        });
+        const name = document.getElementById("today-name");
+        if (name) {
+            name.textContent = new Intl.DateTimeFormat(
+                lang === "id" ? "id-ID" : "en-US",
+                { weekday: "long", timeZone: "Asia/Jakarta" },
+            ).format(now);
+        }
+    </script>
     <script>
         // Glossary tooltips hang off their term's left edge, so a term near the
         // right edge would push its tooltip past the viewport. Nudge it back
