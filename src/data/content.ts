@@ -560,8 +560,25 @@ export const parkPhotos: ParkPhoto[] = [
   },
 ];
 
-// Slides for the "about this site" carousel on Home.
+// Slides for the "Tentang Skate Park Pasupati" carousel on Home. Mixed on purpose,
+// cycling skatepark -> people -> around the park, so the strip is never one subject.
 export const aboutSlides: MediaSlot[] = [
+  {
+    kind: 'photo',
+    src: '/images/park/entrance.webp',
+    hint: {
+      id: 'Taman dari arah masuk: bank biru, box kuning, dan flatground yang membentang ke dalam.',
+      en: 'The park from the entrance: blue bank, yellow box, and the flatground running inward.',
+    },
+  },
+  {
+    kind: 'photo',
+    src: '/media/people/1.webp',
+    hint: {
+      id: 'Sekelompok skater duduk berfoto di flatground.',
+      en: 'A group of skaters sitting together for a photo on the flatground.',
+    },
+  },
   {
     kind: 'photo',
     src: '/images/park/basecamp-bench.webp',
@@ -572,10 +589,18 @@ export const aboutSlides: MediaSlot[] = [
   },
   {
     kind: 'photo',
-    src: '/images/park/graffiti-wall.webp',
+    src: '/images/park/obstacles-blue.webp',
     hint: {
-      id: 'Dinding grafiti di tepi taman, ditempeli poster Go Skateboarding Day.',
-      en: 'The graffiti wall at the park’s edge, with Go Skateboarding Day posters pasted on it.',
+      id: 'Box dan pad biru di flatground — catnya masih tebal.',
+      en: 'The blue boxes and pad on the flatground — the paint is still thick.',
+    },
+  },
+  {
+    kind: 'photo',
+    src: '/media/people/7.webp',
+    hint: {
+      id: 'Tiga anak kecil dengan papan skate.',
+      en: 'Three small kids with their skateboards.',
     },
   },
   {
@@ -588,10 +613,26 @@ export const aboutSlides: MediaSlot[] = [
   },
   {
     kind: 'photo',
-    src: '/images/park/benches-wall.webp',
+    src: '/images/park/transition-edge.webp',
     hint: {
-      id: 'Deretan bangku kayu di sepanjang dinding, tempat melepas papan dan menonton.',
-      en: 'A row of wooden benches along the wall — where boards come off and the watching starts.',
+      id: 'Transisi beton di tepi taman, menghadap rimbun pohon.',
+      en: 'The concrete transition at the park’s edge, facing the trees.',
+    },
+  },
+  {
+    kind: 'photo',
+    src: '/media/people/8.webp',
+    hint: {
+      id: 'Rombongan besar skater berfoto di bawah jalan layang.',
+      en: 'A big crowd of skaters posing under the flyover.',
+    },
+  },
+  {
+    kind: 'photo',
+    src: '/images/park/graffiti-wall.webp',
+    hint: {
+      id: 'Dinding grafiti di tepi taman, ditempeli poster Go Skateboarding Day.',
+      en: 'The graffiti wall at the park’s edge, with Go Skateboarding Day posters pasted on it.',
     },
   },
 ];
