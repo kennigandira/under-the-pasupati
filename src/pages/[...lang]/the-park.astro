@@ -42,22 +42,17 @@ const lang = routeLang(Astro.params.lang);
         </div>
     </section>
 
+
     <section class="section">
         <div class="wrap">
             <div class="section-head">
-                <h2>{t(lang, "park.about")}</h2>
+                <h2>{lang === "id" ? "Pengunjung Taman" : "Park Visitors"}</h2>
             </div>
-            <div class="park-about">
-                <div class="park-about-copy">
-                    <p>{t(lang, "park.about.body1")}</p>
-                    <p>{t(lang, "park.about.body2")}</p>
-                </div>
-                <div class="park-about-shots">
-                    {parkAboutShots.map((shot) => (
-                        <MediaSlot lang={lang} slot={shot} />
-                    ))}
-                </div>
-            </div>
+            <LiveVisitors lang={lang} variant="full" />
+            <p class="rhythm-hours">
+                <span class="mono">{t(lang, "park.rhythm.hours")}</span>
+                <strong>{parkHours[lang]}</strong>
+            </p>
         </div>
     </section>
 
@@ -67,10 +62,6 @@ const lang = routeLang(Astro.params.lang);
                 <div class="section-head">
                     <h2>{t(lang, "park.rhythm")}</h2>
                 </div>
-                <p class="rhythm-hours">
-                    <span class="mono">{t(lang, "park.rhythm.hours")}</span>
-                    <strong>{parkHours[lang]}</strong>
-                </p>
                 <p class="rhythm-disclaimer">{t(lang, "park.rhythm.note")}</p>
             </div>
             <ul class="rhythm" aria-label={t(lang, "park.rhythm")}>
@@ -183,6 +174,37 @@ const lang = routeLang(Astro.params.lang);
     <section class="section">
         <div class="wrap">
             <div class="section-head">
+                <h2>{t(lang, "park.people")}</h2>
+            </div>
+            <div class="people-shots">
+                {parkPeople.map((p) => (
+                    <figure class="people-shot">
+                        <MediaSlot lang={lang} slot={p.photo} />
+                    </figure>
+                ))}
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="wrap">
+            <div class="section-head">
+                <h2>{t(lang, "park.gallery")}</h2>
+            </div>
+            <div class="grid grid-3">
+                {obstacles.map((o) => (
+                    <article class="card tape">
+                        <MediaSlot lang={lang} slot={o.photo} />
+                        <h3 style="margin-top: 0.75rem;">{o.name[lang]}</h3>
+                    </article>
+                ))}
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="wrap">
+            <div class="section-head">
                 <h2>{t(lang, "park.photos")}</h2>
             </div>
             <p class="mono" style="margin-bottom: 1.5rem;">
@@ -201,39 +223,18 @@ const lang = routeLang(Astro.params.lang);
     <section class="section">
         <div class="wrap">
             <div class="section-head">
-                <h2>{t(lang, "park.people")}</h2>
+                <h2>{t(lang, "park.about")}</h2>
             </div>
-            <div class="people-shots">
-                {parkPeople.map((p) => (
-                    <figure class="people-shot">
-                        <MediaSlot lang={lang} slot={p.photo} />
-                    </figure>
-                ))}
-            </div>
-        </div>
-    </section>
-
-    <section class="section">
-        <div class="wrap">
-            <div class="section-head">
-                <h2>{lang === "id" ? "Pengunjung Taman" : "Park Visitors"}</h2>
-            </div>
-            <LiveVisitors lang={lang} variant="full" />
-        </div>
-    </section>
-
-    <section class="section">
-        <div class="wrap">
-            <div class="section-head">
-                <h2>{t(lang, "park.gallery")}</h2>
-            </div>
-            <div class="grid grid-3">
-                {obstacles.map((o) => (
-                    <article class="card tape">
-                        <MediaSlot lang={lang} slot={o.photo} />
-                        <h3 style="margin-top: 0.75rem;">{o.name[lang]}</h3>
-                    </article>
-                ))}
+            <div class="park-about">
+                <div class="park-about-copy">
+                    <p>{t(lang, "park.about.body1")}</p>
+                    <p>{t(lang, "park.about.body2")}</p>
+                </div>
+                <div class="park-about-shots">
+                    {parkAboutShots.map((shot) => (
+                        <MediaSlot lang={lang} slot={shot} />
+                    ))}
+                </div>
             </div>
         </div>
     </section>

@@ -53,7 +53,7 @@ export const ui = {
     'park.rhythm.note':
       'Tidak ada jadwal resmi di taman ini. Tabel ini kami susun dari kebiasaan skaters di kolong — siapa yang biasanya datang, dan jam berapa.',
     'park.rhythm.hours': 'Jam buka',
-    'park.map': 'Peta Taman',
+    'park.map': 'Peta Menuju Taman',
     'park.gallery': 'Galeri Obstacle',
     'park.hero.tagline': 'Kolong jalan layang yang hidup setiap hari',
     'park.hero.scroll': 'Gulir',
@@ -162,7 +162,7 @@ export const ui = {
     'park.rhythm.note':
       'There is no official schedule here. This table is built from the habits of the skaters at the Kolong — who usually shows up, and when.',
     'park.rhythm.hours': 'Park hours',
-    'park.map': 'Park Map',
+    'park.map': 'How to Get There',
     'park.gallery': 'Obstacle Gallery',
     'park.hero.tagline': 'The space under the flyover, alive every day',
     'park.hero.scroll': 'Scroll',
