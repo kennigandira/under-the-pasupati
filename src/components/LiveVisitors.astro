@@ -45,17 +45,16 @@ const id = lang === "id";
             </div>
             {variant === "full" && (
                 <figure class="live-graph">
-                    <svg
+                    <div
                         data-graph
-                        viewBox="0 0 420 120"
-                        preserveAspectRatio="none"
-                        role="img"
+                        class="live-bars"
+                        role="list"
                         aria-label={
                             id
                                 ? "Pengunjung unik per 4 jam, 7 hari terakhir"
                                 : "Unique visitors per 4 hours, last 7 days"
                         }
-                    />
+                    ></div>
                     <figcaption class="mono">
                         {id
                             ? "Pengunjung unik per 4 jam, 7 hari terakhir"
@@ -128,15 +127,64 @@ const id = lang === "id";
             transform: scale(1.8);
         }
     }
-    .live-graph svg {
-        width: 100%;
-        height: 9rem;
-        display: block;
+    /* One column per 4-hour window: bar on top, then date, time and head count below.
+       Wide enough for the text, so the strip scrolls sideways (newest on the right). */
+    .live-bars {
+        display: flex;
+        align-items: flex-end;
+        gap: 0.35rem;
+        overflow-x: auto;
+        padding: 0.8rem 0.8rem 0.6rem;
         background: var(--white);
         border: var(--border);
+        scroll-snap-type: x proximity;
     }
-    .live-graph :global(rect) {
-        fill: var(--accent);
+    .live-bars :global(.col) {
+        flex: 0 0 4.6rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        scroll-snap-align: end;
+    }
+    .live-bars :global(.bar-wrap) {
+        width: 100%;
+        height: 7rem;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        border-bottom: 2px solid var(--ink);
+    }
+    .live-bars :global(.bar) {
+        width: 70%;
+        background: var(--accent);
+        border: 2px solid var(--ink);
+        border-bottom: 0;
+        min-height: 3px;
+    }
+    .live-bars :global(.bar.is-zero) {
+        visibility: hidden;
+    }
+    .live-bars :global(.d),
+    .live-bars :global(.t),
+    .live-bars :global(.n) {
+        font-family: var(--font-mono);
+        line-height: 1.25;
+    }
+    .live-bars :global(.d) {
+        margin-top: 0.4rem;
+        font-size: 0.72rem;
+        font-weight: 700;
+    }
+    .live-bars :global(.t) {
+        font-size: 0.66rem;
+        color: var(--muted);
+    }
+    .live-bars :global(.n) {
+        margin-top: 0.15rem;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--accent);
     }
     .live-graph figcaption {
         margin-top: 0.4rem;
@@ -153,7 +201,7 @@ const id = lang === "id";
             const now = root.querySelector<HTMLElement>("[data-now]")!;
             const week = root.querySelector<HTMLElement>("[data-week]")!;
             const beat = root.querySelector<HTMLElement>("[data-heartbeat]");
-            const graph = root.querySelector<SVGElement>("[data-graph]");
+            const graph = root.querySelector<HTMLElement>("[data-graph]");
             const asOf = root.querySelector<HTMLElement>("[data-asof]");
 
             const fetchStats = async () => {
@@ -170,20 +218,41 @@ const id = lang === "id";
                 return (await res.json()) as {
                     now_present: number;
                     as_of: string | null;
-                    series: { visitors: number; checkins: number }[];
+                    series: { start: string; end: string; visitors: number; checkins: number }[];
                 } | null;
             };
 
-            const draw = (series: { visitors: number }[]) => {
+            let placed = false;
+            type Point = { start: string; end: string; visitors: number };
+            const draw = (series: Point[]) => {
                 if (!graph) return;
-                const max = Math.max(1, ...series.map((s) => s.visitors));
-                const w = 420 / Math.max(series.length, 1);
+                const idLang = lang === "id";
+                const locale = idLang ? "id-ID" : "en-GB";
+                const day = new Intl.DateTimeFormat(locale, {
+                    day: "numeric",
+                    month: "short",
+                    timeZone: "Asia/Jakarta",
+                });
+                const hour = new Intl.DateTimeFormat("en-GB", {
+                    hour: "2-digit",
+                    hourCycle: "h23",
+                    timeZone: "Asia/Jakarta",
+                });
+                const hh = (iso: string) => hour.format(new Date(iso)) + ".00";
+                const unit = idLang ? "orang" : "people";
+                const max = Math.max(1, ...series.map((p) => p.visitors));
+                const wasAtEnd =
+                    graph.scrollLeft + graph.clientWidth >= graph.scrollWidth - 8;
                 graph.innerHTML = series
-                    .map((s, i) => {
-                        const h = (s.visitors / max) * 116;
-                        return `<rect x="${i * w + 0.5}" y="${120 - h}" width="${Math.max(w - 1, 1)}" height="${h}"/>`;
+                    .map((p) => {
+                        const h = Math.round((p.visitors / max) * 100);
+                        const date = day.format(new Date(p.start));
+                        const time = hh(p.start) + "–" + hh(p.end);
+                        return `<div class="col" role="listitem" aria-label="${date}, ${time} WIB: ${p.visitors} ${unit}"><div class="bar-wrap"><div class="bar${p.visitors === 0 ? " is-zero" : ""}" style="height:${h}%"></div></div><span class="d">${date}</span><span class="t">${time}</span><span class="n">${p.visitors} ${unit}</span></div>`;
                     })
                     .join("");
+                // Follow the newest window if the reader was already there; otherwise keep their place.
+                if (placed && wasAtEnd) graph.scrollLeft = graph.scrollWidth;
             };
 
             const refresh = async () => {
@@ -208,6 +277,11 @@ const id = lang === "id";
                         asOf.textContent = ` · ${lang === "id" ? "per" : "as of"} ${t} WIB`;
                     }
                     root.hidden = false;
+                    // The block is display:none until now, so the first scroll to the newest window waits for layout.
+                    if (graph && !placed) {
+                        graph.scrollLeft = graph.scrollWidth;
+                        placed = true;
+                    }
                 } catch {
                     // Stats are a bonus: on failure keep the last values (or stay hidden).
                 }
