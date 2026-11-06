@@ -91,15 +91,23 @@ function buildProfile(kind: Kind, n: number): number[] {
       p = arc(48, 0.88, 0);
       break;
     case 'bowl': {
-      const down = linear(20, 14).map((v) => -v);
-      p = [...down, ...fill(16, -14), ...arc(48, 0.88, -14)];
+      // Ride up onto the deck, drop in, cross the floor, climb the far wall.
+      const dropIn = arc(36, 0.9, 0).reverse();
+      const deckH = dropIn[0];
+      p = [
+        ...linear(34, deckH),
+        ...fill(18, deckH),
+        ...dropIn,
+        ...fill(14, 0),
+        ...arc(48, 0.88, 0),
+      ];
       break;
     }
     case 'stairs': {
-      // Descending steps into a pit, then a wall: clear it or crash.
-      p = [];
-      for (let s = 1; s <= n; s++) for (let i = 0; i < 10; i++) p.push(-4 * s);
-      for (let i = 0; i < 14; i++) p.push(-4 * n);
+      // Ride up a ramp onto a deck, then n steps of 6 px back down to the flat.
+      const top = 6 * n;
+      p = [...linear(Math.round(top / 0.6), top), ...fill(20, top)];
+      for (let s = 1; s <= n; s++) for (let i = 0; i < 10; i++) p.push(6 * (n - s));
       break;
     }
     default:
@@ -129,7 +137,6 @@ export function clearPoints(ob: Ob): number {
     case 'block': return 25;
     case 'ledge': return 20;
     case 'rail': return 25;
-    case 'stairs': return 12 * ob.n;
     case 'puddle': return 5;
     default: return 0;
   }
@@ -169,15 +176,15 @@ export const CHUNKS: readonly Chunk[] = [
   chunk('rail', 1, 34, [{ kind: 'rail', x: 0 }]),
   chunk('bank', 1, 80, [{ kind: 'bank', x: 0 }]),
   chunk('kicker', 1, 80, [{ kind: 'kicker', x: 0 }]),
-  chunk('stairs3', 1, 34, [{ kind: 'stairs', x: 0, n: 3 }]),
+  chunk('stairs3', 1, 82, [{ kind: 'stairs', x: 0, n: 3 }]),
 
   chunk('block', 2, 34, [{ kind: 'block', x: 0 }]),
-  chunk('stairs4', 2, 34, [{ kind: 'stairs', x: 0, n: 4 }]),
-  chunk('stairs5', 2, 34, [{ kind: 'stairs', x: 0, n: 5 }]),
+  chunk('stairs4', 2, 85, [{ kind: 'stairs', x: 0, n: 4 }]),
+  chunk('stairs5', 2, 88, [{ kind: 'stairs', x: 0, n: 5 }]),
   chunk('pyramid', 2, 78, [{ kind: 'pyramid', x: 0 }]),
   chunk('quarter', 2, 85, [{ kind: 'quarter', x: 0 }]),
 
-  chunk('bowl', 3, 80, [{ kind: 'bowl', x: 0 }]),
+  chunk('bowl', 3, 85, [{ kind: 'bowl', x: 0 }]),
   chunk('line-ledge-rail', 3, 34, [
     { kind: 'ledge', x: 0 },
     { kind: 'rail', x: 44 + LINE },

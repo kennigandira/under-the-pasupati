@@ -13,8 +13,8 @@ const { lang, embed = false } = Astro.props;
 const stringKeys = [
   'title', 'tagline', 'start', 'book', 'bookTitle', 'back', 'best', 'score',
   'gameover', 'retry', 'closeGame', 'toTitle', 'paused', 'resume', 'quit',
-  'crash', 'bail', 'clean', 'sketchy', 'newBest', 'hintHold', 'hintTap',
-  'btnA', 'btnB', 'noCanvas',
+  'crash', 'bail', 'miss', 'clean', 'sketchy', 'newBest', 'hintHold', 'hintTap',
+  'hintRail', 'now', 'manual', 'noseManual', 'btnA', 'btnB', 'noCanvas',
 ] as const;
 const strings = Object.fromEntries(
   stringKeys.map((k) => [k, t(lang, `game.${k}` as UIKey)]),
@@ -44,19 +44,6 @@ const strings = Object.fromEntries(
     </button>
   </div>
 
-  {!embed && (
-    <section class="kolong-help">
-      <h2>{t(lang, 'game.help.title')}</h2>
-      <ul>
-        <li>{t(lang, 'game.help.keys')}</li>
-        <li>{t(lang, 'game.help.touch')}</li>
-        <li>{t(lang, 'game.help.jump')}</li>
-        <li>{t(lang, 'game.help.tricks')}</li>
-        <li>{t(lang, 'game.help.rides')}</li>
-      </ul>
-      <p><a href={localeHref(lang, '')}>{t(lang, 'game.home')}</a></p>
-    </section>
-  )}
 </div>
 
 <style is:global>
@@ -163,10 +150,6 @@ const strings = Object.fromEntries(
     .kbtn { width: 96px; font-size: 2.4rem; pointer-events: auto; }
     .kpause { pointer-events: auto; }
   }
-
-  .kolong-help { max-width: 640px; width: 100%; padding: 0 0.75rem; }
-  .kolong-help h2 { margin-bottom: 0.5rem; }
-  .kolong-help ul { padding-left: 1.2rem; display: grid; gap: 0.4rem; margin-bottom: 1rem; }
 </style>
 
 <script>

@@ -3,13 +3,15 @@
 
 export const STEP_MS = 1000 / 60;
 
-// Playfield: 176 wide, 96 tall. The canvas may be taller in portrait (extra
-// headroom drawn above the playfield); simulation coordinates never change.
+// Playfield: 176 wide, 96 tall. The canvas is at least MIN_CANVAS_H tall and
+// grows in portrait (up to MAX_CANVAS_H); the extra headroom is drawn above the
+// playfield. Simulation coordinates never change.
 export const LOGICAL_W = 176;
 export const PLAYFIELD_H = 96;
-export const MAX_CANVAS_H = 220;
+export const MIN_CANVAS_H = 128;
+export const MAX_CANVAS_H = 240;
 export const GROUND_Y = 76;
-export const PLAYER_X = 40;
+export const PLAYER_X = 44;
 
 // Jump physics.
 export const GRAVITY = 0.06;
@@ -35,6 +37,11 @@ export const TAP_MAX = 10;
 export const COMBO_GAP = 9;
 export const BAIL_WINDOW = 7;
 
+// Rails: press A (manual) or B (nose manual) this close to touchdown or lose
+// the run. EARLY counts presses before touchdown, LATE after.
+export const RAIL_EARLY_TICKS = 8;
+export const RAIL_LATE_TICKS = 6;
+
 // Collision.
 export const SNAP_BAND = 2;
 export const WALL_RISE = 6;
@@ -44,17 +51,20 @@ export const FOOT_HALF = 3;
 // Scoring.
 export const DIST_POINTS_PER_PX = 0.1;
 export const GRIND_POINTS_PER_TICK = 0.4;
-export const GRIND_STYLE_MUL = 1.5;
+export const MANUAL_MUL = 1.3;
+export const NOSE_MANUAL_MUL = 1.6;
 export const MULT_CAP = 8;
 export const NOLLIE_TRICK_MUL = 1.1;
 export const REPEAT_TRICK_MUL = 0.5;
 export const SKETCHY_MUL = 0.5;
 
-// Level generation.
+// Level generation. Gaps are generous on purpose: about one obstacle per screen.
 export const T_LOW = 40;
-export const REACT_TICKS = 20;
+export const REACT_TICKS = 34;
+export const GAP_EXTRA_MIN = 40;
+export const GAP_EXTRA_RANGE = 100;
 export const SPAWN_MARGIN = 40;
-export const FIRST_CHUNK_X = 240;
+export const FIRST_CHUNK_X = 260;
 export const TIER_START = [0, 600, 1800, 3600] as const;
 
 // Presentation.

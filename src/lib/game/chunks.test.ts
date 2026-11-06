@@ -95,7 +95,7 @@ test('a plain-ollie bot survives every chunk at every speed its tier can reach',
 function longestAir(c: Chunk, speed: number): number {
   const startTick = Math.floor((220 - 40) / speed);
   let longest = 0;
-  for (let rel = -1; rel < 130; rel++) {
+  for (let rel = -1; rel < 320; rel++) {
     const s = createState(5, { speedOverride: speed, autoSpawn: false });
     placeChunk(s, c, 220);
     let air = 0;
@@ -117,7 +117,9 @@ function longestAir(c: Chunk, speed: number): number {
 }
 
 test('declared airTicks covers the longest airtime of each ramp chunk', () => {
-  const ramps = CHUNKS.filter((c) => ['bank', 'kicker', 'pyramid', 'quarter', 'bowl'].includes(c.id));
+  const ramps = CHUNKS.filter((c) =>
+    ['bank', 'kicker', 'pyramid', 'quarter', 'bowl', 'stairs3', 'stairs4', 'stairs5'].includes(c.id),
+  );
   for (const c of ramps) {
     for (const v of [1.2, 1.7, CAP_SPEED]) {
       const air = longestAir(c, v);

@@ -1,6 +1,6 @@
 // Boots every [data-kolong] root: loop, screens, scaling, embed messaging.
 
-import { DEAD_SHOW_TICKS, LOGICAL_W, MAX_CANVAS_H, PLAYFIELD_H, STEP_MS } from './consts.ts';
+import { DEAD_SHOW_TICKS, LOGICAL_W, MAX_CANVAS_H, MIN_CANVAS_H, STEP_MS } from './consts.ts';
 import { createInput, type RawEvent } from './input.ts';
 import { drawFrame, type Screen, type UiState } from './render.ts';
 import { createState, step, type Btn, type GameState } from './sim.ts';
@@ -51,7 +51,7 @@ function init(root: HTMLElement): void {
     now: 0,
     reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches,
     firstRun: best0 === 0,
-    canvasH: PLAYFIELD_H,
+    canvasH: MIN_CANVAS_H,
     screenAge: 0,
   };
 
@@ -185,9 +185,9 @@ function init(root: HTMLElement): void {
       : window.innerHeight - stage.getBoundingClientRect().top - ctrlH - 24;
     const scale = Math.max(
       1,
-      Math.min(8, Math.floor(Math.min(w / LOGICAL_W, Math.max(PLAYFIELD_H, availH) / PLAYFIELD_H))),
+      Math.min(8, Math.floor(Math.min(w / LOGICAL_W, Math.max(MIN_CANVAS_H, availH) / MIN_CANVAS_H))),
     );
-    const h = Math.max(PLAYFIELD_H, Math.min(MAX_CANVAS_H, Math.floor(availH / scale)));
+    const h = Math.max(MIN_CANVAS_H, Math.min(MAX_CANVAS_H, Math.floor(availH / scale)));
     if (canvas.width !== LOGICAL_W) canvas.width = LOGICAL_W;
     if (canvas.height !== h) canvas.height = h;
     canvas.style.width = `${LOGICAL_W * scale}px`;

@@ -15,6 +15,16 @@
 - `PUBLIC_KOLONG_POPUP=false` in `.env.production`. The routes are live; the popup is off until the owner flips the flag.
 - Not built: grabs, manual pad, low beam, time-of-day palette, share card, daily seed, ghost skaters. The grind style (button held while grinding) is built.
 
+**Revision 3 (2026-11-06).** Owner design feedback applied after playing it.
+
+- Rider: drawn as a jointed pixel figure (about 36 px tall, `src/lib/game/figure.ts`) with a 28 px board, replacing the 14 px sprite and `sprites.ts`. Both tilt to any angle, so the board and rider follow kicker, bank, quarter and stair-ramp slopes (board at the full slope angle, rider at 0.7 of it). An ollie snaps the tail down first (a nollie, the nose) then levels out; in the air the board follows the flight path. Tricks show the board's spin (foreshortening and a yellow nose marker), flip (thickness and the deck colour swapping) and ghost trails.
+- Background cut back to flat greys (wall band, pillars, deck) so the rider and tricks carry the detail. Colour stays on the rider, board and obstacles: a measured `drawFrame` costs 0.08 ms of a 16.7 ms frame, and forcing every fill to grey did not make it faster, so grey would not improve performance.
+- Rails: touching down on a rail starts a window of 8 ticks before to 6 ticks after touchdown. Holding A is a manual, holding B a nose manual (board tilts 28 degrees about the rear or front wheel). No press in the window ends the run (`deadReason: 'miss'`, shown as "Kepleset"/"Slipped"). Releasing the held button pops off at mid height. Ledges are unchanged: landing on one is a safe auto slide.
+- Stairs are now a ramp up to a deck followed by steps down to the flat; the bowl is a ramp up to a deck, a drop-in, a floor and the far wall. Nothing goes below ground, and rolling down stairs is safe. Measured airtime off stairs is 73 to 78 ticks, off the bowl 76.
+- Spacing: `REACT_TICKS` 34 and a 40 to 140 px random extra per gap, so about one obstacle is on screen at a time. The first obstacle is at 260 px.
+- Canvas is at least 128 logical px tall (`MIN_CANVAS_H`), so the taller rider has headroom on desktop too.
+- The "Cara main" how-to-play section is removed; the in-game hints stay (jump, tap in the air, and a rail hint until the first manual).
+
 Evidence markers used throughout:
 
 - **[V]** verified in this repo or by a command I ran, source given.

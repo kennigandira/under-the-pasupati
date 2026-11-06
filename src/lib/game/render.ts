@@ -1,17 +1,14 @@
 // Canvas renderer. Reads game state, never changes it. All coordinates are
 // whole logical pixels; the canvas is scaled up by CSS with pixelated sampling.
+// The background is deliberately quiet greys so the rider and the trick
+// animations carry the detail.
 
-import {
-  GROUND_Y,
-  LOGICAL_W,
-  PLAYER_X,
-  PLAYFIELD_H,
-} from './consts.ts';
+import { GROUND_Y, LOGICAL_W, PLAYER_X, PLAYFIELD_H } from './consts.ts';
 import type { Ob } from './chunks.ts';
+import { drawRider, type PoseName, type Rider } from './figure.ts';
 import { drawShadowText, drawText, textWidth, wrap } from './font.ts';
 import type { GameState } from './sim.ts';
-import { getSprite, type Pose } from './sprites.ts';
-import { recognise, TRICKS, animTicks } from './tricks.ts';
+import { animTicks, recognise, TRICKS } from './tricks.ts';
 
 export type Screen = 'title' | 'playing' | 'paused' | 'gameover' | 'book';
 
@@ -32,13 +29,14 @@ export interface UiState {
 }
 
 const C = {
-  sky: '#d9d2bf',
-  far: '#c8c0aa',
-  pillar: '#aaa28d',
-  pillarDark: '#8f8873',
-  deck: '#101010',
-  ground: '#6b6558',
-  seam: '#575145',
+  sky: '#e6e4de',
+  wall: '#d6d3ca',
+  pillar: '#c4c1b6',
+  pillarEdge: '#aeab9f',
+  deck: '#232323',
+  deckDash: '#8a877d',
+  ground: '#8f8c82',
+  groundDark: '#7a776d',
   ink: '#101010',
   paper: '#f4efe2',
   accent: '#ff4d00',
@@ -48,10 +46,10 @@ const C = {
   tape: '#ffd400',
   white: '#ffffff',
   concrete: '#bdb6a2',
-  pit: '#24231f',
   silver: '#c9ccd1',
-  puddle: '#6fa8dc',
+  puddle: '#9db8d3',
   muted: '#6b6558',
+  dust: '#f4efe2',
 };
 
 const KIND_COLOR: Partial<Record<Ob['kind'], string>> = {
@@ -59,7 +57,7 @@ const KIND_COLOR: Partial<Record<Ob['kind'], string>> = {
   crate: C.tape,
   block: C.pink,
   ledge: C.pink,
-  kicker: '#2a2a2a',
+  kicker: '#3a3a3a',
   bank: C.blue,
   pyramid: C.blue,
   quarter: C.silver,
@@ -74,48 +72,30 @@ function rect(ctx: CanvasRenderingContext2D, color: string, x: number, y: number
   ctx.fillRect(Math.round(x), Math.round(y), w, h);
 }
 
-function hash(n: number): number {
-  let x = Math.imul(n | 0, 2654435761) >>> 0;
-  x ^= x >>> 13;
-  return x % 1000;
-}
-
 function drawBackground(ctx: CanvasRenderingContext2D, scroll: number, h: number, yOff: number): void {
   rect(ctx, C.sky, 0, 0, LOGICAL_W, h);
+  const gy = GROUND_Y + yOff;
+  rect(ctx, C.wall, 0, gy - 22, LOGICAL_W, 22);
 
-  // Far silhouettes: warung roofs and walls.
-  const far = Math.floor(scroll * 0.2);
-  const tile = 44;
-  for (let k = Math.floor(far / tile) - 1; k < Math.floor((far + LOGICAL_W) / tile) + 1; k++) {
-    const sx = k * tile - far;
-    const hh = 16 + (hash(k) % 22);
-    rect(ctx, C.far, sx, GROUND_Y + yOff - hh, tile - 6, hh);
-    rect(ctx, C.pillarDark, sx + 4, GROUND_Y + yOff - hh + 4, 3, 3);
-  }
-
-  // Flyover pillars.
-  const near = Math.floor(scroll * 0.55);
-  const spacing = 96;
+  const near = Math.floor(scroll * 0.5);
+  const spacing = 112;
   for (let k = Math.floor(near / spacing) - 1; k < Math.floor((near + LOGICAL_W) / spacing) + 1; k++) {
-    const sx = k * spacing - near + 30;
-    rect(ctx, C.pillar, sx, DECK_H, 16, GROUND_Y + yOff - DECK_H);
-    rect(ctx, C.pillarDark, sx + 13, DECK_H, 3, GROUND_Y + yOff - DECK_H);
-    rect(ctx, C.pillarDark, sx - 2, DECK_H, 20, 3);
+    const sx = k * spacing - near + 40;
+    rect(ctx, C.pillar, sx, DECK_H, 18, gy - DECK_H);
+    rect(ctx, C.pillarEdge, sx + 15, DECK_H, 3, gy - DECK_H);
   }
 
-  // Deck with hazard dashes.
   rect(ctx, C.deck, 0, 0, LOGICAL_W, DECK_H);
-  const dash = Math.floor(scroll * 0.55) % 16;
-  for (let x = -dash; x < LOGICAL_W; x += 16) rect(ctx, C.tape, x, DECK_H - 2, 8, 1);
+  const dash = Math.floor(scroll * 0.5) % 24;
+  for (let x = -dash; x < LOGICAL_W; x += 24) rect(ctx, C.deckDash, x, DECK_H - 2, 10, 1);
 }
 
 function drawGround(ctx: CanvasRenderingContext2D, scroll: number, yOff: number): void {
   const gy = GROUND_Y + yOff;
   rect(ctx, C.ground, 0, gy, LOGICAL_W, PLAYFIELD_H - GROUND_Y);
   rect(ctx, C.ink, 0, gy, LOGICAL_W, 1);
-  const seam = Math.floor(scroll) % 24;
-  for (let x = -seam; x < LOGICAL_W; x += 24) rect(ctx, C.seam, x, gy + 5, 1, 12);
-  rect(ctx, C.seam, 0, gy + 10, LOGICAL_W, 1);
+  const seam = Math.floor(scroll) % 32;
+  for (let x = -seam; x < LOGICAL_W; x += 32) rect(ctx, C.groundDark, x, gy + 4, 1, 14);
 }
 
 function drawProfile(ctx: CanvasRenderingContext2D, o: Ob, sx0: number, yOff: number): void {
@@ -127,28 +107,24 @@ function drawProfile(ctx: CanvasRenderingContext2D, o: Ob, sx0: number, yOff: nu
     if (sx < 0 || sx >= LOGICAL_W) continue;
     const h = prof[i];
     const top = gy - h;
-    if (h >= 0) {
-      rect(ctx, color, sx, top, 1, h);
-      rect(ctx, o.kind === 'kicker' ? C.white : C.ink, sx, top, 1, 1);
-    } else {
-      rect(ctx, C.pit, sx, gy, 1, PLAYFIELD_H - GROUND_Y);
-      rect(ctx, color, sx, top, 1, PLAYFIELD_H + yOff - top);
-      rect(ctx, C.ink, sx, top, 1, 1);
-    }
+    if (h > 0) rect(ctx, color, sx, top, 1, h);
+    rect(ctx, o.kind === 'kicker' ? C.white : C.ink, sx, top, 1, 1);
+    // Risers and the launch lip get an ink edge so steps and lips read.
+    const prev = i > 0 ? prof[i - 1] : h;
+    if (prev - h > 1) rect(ctx, C.ink, sx, top, 1, prev - h);
   }
-  // Bowl and quarter get an ink lip so the launch edge reads clearly.
-  if (o.kind === 'quarter' || o.kind === 'bowl' || o.kind === 'kicker' || o.kind === 'bank') {
-    const last = prof[prof.length - 1];
-    rect(ctx, C.ink, sx0 + prof.length - 1, gy - last, 1, Math.max(1, last));
-  }
+  const last = prof[prof.length - 1];
+  if (last > 0) rect(ctx, C.ink, sx0 + prof.length - 1, gy - last, 1, last);
 }
 
 function drawRect(ctx: CanvasRenderingContext2D, o: Ob, sx: number, yOff: number): void {
   const top = GROUND_Y + yOff - o.h;
   if (o.kind === 'rail') {
-    rect(ctx, C.ink, sx, top, o.w, 2);
-    rect(ctx, C.white, sx + 1, top, o.w - 2, 1);
-    for (const px of [1, Math.floor(o.w / 2) - 1, o.w - 3]) rect(ctx, C.muted, sx + px, top + 2, 2, o.h - 2);
+    rect(ctx, C.ink, sx, top, o.w, 3);
+    rect(ctx, C.silver, sx + 1, top + 1, o.w - 2, 1);
+    for (const px of [1, Math.floor(o.w / 2) - 1, o.w - 4]) {
+      rect(ctx, C.ink, sx + px, top + 3, 3, o.h - 3);
+    }
     return;
   }
   const color = KIND_COLOR[o.kind] ?? C.concrete;
@@ -169,67 +145,81 @@ function drawObstacles(ctx: CanvasRenderingContext2D, s: GameState, yOff: number
   }
 }
 
-// Board seen from the side. spin rotates it flat (length shrinks), flip turns
-// it over its long axis (thickness grows, colour swaps).
-function drawBoard(
-  ctx: CanvasRenderingContext2D,
-  cx: number,
-  topY: number,
-  spin: number,
-  flip: number,
-  raised: boolean,
-): void {
-  const cs = Math.cos(spin);
-  const cf = Math.cos(flip);
-  const len = Math.max(2, Math.round(16 * Math.abs(cs)));
-  const thick = 2 + Math.round(3 * Math.abs(Math.sin(flip)));
-  const x0 = Math.round(cx - len / 2);
-  const y0 = Math.round(topY + 1 - Math.floor(thick / 2)) - (raised ? 1 : 0);
-  const upColor = cf >= 0 ? C.ink : C.accent;
-  const downColor = cf >= 0 ? C.accent : C.ink;
-  const half = Math.ceil(thick / 2);
-  rect(ctx, upColor, x0, y0, len, half);
-  rect(ctx, downColor, x0, y0 + half, len, thick - half);
-  const tipX = cs >= 0 ? x0 + len - 3 : x0;
-  rect(ctx, C.tape, tipX, y0, Math.min(3, len), thick);
-  if (Math.abs(cf) > 0.5 && Math.abs(cs) > 0.7) {
-    const wy = cf >= 0 ? y0 + thick : y0 - 2;
-    rect(ctx, C.ink, x0 + 2, wy, 2, 2);
-    rect(ctx, C.ink, x0 + len - 4, wy, 2, 2);
-  }
-}
-
-function drawLoopBoard(ctx: CanvasRenderingContext2D, cx: number, cy: number, angle: number): void {
-  const ca = Math.cos(angle);
-  const sa = Math.sin(angle);
-  for (let i = -7; i <= 7; i++) {
-    const x = Math.round(cx + i * ca);
-    const y = Math.round(cy + i * sa);
-    rect(ctx, i > 3 ? C.tape : i < 0 ? C.accent : C.ink, x, y, 1, 2);
-  }
-}
-
-function drawPlayer(ctx: CanvasRenderingContext2D, s: GameState, ui: UiState, yOff: number): void {
+function riderFor(s: GameState, yOff: number): Rider {
   const p = s.p;
-  const y = Math.round(p.y) + yOff;
-  const topY = y - 4;
+  const speed = Math.max(0.6, s.speed);
+  let poseA: PoseName = 'ride';
+  let poseB: PoseName = 'ride';
+  let blend = 0;
+  let boardTilt = 0;
+  let bodyTilt = 0;
+  let pivotX = 0;
+  let spin = 0;
+  let flip = 0;
+  let loop: number | null = null;
+  let kx = 1;
+  let ghosts: Array<{ spin: number; flip: number }> = [];
+  let x = PLAYER_X;
+  let boardDx = 0;
+  let boardDy = 0;
 
   if (s.dead) {
     const age = s.tick - s.deadTick;
-    const slide = Math.min(10, age);
-    const sprite = getSprite('dead');
-    ctx.drawImage(sprite, PLAYER_X - 6 - slide, y - sprite.height);
-    const bx = PLAYER_X + 14 + Math.min(18, age * 2);
-    drawLoopBoard(ctx, bx, y - 3 - Math.max(0, 10 - age) * 0, age * 0.3);
-    return;
-  }
-
-  let spin = 0;
-  let flip = 0;
-  let body = false;
-  let loop = -1;
-  let raised = false;
-  if (p.air) {
+    poseA = 'air';
+    poseB = 'air';
+    bodyTilt = -Math.min(1.5, age * 0.1);
+    pivotX = 0;
+    x = PLAYER_X - Math.min(10, age);
+    boardDx = 12 + Math.min(26, age * 2);
+    boardDy = -Math.max(0, 8 - age * 0.5);
+    loop = age * 0.4;
+  } else if (!p.air) {
+    const slope = Math.atan2(-p.rideVy, speed);
+    boardTilt = slope;
+    bodyTilt = slope * 0.7;
+    const g = p.groundTicks;
+    if (p.manual !== null) {
+      const e = Math.min(1, g / 4);
+      const ang = (p.manual === 'A' ? 0.5 : -0.5) * e;
+      boardTilt = ang;
+      bodyTilt = ang;
+      pivotX = p.manual === 'A' ? -6 : 6;
+      poseA = 'ride';
+      poseB = 'crouch';
+      blend = 0.35;
+    } else if (p.crouchBtn !== null) {
+      poseA = 'ride';
+      poseB = 'crouch';
+      blend = Math.min(1, p.crouchTicks / 6);
+    } else if (g < 8) {
+      const k = 1 - g / 8;
+      const landTilt = Math.atan2(-p.landVy, speed) * 0.5 * k;
+      boardTilt += landTilt;
+      bodyTilt += landTilt * 0.5;
+      poseA = 'crouch';
+      poseB = 'ride';
+      blend = g / 8;
+    }
+  } else {
+    // The board follows the flight path; an ollie also snaps the tail (nose
+    // for a nollie) down first, then levels out.
+    const path = Math.atan2(-p.vy, speed);
+    const decay = p.popped ? Math.max(0, 1 - p.airTicks / 12) : 0;
+    const popTilt = (p.nollie ? -1 : 1) * 0.6 * decay;
+    boardTilt = path * 0.8 + popTilt;
+    bodyTilt = path * 0.6;
+    if (p.airTicks < 8 && p.popped) {
+      poseA = 'pop';
+      poseB = 'air';
+      blend = p.airTicks / 8;
+    } else if (p.vy > 0.3) {
+      poseA = 'air';
+      poseB = 'pop';
+      blend = Math.min(1, (p.vy - 0.3) / 1.0) * 0.7;
+    } else {
+      poseA = 'air';
+      poseB = 'air';
+    }
     if (p.trickSeq !== null) {
       const trick = recognise(p.trickSeq);
       if (trick) {
@@ -238,42 +228,80 @@ function drawPlayer(ctx: CanvasRenderingContext2D, s: GameState, ui: UiState, yO
         spin = Math.PI * trick.spin * prog;
         flip = 2 * Math.PI * trick.flip * prog * trick.dir;
         if (trick.loop) loop = 2 * Math.PI * prog;
-        body = trick.body && prog > 0.25 && prog < 0.75;
+        if (trick.body) kx = Math.cos(2 * Math.PI * prog);
+        ghosts = [];
+        for (const back of [0.07, 0.14]) {
+          const gp = prog - back;
+          if (gp > 0) {
+            ghosts.push({ spin: Math.PI * trick.spin * gp, flip: 2 * Math.PI * trick.flip * gp * trick.dir });
+          }
+        }
+        poseA = 'air';
+        poseB = 'air';
+        blend = 0;
+        // Reach for the board as the trick ends.
+        if (prog > 0.8) {
+          poseA = 'air';
+          poseB = 'pop';
+          blend = (prog - 0.8) / 0.2;
+        }
       }
     } else if (p.buffer.length > 0) {
-      raised = true;
+      // First tap: a quick flick of the board before the trick commits.
+      boardTilt += 0.35;
+      poseA = 'air';
+      poseB = 'air';
     }
   }
 
-  let pose: Pose = 'ride';
-  if (p.air) pose = 'air';
-  else if (p.crouchBtn !== null) pose = 'crouch';
-  const sprite = getSprite(pose);
-  const sx = PLAYER_X - 4;
-  const sy = topY - sprite.height;
-  if (body) {
-    ctx.save();
-    ctx.translate(PLAYER_X, 0);
-    ctx.scale(-1, 1);
-    ctx.drawImage(sprite, -4, sy);
-    ctx.restore();
-  } else {
-    ctx.drawImage(sprite, sx, sy);
+  return {
+    x,
+    y: Math.round(p.y) + yOff,
+    poseA,
+    poseB,
+    blend,
+    boardTilt,
+    bodyTilt,
+    pivotX,
+    kx,
+    spin,
+    flip,
+    loop,
+    ghosts,
+    boardDx,
+    boardDy,
+  };
+}
+
+function drawEffects(ctx: CanvasRenderingContext2D, s: GameState, yOff: number): void {
+  const p = s.p;
+  const gy = GROUND_Y + yOff;
+  const y = Math.round(p.y) + yOff;
+  if (s.dead) return;
+  // Dust when landing hard and when popping.
+  if (!p.air && p.groundTicks < 9 && p.landVy > 0.8) {
+    for (let i = 0; i < 4; i++) {
+      rect(ctx, C.dust, PLAYER_X - 12 - i * 3 - p.groundTicks, y - 1 - (i % 2) * 2 - Math.floor(p.groundTicks / 3), 2, 2);
+    }
   }
-
-  if (loop >= 0) drawLoopBoard(ctx, PLAYER_X, topY + 2, loop);
-  else drawBoard(ctx, PLAYER_X, topY, spin, flip, raised);
-
-  if (p.grinding && s.tick % 4 < 2) {
-    rect(ctx, C.tape, PLAYER_X - 7 + (s.tick % 3), topY + 4, 1, 1);
-    rect(ctx, C.white, PLAYER_X + 5 - (s.tick % 3), topY + 3, 1, 1);
+  if (p.air && p.popped && p.airTicks < 7) {
+    for (let i = 0; i < 3; i++) {
+      rect(ctx, C.dust, PLAYER_X - 10 - i * 3 - p.airTicks, gy - 2 - i, 2, 2);
+    }
+  }
+  // Sparks off the wheels on a rail manual.
+  if (p.manual !== null && s.tick % 3 !== 0) {
+    const wheel = PLAYER_X + (p.manual === 'A' ? -9 : 9);
+    rect(ctx, C.tape, wheel + (s.tick % 4) - 2, y - 1 - (s.tick % 3), 2, 2);
+    rect(ctx, C.white, wheel - (s.tick % 5), y, 1, 1);
   }
 }
 
 function drawHud(ctx: CanvasRenderingContext2D, s: GameState, ui: UiState, yOff: number): void {
   const str = (k: string) => ui.strings[k] ?? k;
+  const p = s.p;
   drawText(ctx, String(Math.floor(s.score)), 3, 3, C.white);
-  if (s.mult > 1) drawText(ctx, `X${s.mult}`, 3, 15 + 0, C.tape);
+  if (s.mult > 1) drawText(ctx, `X${s.mult}`, 3, 15, C.accent);
   const best = `${str('best')} ${Math.max(ui.best, Math.floor(s.score))}`;
   drawText(ctx, best, LOGICAL_W - 3 - textWidth(best), 3, C.tape);
 
@@ -281,17 +309,33 @@ function drawHud(ctx: CanvasRenderingContext2D, s: GameState, ui: UiState, yOff:
     const q = s.lastTrick.quality === 'clean' ? str('clean') : str('sketchy');
     const col = s.lastTrick.quality === 'clean' ? C.green : C.accent;
     const name = s.lastTrick.name;
-    drawShadowText(ctx, name, Math.round((LOGICAL_W - textWidth(name)) / 2), yOff + 22, C.ink, C.paper);
+    drawShadowText(ctx, name, Math.round((LOGICAL_W - textWidth(name)) / 2), 16, C.ink, C.paper);
     const sub = `${q} +${s.lastTrick.points}`;
-    drawShadowText(ctx, sub, Math.round((LOGICAL_W - textWidth(sub)) / 2), yOff + 29, col, C.paper);
+    drawShadowText(ctx, sub, Math.round((LOGICAL_W - textWidth(sub)) / 2), 23, col, C.paper);
   }
 
-  if (ui.screen === 'playing' && !s.dead) {
-    if (ui.firstRun && s.clears === 0 && !s.p.air) {
-      drawHint(ctx, str('hintHold'), yOff + 17);
-    } else if (ui.discovered.size === 0 && s.p.air && s.p.trickSeq === null && s.p.buffer === '') {
-      drawHint(ctx, str('hintTap'), yOff + 17);
-    }
+  if (ui.screen !== 'playing' || s.dead) return;
+
+  // Rail cue: A / B must be pressed as the board touches down.
+  if (p.railDeadline > 0 && p.manual === null) {
+    const t = `A / B ${str('now')}`;
+    drawShadowText(ctx, t, PLAYER_X - Math.round(textWidth(t) / 2), Math.round(p.y) + yOff - 52, C.accent, C.paper);
+  } else if (p.manual !== null) {
+    const t = p.manual === 'A' ? str('manual') : str('noseManual');
+    drawShadowText(ctx, t, PLAYER_X - Math.round(textWidth(t) / 2), Math.round(p.y) + yOff - 52, C.green, C.paper);
+  }
+
+  const wx = s.scroll + PLAYER_X;
+  let railAhead = false;
+  for (const o of s.obs) {
+    if (o.kind === 'rail' && o.x - wx > -8 && o.x - wx < 90) railAhead = true;
+  }
+  if (railAhead && s.manuals === 0 && ui.best < 400) {
+    drawHint(ctx, str('hintRail'), 30);
+  } else if (ui.firstRun && s.clears === 0 && !p.air) {
+    drawHint(ctx, str('hintHold'), 30);
+  } else if (ui.discovered.size === 0 && p.air && p.trickSeq === null && p.buffer === '') {
+    drawHint(ctx, str('hintTap'), 30);
   }
 }
 
@@ -336,12 +380,12 @@ function drawGameOver(ctx: CanvasRenderingContext2D, s: GameState, ui: UiState, 
   const str = (k: string) => ui.strings[k] ?? k;
   const y = yOff + 10;
   panel(ctx, 6, y, LOGICAL_W - 12, 76);
-  center(ctx, s.deadReason === 'bail' ? str('bail') : str('crash'), y + 6, C.accent, 2);
+  const why = s.deadReason === 'bail' ? 'bail' : s.deadReason === 'miss' ? 'miss' : 'crash';
+  center(ctx, str(why), y + 6, C.accent, 2);
   center(ctx, str('gameover'), y + 18, C.ink);
   center(ctx, `${str('score')} ${Math.floor(s.score)}`, y + 26, C.ink, 2);
   center(ctx, ui.newBest ? str('newBest') : `${str('best')} ${ui.best}`, y + 39, ui.newBest ? C.green : C.muted);
-  const ready = ui.screenAge > 24;
-  const col = ready ? C.ink : C.muted;
+  const col = ui.screenAge > 24 ? C.ink : C.muted;
   const retry = `A  ${str('retry')}`;
   const leave = wrap(`B  ${ui.embed ? str('closeGame') : str('toTitle')}`, LOGICAL_W - 24);
   center(ctx, retry, y + 50, col);
@@ -387,11 +431,13 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: GameState, ui: UiSta
   drawBackground(ctx, bgScroll, ui.canvasH, yOff);
   drawGround(ctx, bgScroll, yOff);
   drawObstacles(ctx, s, yOff);
-  if (ui.screen !== 'title' && ui.screen !== 'book') drawPlayer(ctx, s, ui, yOff);
+  if (ui.screen !== 'title' && ui.screen !== 'book') {
+    drawEffects(ctx, s, yOff);
+    drawRider(ctx, riderFor(s, yOff));
+  }
   ctx.restore();
 
-  if (ui.screen === 'playing' || ui.screen === 'paused') drawHud(ctx, s, ui, yOff);
-  if (ui.screen === 'gameover') drawHud(ctx, s, ui, yOff);
+  if (ui.screen === 'playing' || ui.screen === 'paused' || ui.screen === 'gameover') drawHud(ctx, s, ui, yOff);
 
   if (ui.screen === 'title') drawTitle(ctx, ui, yOff);
   else if (ui.screen === 'paused') drawPaused(ctx, ui, yOff);

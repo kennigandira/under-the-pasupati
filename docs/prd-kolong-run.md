@@ -2,6 +2,8 @@
 
 **Status:** Draft for review, revision 1. Built through M4 (popup flag off in production); see the TRD revision 2 for tuning changes.
 
+**Revision 3 (2026-11-06).** Owner design feedback applied: bigger rider and board with tilt and trick detail, quiet greyscale background, rails need a timed A (manual) or B (nose manual), stairs and bowl are raised structures you ride up onto, sparser obstacles, no how-to-play section. Details are in the TRD revision 3. The "Stairs" and "Bowl" rows and the rail behaviour in section 6.6 are superseded by it.
+
 **Date:** 2026-11-06
 
 **Working title:** Kolong Run, route `/kolong-run/` (decided, Q1). "Kolong" is what the park copy already calls the space under the flyover.

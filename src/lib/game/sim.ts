@@ -14,18 +14,23 @@ import {
   DROP_STICK,
   FIRST_CHUNK_X,
   FOOT_HALF,
+  GAP_EXTRA_MIN,
+  GAP_EXTRA_RANGE,
   GRAVITY,
   GRIND_POINTS_PER_TICK,
-  GRIND_STYLE_MUL,
   GROUND_Y,
   LEVEL_HIGH_TICKS,
   LEVEL_MID_TICKS,
+  MANUAL_MUL,
   MAX_LAUNCH_VY,
   MULT_CAP,
   NOLLIE_APEX,
   NOLLIE_TRICK_MUL,
+  NOSE_MANUAL_MUL,
   PLAYER_X,
   PUDDLE_SLOW,
+  RAIL_EARLY_TICKS,
+  RAIL_LATE_TICKS,
   REPEAT_TRICK_MUL,
   RIDE_POP_BONUS,
   SKETCHY_MUL,
@@ -62,6 +67,8 @@ export interface Player {
   vy: number;
   air: boolean;
   airTicks: number;
+  groundTicks: number;
+  landVy: number;
   rideVy: number;
   crouchBtn: Btn | null;
   crouchTicks: number;
@@ -77,6 +84,10 @@ export interface Player {
   supportId: number;
   supportKind: Kind | 'ground';
   grinding: boolean;
+  // Rail rule: after touching a rail the player has until railDeadline to press
+  // A (manual) or B (nose manual). manual holds the button that did it.
+  railDeadline: number;
+  manual: Btn | null;
   fromProfile: boolean;
   overIds: number[];
 }
@@ -88,6 +99,8 @@ export interface TrickResult {
   quality: 'clean' | 'sketchy';
   tick: number;
 }
+
+export type DeadReason = '' | 'crash' | 'bail' | 'miss';
 
 export interface GameState {
   tick: number;
@@ -106,11 +119,12 @@ export interface GameState {
   mult: number;
   recent: string[];
   dead: boolean;
-  deadReason: '' | 'crash' | 'bail';
+  deadReason: DeadReason;
   deadTick: number;
   lastTrick: TrickResult | null;
   fresh: string[];
   clears: number;
+  manuals: number;
 }
 
 export interface CreateOptions {
@@ -136,6 +150,8 @@ export function createState(seed: number, opts: CreateOptions = {}): GameState {
       vy: 0,
       air: false,
       airTicks: 0,
+      groundTicks: 99,
+      landVy: 0,
       rideVy: 0,
       crouchBtn: null,
       crouchTicks: 0,
@@ -151,6 +167,8 @@ export function createState(seed: number, opts: CreateOptions = {}): GameState {
       supportId: 0,
       supportKind: 'ground',
       grinding: false,
+      railDeadline: 0,
+      manual: null,
       fromProfile: false,
       overIds: [],
     },
@@ -163,6 +181,7 @@ export function createState(seed: number, opts: CreateOptions = {}): GameState {
     lastTrick: null,
     fresh: [],
     clears: 0,
+    manuals: 0,
   };
 }
 
@@ -198,7 +217,8 @@ function spawn(s: GameState): void {
   const start = s.nextChunkX;
   placeChunk(s, chosen, start);
   s.lastChunkId = chosen.id;
-  const gap = minGap(baseSpeed(s.scroll) * 1.05, chosen.airTicks) + randomInt(s, 25);
+  const gap =
+    minGap(baseSpeed(s.scroll) * 1.05, chosen.airTicks) + GAP_EXTRA_MIN + randomInt(s, GAP_EXTRA_RANGE);
   s.nextChunkX = start + chosen.width + gap;
 }
 
@@ -242,11 +262,12 @@ function surfaceAt(obs: Ob[], wx: number): Surf {
   return SURF;
 }
 
-function die(s: GameState, reason: 'crash' | 'bail'): void {
+function die(s: GameState, reason: 'crash' | 'bail' | 'miss'): void {
   s.dead = true;
   s.deadReason = reason;
   s.deadTick = s.tick;
   s.p.crouchBtn = null;
+  s.p.manual = null;
 }
 
 function resetAir(p: Player): void {
@@ -275,16 +296,30 @@ function pop(s: GameState, btn: Btn): void {
   const fromProfile = !wasAir && p.supportKind !== 'ground' && !GRINDABLE.has(p.supportKind as Kind);
   p.air = true;
   p.airTicks = 0;
+  p.groundTicks = 0;
   p.vy = vy;
   p.crouchBtn = null;
   p.crouchTicks = 0;
   p.grinding = false;
+  p.manual = null;
+  p.railDeadline = 0;
   if (!wasAir) {
     resetAir(p);
     p.fromProfile = fromProfile;
   }
   p.popped = true;
   p.nollie = btn === 'B';
+}
+
+// Press A or B on a rail: A is a manual, B a nose manual. The held button is
+// the crouch button, so releasing it pops off with a mid-height ollie.
+function engageManual(s: GameState, btn: Btn): void {
+  const p = s.p;
+  p.manual = btn;
+  p.railDeadline = 0;
+  p.crouchBtn = btn;
+  p.crouchTicks = LEVEL_MID_TICKS;
+  s.manuals++;
 }
 
 function handleInput(s: GameState, events: readonly InputEvent[]): void {
@@ -295,7 +330,9 @@ function handleInput(s: GameState, events: readonly InputEvent[]): void {
     if (e.down) {
       p.held[i] = true;
       p.pressTick[i] = s.tick;
-      if (!p.air && p.crouchBtn === null) {
+      if (!p.air && p.railDeadline > 0 && p.manual === null) {
+        engageManual(s, e.btn);
+      } else if (!p.air && p.crouchBtn === null) {
         p.crouchBtn = e.btn;
         p.crouchTicks = 0;
       }
@@ -348,11 +385,15 @@ function land(s: GameState, surf: Surf): void {
   } else if (p.buffer.length > 0) {
     quality = 'bail';
   }
+  p.landVy = p.vy;
   p.air = false;
   p.vy = 0;
   p.y = surf.y;
   p.rideVy = 0;
   p.airTicks = 0;
+  p.groundTicks = 0;
+  p.manual = null;
+  p.railDeadline = 0;
   p.supportId = ob ? ob.id : 0;
   p.supportKind = ob ? ob.kind : 'ground';
   if (ob) ob.touched = true;
@@ -365,6 +406,25 @@ function land(s: GameState, surf: Surf): void {
     if (trick) score(s, trick, quality, ob !== null && GRINDABLE.has(ob.kind));
   }
   resetAir(p);
+
+  if (ob !== null && ob.kind === 'rail') {
+    // Touchdown on a rail: a press this close to it counts, otherwise the
+    // player has RAIL_LATE_TICKS more to press.
+    p.crouchBtn = null;
+    let engaged = false;
+    let latest = -Infinity;
+    for (let i = 0; i < 2; i++) {
+      if (p.held[i] && s.tick - p.pressTick[i] <= RAIL_EARLY_TICKS && p.pressTick[i] > latest) {
+        latest = p.pressTick[i];
+        engaged = true;
+        p.manual = i === 0 ? 'A' : 'B';
+      }
+    }
+    if (engaged) engageManual(s, p.manual as Btn);
+    else p.railDeadline = s.tick + RAIL_LATE_TICKS;
+    return;
+  }
+
   for (let i = 0; i < 2; i++) {
     if (p.held[i] && p.crouchBtn === null && s.tick - p.pressTick[i] <= BUFFER_TICKS) {
       p.crouchBtn = i === 0 ? 'A' : 'B';
@@ -378,8 +438,11 @@ function leaveSurface(s: GameState): void {
   const fromProfile = p.supportKind !== 'ground' && !GRINDABLE.has(p.supportKind as Kind);
   p.air = true;
   p.airTicks = 0;
+  p.groundTicks = 0;
   p.vy = Math.max(MAX_LAUNCH_VY, Math.min(3, p.rideVy));
   p.grinding = false;
+  p.manual = null;
+  p.railDeadline = 0;
   resetAir(p);
   p.fromProfile = fromProfile && p.rideVy < 0;
 }
@@ -400,8 +463,9 @@ function speedFor(s: GameState, wx: number): number {
     const o = s.obs[i];
     if (o.kind === 'puddle' && wx > o.x && wx < o.x + o.w && !s.p.air) sp *= PUDDLE_SLOW;
   }
-  if (s.p.supportKind === 'bowl' && s.p.y > GROUND_Y) {
-    sp *= 1 + BOWL_BOOST * Math.min(1, (s.p.y - GROUND_Y) / 14);
+  // Dropping into a bowl speeds you up.
+  if (s.p.supportKind === 'bowl' && s.p.rideVy > 0.4) {
+    sp *= 1 + BOWL_BOOST * Math.min(1, s.p.rideVy / 2);
   }
   return sp;
 }
@@ -414,7 +478,8 @@ export function step(s: GameState, events: readonly InputEvent[] = NO_EVENTS): v
   const p = s.p;
 
   handleInput(s, events);
-  if (p.crouchBtn !== null && !p.air) p.crouchTicks++;
+  if (p.crouchBtn !== null && !p.air && p.manual === null) p.crouchTicks++;
+  if (!p.air) p.groundTicks++;
 
   while (s.autoSpawn && s.nextChunkX < s.scroll + 176 + SPAWN_MARGIN) spawn(s);
 
@@ -440,8 +505,13 @@ export function step(s: GameState, events: readonly InputEvent[] = NO_EVENTS): v
       p.supportKind = surf.ob ? surf.ob.kind : 'ground';
       if (surf.ob) surf.ob.touched = true;
       p.grinding = surf.ob !== null && GRINDABLE.has(surf.ob.kind);
-      if (p.grinding) {
-        s.score += GRIND_POINTS_PER_TICK * (p.crouchBtn !== null ? GRIND_STYLE_MUL : 1);
+      if (p.railDeadline > 0 && s.tick > p.railDeadline) {
+        die(s, 'miss');
+        return;
+      }
+      if (p.grinding && (surf.ob!.kind === 'ledge' || p.manual !== null)) {
+        const mul = p.manual === 'B' ? NOSE_MANUAL_MUL : p.manual === 'A' ? MANUAL_MUL : 1;
+        s.score += GRIND_POINTS_PER_TICK * mul;
       }
     }
   }
