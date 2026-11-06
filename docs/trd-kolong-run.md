@@ -25,6 +25,14 @@
 - Canvas is at least 128 logical px tall (`MIN_CANVAS_H`), so the taller rider has headroom on desktop too.
 - The "Cara main" how-to-play section is removed; the in-game hints stay (jump, tap in the air, and a rail hint until the first manual).
 
+**Revision 4 (2026-11-06).** Owner feedback on feel and size.
+
+- Gravity raised from 0.06 to 0.1 px/tick². To keep hang time, pops are higher: apex now grows continuously with the crouch, from 14 px at a tap to 60 px at 30 ticks of hold (`APEX_MIN`, `APEX_MAX`, `CROUCH_FULL_TICKS`), instead of three fixed levels that stopped growing at 16 ticks. Measured apex: hold 2 gives 16 px, hold 18 gives 40 px, hold 30 gives 58 px; holding past 30 adds nothing. Flat-ground airtime is about 36 to 69 ticks.
+- Ramp launches are capped at -3.6 px/tick (was -3.2, -2.0 before). Measured airtime off ramps, stairs and the bowl with a full-hold pop is 76 to 80 ticks, so a four-tap trick fits there (clean at 77 or more, sketchy within 7 ticks of it). Three taps are clean from a full-hold flat ollie.
+- Rails are 96 px long (was 44) and the bowl is about 240 px long. Stair decks are 24, 32 and 40 px high (8 px per step, was 6) and the bowl deck is 34 px (was 18), each reached by a longer ramp. The plain-ollie test bot may now hold A after its pop, because a rail that long cannot be jumped over at start speed.
+- Headroom: `MIN_CANVAS_H` is 170 so the tallest pop (from a 40 px deck) stays on screen on desktop; portrait has more.
+- Frame rate: the game loop is a fixed 60 Hz sim and draws only when a new sim step exists, so a 120 Hz screen does not redraw identical frames; the 2D context is opaque (`alpha: false`). Measured with a 6x CPU throttle requested through the browser emulation: 414 frames while jumping and tricking, average 16.54 ms, p99 16.8 ms, worst 16.8 ms, none over 20 ms, in-game fps readout 60. Not measured on a physical phone.
+
 Evidence markers used throughout:
 
 - **[V]** verified in this repo or by a command I ran, source given.

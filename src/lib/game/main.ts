@@ -29,7 +29,7 @@ function init(root: HTMLElement): void {
   const btnA = root.querySelector<HTMLElement>('[data-btn="A"]');
   const btnB = root.querySelector<HTMLElement>('[data-btn="B"]');
   const pauseBtn = root.querySelector<HTMLElement>('[data-pause]');
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext('2d', { alpha: false });
   if (!ctx) {
     stage.textContent = strings.noCanvas ?? 'Canvas unavailable';
     return;
@@ -61,6 +61,8 @@ function init(root: HTMLElement): void {
   let acc = 0;
   let last = performance.now();
   let frames = 0;
+  let lastScreen: Screen | '' = '';
+  let lastH = 0;
   let fpsAt = last;
   const raw: RawEvent[] = [];
 
@@ -219,6 +221,7 @@ function init(root: HTMLElement): void {
     }
     ui.screenAge = (now - screenSince) / STEP_MS;
 
+    let drawNeeded = true;
     if (ui.screen === 'playing') {
       acc += dt;
       let n = 0;
@@ -240,12 +243,17 @@ function init(root: HTMLElement): void {
         }
       }
       if (n === 6) acc = 0;
+      // A 120 Hz display gets two frames per 60 Hz sim step: draw only new states.
+      drawNeeded = n > 0 || ui.screen !== lastScreen || ui.canvasH !== lastH;
     } else {
       raw.length = 0;
       input.take(Infinity, raw);
       for (const e of raw) if (e.down) uiPress(e.btn);
     }
 
+    lastScreen = ui.screen;
+    lastH = ui.canvasH;
+    if (!drawNeeded) return;
     const drift = ui.screen === 'title' || ui.screen === 'book' ? now * 0.03 : undefined;
     drawFrame(ctx, state, ui, drift);
   };

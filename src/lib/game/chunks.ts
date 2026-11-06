@@ -46,7 +46,7 @@ const RECTS: Partial<Record<Kind, { w: number; h: number }>> = {
   crate: { w: 12, h: 14 },
   block: { w: 16, h: 18 },
   ledge: { w: 44, h: 10 },
-  rail: { w: 44, h: 11 },
+  rail: { w: 96, h: 11 },
 };
 
 function linear(w: number, h: number): number[] {
@@ -91,23 +91,23 @@ function buildProfile(kind: Kind, n: number): number[] {
       p = arc(48, 0.88, 0);
       break;
     case 'bowl': {
-      // Ride up onto the deck, drop in, cross the floor, climb the far wall.
-      const dropIn = arc(36, 0.9, 0).reverse();
+      // Long ride up onto a high deck, drop in, cross the floor, climb the far wall.
+      const dropIn = arc(60, 0.9, 0).reverse();
       const deckH = dropIn[0];
       p = [
-        ...linear(34, deckH),
-        ...fill(18, deckH),
+        ...linear(Math.round(deckH / 0.55), deckH),
+        ...fill(36, deckH),
         ...dropIn,
-        ...fill(14, 0),
-        ...arc(48, 0.88, 0),
+        ...fill(40, 0),
+        ...arc(56, 0.88, 0),
       ];
       break;
     }
     case 'stairs': {
-      // Ride up a ramp onto a deck, then n steps of 6 px back down to the flat.
-      const top = 6 * n;
-      p = [...linear(Math.round(top / 0.6), top), ...fill(20, top)];
-      for (let s = 1; s <= n; s++) for (let i = 0; i < 10; i++) p.push(6 * (n - s));
+      // Ride up a ramp onto a high deck, then n steps of 8 px back down to the flat.
+      const top = 8 * n;
+      p = [...linear(Math.round(top / 0.55), top), ...fill(40, top)];
+      for (let s = 1; s <= n; s++) for (let i = 0; i < 12; i++) p.push(8 * (n - s));
       break;
     }
     default:
@@ -195,7 +195,7 @@ export const CHUNKS: readonly Chunk[] = [
   ]),
   chunk('line-stairs-rail', 3, 34, [
     { kind: 'stairs', x: 0, n: 3 },
-    { kind: 'rail', x: 44 + LINE },
+    { kind: 'rail', x: obstacleWidth('stairs', 3) + LINE },
   ]),
 ];
 

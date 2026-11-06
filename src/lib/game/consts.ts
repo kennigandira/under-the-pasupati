@@ -8,18 +8,21 @@ export const STEP_MS = 1000 / 60;
 // playfield. Simulation coordinates never change.
 export const LOGICAL_W = 176;
 export const PLAYFIELD_H = 96;
-export const MIN_CANVAS_H = 128;
+export const MIN_CANVAS_H = 170;
 export const MAX_CANVAS_H = 240;
 export const GROUND_Y = 76;
 export const PLAYER_X = 44;
 
 // Jump physics.
-export const GRAVITY = 0.06;
-export const APEX = [12, 20, 28] as const;
+export const GRAVITY = 0.1;
+// Pop height grows smoothly with crouch time: APEX_MIN at a tap, APEX_MAX once
+// the crouch reaches CROUCH_FULL_TICKS (holding longer adds nothing).
+export const APEX_MIN = 14;
+export const APEX_MAX = 60;
+export const CROUCH_FULL_TICKS = 30;
+export const MANUAL_POP_TICKS = 12;
 export const NOLLIE_APEX = 0.85;
-export const LEVEL_MID_TICKS = 8;
-export const LEVEL_HIGH_TICKS = 16;
-export const MAX_LAUNCH_VY = -2.0;
+export const MAX_LAUNCH_VY = -3.6;
 export const RIDE_POP_BONUS = 0.9;
 
 // Speed (px per tick).

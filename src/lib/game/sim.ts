@@ -3,7 +3,8 @@
 // RNG, so a (seed, input log) pair replays to the same state.
 
 import {
-  APEX,
+  APEX_MAX,
+  APEX_MIN,
   BAIL_WINDOW,
   BOWL_BOOST,
   BUFFER_TICKS,
@@ -19,8 +20,8 @@ import {
   GRAVITY,
   GRIND_POINTS_PER_TICK,
   GROUND_Y,
-  LEVEL_HIGH_TICKS,
-  LEVEL_MID_TICKS,
+  CROUCH_FULL_TICKS,
+  MANUAL_POP_TICKS,
   MANUAL_MUL,
   MAX_LAUNCH_VY,
   MULT_CAP,
@@ -280,15 +281,13 @@ function resetAir(p: Player): void {
   p.lastTapTick = -9999;
 }
 
-function popLevel(ticks: number): number {
-  if (ticks >= LEVEL_HIGH_TICKS) return 2;
-  if (ticks >= LEVEL_MID_TICKS) return 1;
-  return 0;
+function popApex(ticks: number): number {
+  return APEX_MIN + (APEX_MAX - APEX_MIN) * Math.min(1, ticks / CROUCH_FULL_TICKS);
 }
 
 function pop(s: GameState, btn: Btn): void {
   const p = s.p;
-  let apex = APEX[popLevel(p.crouchTicks)];
+  let apex = popApex(p.crouchTicks);
   if (btn === 'B') apex *= NOLLIE_APEX;
   let vy = -Math.sqrt(2 * GRAVITY * apex);
   const wasAir = p.air;
@@ -318,7 +317,7 @@ function engageManual(s: GameState, btn: Btn): void {
   p.manual = btn;
   p.railDeadline = 0;
   p.crouchBtn = btn;
-  p.crouchTicks = LEVEL_MID_TICKS;
+  p.crouchTicks = MANUAL_POP_TICKS;
   s.manuals++;
 }
 

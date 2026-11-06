@@ -39,9 +39,10 @@ function survives(s: GameState, plan: Plan, h: number): boolean {
   return true;
 }
 
-// The bot only ever pops with A and never taps in the air: a plain ollie.
+// The bot only ever uses A: a plain ollie first, and if no plain ollie
+// survives, an ollie followed by a held A (the manual a rail needs).
 function search(s: GameState, h: number): Plan | null {
-  const holds = [2, 10, 18];
+  const holds = [2, 10, 18, 30];
   for (let d = 0; d <= h; d++) {
     for (const hold of holds) {
       const plan: Plan = [];
@@ -49,6 +50,21 @@ function search(s: GameState, h: number): Plan | null {
       plan[d].push({ btn: 'A' as Btn, down: true });
       plan[d + hold].push({ btn: 'A' as Btn, down: false });
       if (survives(s, plan, h)) return plan;
+    }
+  }
+  for (let d = 0; d <= h; d += 2) {
+    for (const hold of [10, 18, 30]) {
+      for (let j = 0; j <= 70; j += 2) {
+        const press2 = d + hold + j;
+        if (press2 >= h - 1) break;
+        const plan: Plan = [];
+        for (let t = 0; t < h; t++) plan.push([]);
+        plan[d].push({ btn: 'A' as Btn, down: true });
+        plan[d + hold].push({ btn: 'A' as Btn, down: false });
+        plan[press2].push({ btn: 'A' as Btn, down: true });
+        plan[h - 1].push({ btn: 'A' as Btn, down: false });
+        if (survives(s, plan, h)) return plan;
+      }
     }
   }
   return null;

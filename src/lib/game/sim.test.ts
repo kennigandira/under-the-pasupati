@@ -32,10 +32,13 @@ function apexAfterHold(hold: number, btn: Btn = 'A'): number {
   return best;
 }
 
-test('pop height follows the crouch level', () => {
-  assert.ok(Math.abs(apexAfterHold(2) - 12) < 2, 'low');
-  assert.ok(Math.abs(apexAfterHold(10) - 20) < 2, 'mid');
-  assert.ok(Math.abs(apexAfterHold(18) - 28) < 2, 'high');
+test('pop height grows with the hold until it is full, then stops growing', () => {
+  const expected = (hold: number) => 14 + 46 * Math.min(1, hold / 30);
+  for (const hold of [2, 10, 18, 30]) {
+    assert.ok(Math.abs(apexAfterHold(hold) - expected(hold)) < 2, `hold ${hold}`);
+  }
+  assert.ok(Math.abs(apexAfterHold(45) - apexAfterHold(30)) < 1.5, 'holding past full adds nothing');
+  assert.ok(apexAfterHold(30) > apexAfterHold(18) + 10, 'a longer hold is clearly higher');
 });
 
 test('nollie (B) pops lower than ollie (A) at the same hold', () => {
