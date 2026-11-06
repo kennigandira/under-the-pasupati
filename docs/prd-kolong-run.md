@@ -4,6 +4,8 @@
 
 **Revision 3 (2026-11-06).** Owner design feedback applied: bigger rider and board with tilt and trick detail, quiet greyscale background, rails need a timed A (manual) or B (nose manual), stairs and bowl are raised structures you ride up onto, sparser obstacles, no how-to-play section. Details are in the TRD revision 3. The "Stairs" and "Bowl" rows and the rail behaviour in section 6.6 are superseded by it.
 
+**Revision 4 (2026-11-06).** Controls are now three buttons: A crouches and ollies, B and C are the trick buttons (and, on a rail, B is a manual and C a nose manual). In section 6.5, read every A in a trick sequence as B and every B as C: `A A B` is `B B C`, `B B B A` is `C C C B`. Desktop keys are Left (A), Down (B) and Right (C). The nollie is gone. Details are in the TRD revision 5. Sections 6.3, 6.4 and 6.5 are superseded by it where they say two buttons.
+
 **Date:** 2026-11-06
 
 **Working title:** Kolong Run, route `/kolong-run/` (decided, Q1). "Kolong" is what the park copy already calls the space under the flyover.

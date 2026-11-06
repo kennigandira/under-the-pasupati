@@ -26,7 +26,7 @@ export function loadDiscovered(): Set<string> {
     const raw = localStorage.getItem(TRICKS);
     const list: unknown = raw ? JSON.parse(raw) : [];
     if (Array.isArray(list)) {
-      for (const v of list) if (typeof v === 'string' && /^[AB]{1,4}$/.test(v)) out.add(v);
+      for (const v of list) if (typeof v === 'string' && /^[BC]{1,4}$/.test(v)) out.add(v);
     }
   } catch {
     // corrupt or blocked: start empty

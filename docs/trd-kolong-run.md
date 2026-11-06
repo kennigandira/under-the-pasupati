@@ -33,6 +33,14 @@
 - Headroom: `MIN_CANVAS_H` is 170 so the tallest pop (from a 40 px deck) stays on screen on desktop; portrait has more.
 - Frame rate: the game loop is a fixed 60 Hz sim and draws only when a new sim step exists, so a 120 Hz screen does not redraw identical frames; the 2D context is opaque (`alpha: false`). Measured with a 6x CPU throttle requested through the browser emulation: 414 frames while jumping and tricking, average 16.54 ms, p99 16.8 ms, worst 16.8 ms, none over 20 ms, in-game fps readout 60. Not measured on a physical phone.
 
+**Revision 5 (2026-11-06).** Three buttons.
+
+- A crouches and ollies only (hold, release; hold time sets height). B and C are the trick buttons: in the air, taps of B and C build the sequence, where B scoops the tail (board spin) and C flicks the nose (board flip). The old A and B sequences map one to one: A became B and B became C, so `A A B` is now `B B C` (360 flip) and `B B B A` is now `C C C B` (triple flip shove-it). A in the air does nothing. The nollie is removed, since the second foot now belongs to the trick buttons.
+- Rails: after touchdown, B is a manual and C a nose manual, with the same window as before (8 ticks before to 6 after) and release pops off at mid height. A at touchdown does not count.
+- Desktop keys: Left is A, Down is B, Right is C. Phone buttons: A is the large button on the left, B and C sit side by side on the right. The pause button moved onto the stage (bottom right of the canvas) to make room.
+- Stored trick book entries from the earlier A and B version are dropped on load, since the sequences changed meaning (`storage.ts` accepts only B and C).
+- Tests: 31 pass. New cases check that B and C never pop from the ground, that A in the air is not a tap, and that A held at a rail touchdown is a miss. The plain-ollie test bot holds B for rails.
+
 Evidence markers used throughout:
 
 - **[V]** verified in this repo or by a command I ran, source given.

@@ -39,8 +39,8 @@ function survives(s: GameState, plan: Plan, h: number): boolean {
   return true;
 }
 
-// The bot only ever uses A: a plain ollie first, and if no plain ollie
-// survives, an ollie followed by a held A (the manual a rail needs).
+// The bot only uses A to ollie, and B to hold a manual: a plain ollie first, and
+// if no plain ollie survives, an ollie followed by a held B (what a rail needs).
 function search(s: GameState, h: number): Plan | null {
   const holds = [2, 10, 18, 30];
   for (let d = 0; d <= h; d++) {
@@ -61,8 +61,8 @@ function search(s: GameState, h: number): Plan | null {
         for (let t = 0; t < h; t++) plan.push([]);
         plan[d].push({ btn: 'A' as Btn, down: true });
         plan[d + hold].push({ btn: 'A' as Btn, down: false });
-        plan[press2].push({ btn: 'A' as Btn, down: true });
-        plan[h - 1].push({ btn: 'A' as Btn, down: false });
+        plan[press2].push({ btn: 'B' as Btn, down: true });
+        plan[h - 1].push({ btn: 'B' as Btn, down: false });
         if (survives(s, plan, h)) return plan;
       }
     }

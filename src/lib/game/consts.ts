@@ -21,7 +21,6 @@ export const APEX_MIN = 14;
 export const APEX_MAX = 60;
 export const CROUCH_FULL_TICKS = 30;
 export const MANUAL_POP_TICKS = 12;
-export const NOLLIE_APEX = 0.85;
 export const MAX_LAUNCH_VY = -3.6;
 export const RIDE_POP_BONUS = 0.9;
 
@@ -57,7 +56,6 @@ export const GRIND_POINTS_PER_TICK = 0.4;
 export const MANUAL_MUL = 1.3;
 export const NOSE_MANUAL_MUL = 1.6;
 export const MULT_CAP = 8;
-export const NOLLIE_TRICK_MUL = 1.1;
 export const REPEAT_TRICK_MUL = 0.5;
 export const SKETCHY_MUL = 0.5;
 

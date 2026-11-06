@@ -22,11 +22,12 @@ export interface Input {
   dispose(): void;
 }
 
-const KEYS: Record<string, Btn> = { ArrowLeft: 'A', ArrowRight: 'B' };
+// Left = A (crouch, ollie), Down = B and Right = C (tricks, rail manuals).
+const KEYS: Record<string, Btn> = { ArrowLeft: 'A', ArrowDown: 'B', ArrowRight: 'C' };
 
 export function createInput(opts: InputOptions): Input {
   const queue: RawEvent[] = [];
-  const sources: Record<Btn, Set<string>> = { A: new Set(), B: new Set() };
+  const sources: Record<Btn, Set<string>> = { A: new Set(), B: new Set(), C: new Set() };
   const cleanups: Array<() => void> = [];
 
   const stamp = (e?: Event) => {
@@ -62,7 +63,7 @@ export function createInput(opts: InputOptions): Input {
 
   const releaseAll = () => {
     const t = stamp();
-    for (const btn of ['A', 'B'] as const) {
+    for (const btn of ['A', 'B', 'C'] as const) {
       if (sources[btn].size > 0) {
         sources[btn].clear();
         queue.push({ t, btn, down: false });
@@ -99,7 +100,7 @@ export function createInput(opts: InputOptions): Input {
   });
   on('blur', releaseAll);
 
-  for (const btn of ['A', 'B'] as const) {
+  for (const btn of ['A', 'B', 'C'] as const) {
     const el = opts.buttons[btn];
     if (!el) continue;
     const down = (e: PointerEvent) => {

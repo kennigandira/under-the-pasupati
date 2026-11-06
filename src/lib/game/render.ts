@@ -180,10 +180,10 @@ function riderFor(s: GameState, yOff: number): Rider {
     const g = p.groundTicks;
     if (p.manual !== null) {
       const e = Math.min(1, g / 4);
-      const ang = (p.manual === 'A' ? 0.5 : -0.5) * e;
+      const ang = (p.manual === 'B' ? 0.5 : -0.5) * e;
       boardTilt = ang;
       bodyTilt = ang;
-      pivotX = p.manual === 'A' ? -6 : 6;
+      pivotX = p.manual === 'B' ? -6 : 6;
       poseA = 'ride';
       poseB = 'crouch';
       blend = 0.35;
@@ -201,11 +201,11 @@ function riderFor(s: GameState, yOff: number): Rider {
       blend = g / 8;
     }
   } else {
-    // The board follows the flight path; an ollie also snaps the tail (nose
-    // for a nollie) down first, then levels out.
+    // The board follows the flight path; an ollie also snaps the tail down
+    // first, then levels out.
     const path = Math.atan2(-p.vy, speed);
     const decay = p.popped ? Math.max(0, 1 - p.airTicks / 12) : 0;
-    const popTilt = (p.nollie ? -1 : 1) * 0.6 * decay;
+    const popTilt = 0.6 * decay;
     boardTilt = path * 0.8 + popTilt;
     bodyTilt = path * 0.6;
     if (p.airTicks < 8 && p.popped) {
@@ -291,7 +291,7 @@ function drawEffects(ctx: CanvasRenderingContext2D, s: GameState, yOff: number):
   }
   // Sparks off the wheels on a rail manual.
   if (p.manual !== null && s.tick % 3 !== 0) {
-    const wheel = PLAYER_X + (p.manual === 'A' ? -9 : 9);
+    const wheel = PLAYER_X + (p.manual === 'B' ? -9 : 9);
     rect(ctx, C.tape, wheel + (s.tick % 4) - 2, y - 1 - (s.tick % 3), 2, 2);
     rect(ctx, C.white, wheel - (s.tick % 5), y, 1, 1);
   }
@@ -316,12 +316,12 @@ function drawHud(ctx: CanvasRenderingContext2D, s: GameState, ui: UiState, yOff:
 
   if (ui.screen !== 'playing' || s.dead) return;
 
-  // Rail cue: A / B must be pressed as the board touches down.
+  // Rail cue: B or C must be pressed as the board touches down.
   if (p.railDeadline > 0 && p.manual === null) {
-    const t = `A / B ${str('now')}`;
+    const t = `B / C ${str('now')}`;
     drawShadowText(ctx, t, PLAYER_X - Math.round(textWidth(t) / 2), Math.round(p.y) + yOff - 52, C.accent, C.paper);
   } else if (p.manual !== null) {
-    const t = p.manual === 'A' ? str('manual') : str('noseManual');
+    const t = p.manual === 'B' ? str('manual') : str('noseManual');
     drawShadowText(ctx, t, PLAYER_X - Math.round(textWidth(t) / 2), Math.round(p.y) + yOff - 52, C.green, C.paper);
   }
 

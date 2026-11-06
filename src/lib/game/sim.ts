@@ -25,8 +25,6 @@ import {
   MANUAL_MUL,
   MAX_LAUNCH_VY,
   MULT_CAP,
-  NOLLIE_APEX,
-  NOLLIE_TRICK_MUL,
   NOSE_MANUAL_MUL,
   PLAYER_X,
   PUDDLE_SLOW,
@@ -56,7 +54,10 @@ import {
 import { randomInt } from './rng.ts';
 import { animTicks, recognise, type Trick } from './tricks.ts';
 
-export type Btn = 'A' | 'B';
+// A crouches and ollies. B and C are the trick buttons and, on a rail, B is a
+// manual and C a nose manual.
+export type Btn = 'A' | 'B' | 'C';
+const BTN_INDEX: Record<Btn, number> = { A: 0, B: 1, C: 2 };
 
 export interface InputEvent {
   btn: Btn;
@@ -74,9 +75,8 @@ export interface Player {
   crouchBtn: Btn | null;
   crouchTicks: number;
   popped: boolean;
-  nollie: boolean;
-  held: [boolean, boolean];
-  pressTick: [number, number];
+  held: [boolean, boolean, boolean];
+  pressTick: [number, number, number];
   buffer: string;
   lastTapTick: number;
   trickSeq: string | null;
@@ -86,7 +86,7 @@ export interface Player {
   supportKind: Kind | 'ground';
   grinding: boolean;
   // Rail rule: after touching a rail the player has until railDeadline to press
-  // A (manual) or B (nose manual). manual holds the button that did it.
+  // B (manual) or C (nose manual). manual holds the button that did it.
   railDeadline: number;
   manual: Btn | null;
   fromProfile: boolean;
@@ -157,9 +157,8 @@ export function createState(seed: number, opts: CreateOptions = {}): GameState {
       crouchBtn: null,
       crouchTicks: 0,
       popped: false,
-      nollie: false,
-      held: [false, false],
-      pressTick: [-9999, -9999],
+      held: [false, false, false],
+      pressTick: [-9999, -9999, -9999],
       buffer: '',
       lastTapTick: -9999,
       trickSeq: null,
@@ -275,7 +274,6 @@ function resetAir(p: Player): void {
   p.buffer = '';
   p.trickSeq = null;
   p.overIds.length = 0;
-  p.nollie = false;
   p.popped = false;
   p.fromProfile = false;
   p.lastTapTick = -9999;
@@ -285,10 +283,9 @@ function popApex(ticks: number): number {
   return APEX_MIN + (APEX_MAX - APEX_MIN) * Math.min(1, ticks / CROUCH_FULL_TICKS);
 }
 
-function pop(s: GameState, btn: Btn): void {
+function pop(s: GameState): void {
   const p = s.p;
-  let apex = popApex(p.crouchTicks);
-  if (btn === 'B') apex *= NOLLIE_APEX;
+  const apex = popApex(p.crouchTicks);
   let vy = -Math.sqrt(2 * GRAVITY * apex);
   const wasAir = p.air;
   if (!wasAir && p.rideVy < 0) vy = Math.max(MAX_LAUNCH_VY, vy + p.rideVy * RIDE_POP_BONUS);
@@ -307,10 +304,9 @@ function pop(s: GameState, btn: Btn): void {
     p.fromProfile = fromProfile;
   }
   p.popped = true;
-  p.nollie = btn === 'B';
 }
 
-// Press A or B on a rail: A is a manual, B a nose manual. The held button is
+// Press B or C on a rail: B is a manual, C a nose manual. The held button is
 // the crouch button, so releasing it pops off with a mid-height ollie.
 function engageManual(s: GameState, btn: Btn): void {
   const p = s.p;
@@ -325,24 +321,28 @@ function handleInput(s: GameState, events: readonly InputEvent[]): void {
   const p = s.p;
   for (let k = 0; k < events.length; k++) {
     const e = events[k];
-    const i = e.btn === 'A' ? 0 : 1;
+    const i = BTN_INDEX[e.btn];
     if (e.down) {
       p.held[i] = true;
       p.pressTick[i] = s.tick;
-      if (!p.air && p.railDeadline > 0 && p.manual === null) {
-        engageManual(s, e.btn);
-      } else if (!p.air && p.crouchBtn === null) {
-        p.crouchBtn = e.btn;
-        p.crouchTicks = 0;
+      if (!p.air) {
+        if (e.btn === 'A') {
+          if (p.crouchBtn === null) {
+            p.crouchBtn = 'A';
+            p.crouchTicks = 0;
+          }
+        } else if (p.railDeadline > 0 && p.manual === null) {
+          engageManual(s, e.btn);
+        }
       }
       continue;
     }
     const wasHeld = p.held[i];
     p.held[i] = false;
     if (!p.air) {
-      if (p.crouchBtn === e.btn) pop(s, e.btn);
-    } else if (p.crouchBtn === e.btn && !p.popped && p.airTicks <= COYOTE_TICKS) {
-      pop(s, e.btn);
+      if (p.crouchBtn === e.btn) pop(s);
+    } else if (e.btn === 'A') {
+      if (p.crouchBtn === 'A' && !p.popped && p.airTicks <= COYOTE_TICKS) pop(s);
     } else if (
       wasHeld &&
       s.tick - p.pressTick[i] <= TAP_MAX &&
@@ -362,7 +362,6 @@ function score(s: GameState, trick: Trick, quality: 'clean' | 'sketchy', onGrind
   if (onGrind) bonus += 0.5;
   let pts = trick.base * bonus * s.mult;
   if (s.recent.includes(trick.seq)) pts *= REPEAT_TRICK_MUL;
-  if (p.nollie) pts *= NOLLIE_TRICK_MUL;
   if (quality === 'sketchy') pts *= SKETCHY_MUL;
   pts = Math.round(pts);
   s.score += pts;
@@ -407,28 +406,26 @@ function land(s: GameState, surf: Surf): void {
   resetAir(p);
 
   if (ob !== null && ob.kind === 'rail') {
-    // Touchdown on a rail: a press this close to it counts, otherwise the
-    // player has RAIL_LATE_TICKS more to press.
+    // Touchdown on a rail: a B or C press this close to it counts, otherwise
+    // the player has RAIL_LATE_TICKS more to press.
     p.crouchBtn = null;
-    let engaged = false;
     let latest = -Infinity;
-    for (let i = 0; i < 2; i++) {
+    let pick: Btn | null = null;
+    for (const btn of ['B', 'C'] as const) {
+      const i = BTN_INDEX[btn];
       if (p.held[i] && s.tick - p.pressTick[i] <= RAIL_EARLY_TICKS && p.pressTick[i] > latest) {
         latest = p.pressTick[i];
-        engaged = true;
-        p.manual = i === 0 ? 'A' : 'B';
+        pick = btn;
       }
     }
-    if (engaged) engageManual(s, p.manual as Btn);
+    if (pick !== null) engageManual(s, pick);
     else p.railDeadline = s.tick + RAIL_LATE_TICKS;
     return;
   }
 
-  for (let i = 0; i < 2; i++) {
-    if (p.held[i] && p.crouchBtn === null && s.tick - p.pressTick[i] <= BUFFER_TICKS) {
-      p.crouchBtn = i === 0 ? 'A' : 'B';
-      p.crouchTicks = s.tick - p.pressTick[i];
-    }
+  if (p.held[0] && p.crouchBtn === null && s.tick - p.pressTick[0] <= BUFFER_TICKS) {
+    p.crouchBtn = 'A';
+    p.crouchTicks = s.tick - p.pressTick[0];
   }
 }
 
@@ -509,7 +506,7 @@ export function step(s: GameState, events: readonly InputEvent[] = NO_EVENTS): v
         return;
       }
       if (p.grinding && (surf.ob!.kind === 'ledge' || p.manual !== null)) {
-        const mul = p.manual === 'B' ? NOSE_MANUAL_MUL : p.manual === 'A' ? MANUAL_MUL : 1;
+        const mul = p.manual === 'C' ? NOSE_MANUAL_MUL : p.manual === 'B' ? MANUAL_MUL : 1;
         s.score += GRIND_POINTS_PER_TICK * mul;
       }
     }
@@ -536,8 +533,8 @@ export function step(s: GameState, events: readonly InputEvent[] = NO_EVENTS): v
       }
       if (p.trickSeq === null && p.buffer.length > 0) {
         const pressing =
-          (p.held[0] && s.tick - p.pressTick[0] <= TAP_MAX) ||
-          (p.held[1] && s.tick - p.pressTick[1] <= TAP_MAX);
+          (p.held[1] && s.tick - p.pressTick[1] <= TAP_MAX) ||
+          (p.held[2] && s.tick - p.pressTick[2] <= TAP_MAX);
         if (!pressing && (s.tick - p.lastTapTick >= COMBO_GAP || p.buffer.length >= 4)) {
           commitTrick(s);
         }

@@ -7,10 +7,10 @@ import { createState, step, type InputEvent } from './sim.ts';
 function play(seed: number, inputSeed: number, ticks: number) {
   const s = createState(seed);
   const driver = { rng: inputSeed };
-  const held = { A: false, B: false };
+  const held = { A: false, B: false, C: false };
   for (let i = 0; i < ticks; i++) {
     const ev: InputEvent[] = [];
-    for (const btn of ['A', 'B'] as const) {
+    for (const btn of ['A', 'B', 'C'] as const) {
       if (nextRandom(driver) < 0.07) {
         held[btn] = !held[btn];
         ev.push({ btn, down: held[btn] });

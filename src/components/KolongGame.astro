@@ -14,7 +14,7 @@ const stringKeys = [
   'title', 'tagline', 'start', 'book', 'bookTitle', 'back', 'best', 'score',
   'gameover', 'retry', 'closeGame', 'toTitle', 'paused', 'resume', 'quit',
   'crash', 'bail', 'miss', 'clean', 'sketchy', 'newBest', 'hintHold', 'hintTap',
-  'hintRail', 'now', 'manual', 'noseManual', 'btnA', 'btnB', 'noCanvas',
+  'hintRail', 'now', 'manual', 'noseManual', 'btnA', 'btnB', 'btnC', 'noCanvas',
 ] as const;
 const strings = Object.fromEntries(
   stringKeys.map((k) => [k, t(lang, `game.${k}` as UIKey)]),
@@ -30,18 +30,23 @@ const strings = Object.fromEntries(
 >
   <div class="kolong-stage" data-stage tabindex="0" role="group" aria-label={t(lang, 'game.page.title')}>
     <canvas width="176" height="96" role="img" aria-label={t(lang, 'game.page.desc')}></canvas>
+    <button class="kpause" type="button" data-pause hidden aria-label={t(lang, 'game.pause')}>
+      <span aria-hidden="true">II</span>
+    </button>
   </div>
 
   <div class="kolong-controls" data-controls>
     <button class="kbtn kbtn-a" type="button" data-btn="A" aria-label={`A: ${t(lang, 'game.btnA')}`}>
       <span aria-hidden="true">A</span>
     </button>
-    <button class="kpause" type="button" data-pause hidden aria-label={t(lang, 'game.pause')}>
-      <span aria-hidden="true">II</span>
-    </button>
-    <button class="kbtn kbtn-b" type="button" data-btn="B" aria-label={`B: ${t(lang, 'game.btnB')}`}>
-      <span aria-hidden="true">B</span>
-    </button>
+    <div class="kpair">
+      <button class="kbtn kbtn-b" type="button" data-btn="B" aria-label={`B: ${t(lang, 'game.btnB')}`}>
+        <span aria-hidden="true">B</span>
+      </button>
+      <button class="kbtn kbtn-c" type="button" data-btn="C" aria-label={`C: ${t(lang, 'game.btnC')}`}>
+        <span aria-hidden="true">C</span>
+      </button>
+    </div>
   </div>
 
 </div>
@@ -73,6 +78,7 @@ const strings = Object.fromEntries(
     padding-bottom: env(safe-area-inset-bottom);
   }
   .kolong-stage {
+    position: relative;
     line-height: 0;
     outline: none;
     box-shadow: 0 0 0 3px var(--ink);
@@ -100,13 +106,14 @@ const strings = Object.fromEntries(
   }
   :global(.has-touch) .kolong-controls { display: flex; }
 
+  .kpair { display: flex; gap: 0.6rem; }
   .kbtn {
-    width: min(38vw, 168px);
+    width: min(26vw, 108px);
     aspect-ratio: 1;
     border-radius: 50%;
     border: 4px solid var(--ink);
     font-family: var(--font-logo);
-    font-size: 3.2rem;
+    font-size: 2.2rem;
     line-height: 1;
     color: var(--white);
     box-shadow: 0 6px 0 var(--ink);
@@ -117,8 +124,9 @@ const strings = Object.fromEntries(
     -webkit-tap-highlight-color: transparent;
     cursor: pointer;
   }
-  .kbtn-a { background: var(--accent); }
+  .kbtn-a { background: var(--accent); width: min(40vw, 168px); font-size: 3.2rem; }
   .kbtn-b { background: var(--blue); }
+  .kbtn-c { background: var(--pink); }
   .kbtn[data-pressed] {
     transform: translateY(5px);
     box-shadow: 0 1px 0 var(--ink);
@@ -126,13 +134,17 @@ const strings = Object.fromEntries(
   .kbtn:focus-visible, .kpause:focus-visible { outline: 3px solid var(--pink); outline-offset: 3px; }
 
   .kpause {
-    width: 3rem;
-    height: 3rem;
-    border-radius: 0.5rem;
+    position: absolute;
+    right: 6px;
+    bottom: 6px;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 0.4rem;
     border: 3px solid var(--ink);
     background: var(--tape);
     font-family: var(--font-logo);
-    font-size: 1rem;
+    font-size: 0.85rem;
+    line-height: 1;
     touch-action: manipulation;
     cursor: pointer;
   }
@@ -147,8 +159,9 @@ const strings = Object.fromEntries(
       padding: 0 1rem;
       pointer-events: none;
     }
-    .kbtn { width: 96px; font-size: 2.4rem; pointer-events: auto; }
-    .kpause { pointer-events: auto; }
+    .kbtn { width: 84px; font-size: 1.8rem; pointer-events: auto; }
+    .kbtn-a { width: 100px; font-size: 2.4rem; }
+    .kpair { pointer-events: auto; }
   }
 </style>
 

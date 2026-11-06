@@ -28,6 +28,7 @@ function init(root: HTMLElement): void {
   const controls = root.querySelector<HTMLElement>('[data-controls]');
   const btnA = root.querySelector<HTMLElement>('[data-btn="A"]');
   const btnB = root.querySelector<HTMLElement>('[data-btn="B"]');
+  const btnC = root.querySelector<HTMLElement>('[data-btn="C"]');
   const pauseBtn = root.querySelector<HTMLElement>('[data-pause]');
   const ctx = canvas.getContext('2d', { alpha: false });
   if (!ctx) {
@@ -86,8 +87,10 @@ function init(root: HTMLElement): void {
     ui.screen = next;
     screenSince = performance.now();
     const [a, b] = labels();
+    const c = ui.screen === 'playing' ? (strings.btnC ?? 'C') : b;
     btnA?.setAttribute('aria-label', `A: ${a}`);
     btnB?.setAttribute('aria-label', `B: ${b}`);
+    btnC?.setAttribute('aria-label', `C: ${c}`);
     if (pauseBtn) pauseBtn.hidden = next !== 'playing' && next !== 'paused';
     if (next !== 'playing') input.releaseAll();
     input.clear();
@@ -156,7 +159,7 @@ function init(root: HTMLElement): void {
   };
 
   const input = createInput({
-    buttons: { A: btnA, B: btnB },
+    buttons: { A: btnA, B: btnB, C: btnC },
     onEscape: () => (embed ? closeGame() : togglePause()),
     onPauseKey: togglePause,
   });

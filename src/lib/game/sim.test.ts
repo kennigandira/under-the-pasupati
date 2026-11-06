@@ -41,8 +41,13 @@ test('pop height grows with the hold until it is full, then stops growing', () =
   assert.ok(apexAfterHold(30) > apexAfterHold(18) + 10, 'a longer hold is clearly higher');
 });
 
-test('nollie (B) pops lower than ollie (A) at the same hold', () => {
-  assert.ok(apexAfterHold(18, 'B') < apexAfterHold(18, 'A') - 2);
+test('B and C never pop from the ground; only A does', () => {
+  for (const btn of ['B', 'C'] as const) {
+    const s = bare();
+    run(s, [{ tick: 1, btn, down: true }, { tick: 10, btn, down: false }], 30);
+    assert.equal(s.p.air, false, `${btn} popped`);
+  }
+  assert.ok(apexAfterHold(10) > 10);
 });
 
 test('rolling into a ledge at ground level crashes', () => {
@@ -78,7 +83,7 @@ function landingWith(delta: number): GameState {
   s.p.popped = true;
   s.p.y = GROUND_Y - 0.5;
   s.p.vy = 1;
-  s.p.trickSeq = 'A';
+  s.p.trickSeq = 'B';
   s.p.trickDoneTick = s.tick + 1 + delta;
   step(s);
   return s;
@@ -110,31 +115,43 @@ test('landing with taps still uncommitted is a bail', () => {
   s.p.popped = true;
   s.p.y = GROUND_Y - 0.5;
   s.p.vy = 1;
-  s.p.buffer = 'A';
+  s.p.buffer = 'B';
   step(s);
   assert.equal(s.dead, true);
   assert.equal(s.deadReason, 'bail');
 });
 
-test('A A B in the air commits 360 flip and scores when it lands clean', () => {
+test('B B C in the air commits 360 flip and scores when it lands clean', () => {
   const s = bare();
   const t = 1;
   const ev: Scheduled[] = [
     { tick: t, btn: 'A', down: true },
-    { tick: t + 18, btn: 'A', down: false },
+    { tick: t + 30, btn: 'A', down: false },
   ];
   // Taps: 4-tick presses every 6 ticks after the pop.
-  const popTick = t + 18;
-  for (const [i, btn] of (['A', 'A', 'B'] as Btn[]).entries()) {
+  const popTick = t + 30;
+  for (const [i, btn] of (['B', 'B', 'C'] as Btn[]).entries()) {
     ev.push({ tick: popTick + 2 + i * 6, btn, down: true });
     ev.push({ tick: popTick + 2 + i * 6 + 4, btn, down: false });
   }
   run(s, ev, popTick + 40);
-  assert.equal(s.p.trickSeq, 'AAB');
-  run(s, ev, 40);
+  assert.equal(s.p.trickSeq, 'BBC');
+  run(s, ev, 60);
   assert.equal(s.dead, false);
-  assert.equal(s.lastTrick?.seq, 'AAB');
+  assert.equal(s.lastTrick?.seq, 'BBC');
   assert.ok(s.score > 0);
+});
+
+test('tapping A in the air does nothing', () => {
+  const s = bare();
+  const ev: Scheduled[] = [
+    { tick: 1, btn: 'A', down: true },
+    { tick: 19, btn: 'A', down: false },
+    { tick: 24, btn: 'A', down: true },
+    { tick: 27, btn: 'A', down: false },
+  ];
+  run(s, ev, 40);
+  assert.equal(s.p.buffer, '');
 });
 
 test('a press longer than TAP_MAX in the air is not a trick tap', () => {
@@ -142,8 +159,8 @@ test('a press longer than TAP_MAX in the air is not a trick tap', () => {
   const ev: Scheduled[] = [
     { tick: 1, btn: 'A', down: true },
     { tick: 19, btn: 'A', down: false },
-    { tick: 22, btn: 'B', down: true },
-    { tick: 22 + TAP_MAX + 2, btn: 'B', down: false },
+    { tick: 22, btn: 'C', down: true },
+    { tick: 22 + TAP_MAX + 2, btn: 'C', down: false },
   ];
   run(s, ev, 40);
   assert.equal(s.p.buffer, '');
@@ -159,7 +176,7 @@ function onRail(btn: Btn | null, pressedAgo: number | null): GameState {
   s.p.y = GROUND_Y - 11 - 0.5;
   s.p.vy = 1;
   if (btn !== null && pressedAgo !== null) {
-    const i = btn === 'A' ? 0 : 1;
+    const i = btn === 'A' ? 0 : btn === 'B' ? 1 : 2;
     s.p.held[i] = true;
     s.p.pressTick[i] = s.tick + 1 - pressedAgo;
   }
@@ -174,23 +191,30 @@ test('rail: no press at touchdown starts the countdown, still alive', () => {
   assert.ok(s.p.railDeadline > 0);
 });
 
-test('rail: A held at touchdown is a manual', () => {
-  const s = onRail('A', 3);
-  assert.equal(s.p.manual, 'A');
+test('rail: B held at touchdown is a manual', () => {
+  const s = onRail('B', 3);
+  assert.equal(s.p.manual, 'B');
   run(s, [], 10);
   assert.equal(s.dead, false);
   assert.equal(s.p.grinding, true);
 });
 
-test('rail: B held at touchdown is a nose manual', () => {
-  const s = onRail('B', 3);
-  assert.equal(s.p.manual, 'B');
+test('rail: C held at touchdown is a nose manual', () => {
+  const s = onRail('C', 3);
+  assert.equal(s.p.manual, 'C');
+});
+
+test('rail: A held at touchdown does not count, it is the ollie button', () => {
+  const s = onRail('A', 3);
+  assert.equal(s.p.manual, null);
+  run(s, [], RAIL_LATE_TICKS + 2);
+  assert.equal(s.deadReason, 'miss');
 });
 
 test('rail: a press just after touchdown still counts', () => {
   const s = onRail(null, null);
-  run(s, [{ tick: s.tick + RAIL_LATE_TICKS, btn: 'A', down: true }], RAIL_LATE_TICKS);
-  assert.equal(s.p.manual, 'A');
+  run(s, [{ tick: s.tick + RAIL_LATE_TICKS, btn: 'B', down: true }], RAIL_LATE_TICKS);
+  assert.equal(s.p.manual, 'B');
   assert.equal(s.dead, false);
 });
 
@@ -202,15 +226,15 @@ test('rail: no press within the window loses the run', () => {
 });
 
 test('rail: a press that started long before touchdown does not count', () => {
-  const s = onRail('A', RAIL_EARLY_TICKS + 5);
+  const s = onRail('B', RAIL_EARLY_TICKS + 5);
   assert.equal(s.p.manual, null);
   run(s, [], RAIL_LATE_TICKS + 2);
   assert.equal(s.deadReason, 'miss');
 });
 
 test('rail: releasing the held button pops off the rail', () => {
-  const s = onRail('A', 3);
-  run(s, [{ tick: s.tick + 3, btn: 'A', down: false }], 4);
+  const s = onRail('B', 3);
+  run(s, [{ tick: s.tick + 3, btn: 'B', down: false }], 4);
   assert.equal(s.p.air, true);
   assert.equal(s.p.manual, null);
   assert.equal(s.dead, false);
