@@ -6,6 +6,7 @@ import PartnerChip from "../../components/PartnerChip.astro";
 import LiveVisitors from "../../components/LiveVisitors.astro";
 import SpecialtyLink from "../../components/SpecialtyLink.astro";
 import SpecialtyVideoDialog from "../../components/SpecialtyVideoDialog.astro";
+import KolongPopup from "../../components/KolongPopup.astro";
 import { localeHref, localeRoutes, routeLang, t } from "../../i18n/ui";
 import {
     skaters,
@@ -37,6 +38,8 @@ const latest = [...posts]
 // Park rhythm slots in time order. Which ones show is decided per visitor's
 // day in the script below, so the static page never goes stale.
 const schedule = [...parkRhythm].sort((a, b) => a.startHour - b.startHour);
+// First-visit Kolong Run popup. Build-time flag; the game routes never read it.
+const kolongPopup = import.meta.env.PUBLIC_KOLONG_POPUP === "true";
 ---
 
 <Base lang={lang} path="">
@@ -403,6 +406,7 @@ const schedule = [...parkRhythm].sort((a, b) => a.startHour - b.startHour);
         </div>
     </section>
     <SpecialtyVideoDialog lang={lang} />
+    {kolongPopup && <KolongPopup lang={lang} />}
     <script is:inline define:vars={{ lang }}>
         // Show only today's sessions (park time zone, not the visitor's).
         const now = new Date();

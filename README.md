@@ -283,6 +283,16 @@ Then create `.env.local` there with that account's ID and a Pages:Edit token fro
 its dashboard. Nothing global changes, and no project can deploy into the wrong
 account by accident.
 
+## Kolong Run (hidden skateboard game)
+
+A two-button pixel skateboard runner. Specs: `docs/prd-kolong-run.md`, `docs/trd-kolong-run.md`.
+
+- Routes: `/kolong-run/` and `/en/kolong-run/` (standalone, with the site header), plus `/kolong-run/embed/` and `/en/kolong-run/embed/` (no chrome, loaded by the popup). All four are always built, `noindex`, and left out of the nav and `sitemap.xml.ts` on purpose. Do not add them to `robots.txt`.
+- Controls: A = left arrow or the on-screen A, B = right arrow or the on-screen B. Hold and release to pop, tap A and B in the air for tricks (sequences are in `src/lib/game/tricks.ts`). `?debug=1` shows fps and the trick buffer.
+- Homepage popup: first-visit dialog on `/` and `/en/`, controlled by the build-time flag `PUBLIC_KOLONG_POPUP` (only the exact value `true` enables it; set in `.env.production`, documented in `.env.example`). The flag affects the popup only, never the routes. To see it again locally, delete `localStorage['kolong:seen']`.
+- Code: `src/lib/game/` (pure simulation in `sim.ts`, tunables in `consts.ts`, obstacles and chunks in `chunks.ts`), shell in `src/components/KolongGame.astro`, popup in `src/components/KolongPopup.astro`. Strings live under `game.*` in `src/i18n/ui.ts`; canvas text must stay ASCII.
+- Tests: `npm test` (built-in `node --test`, runs in CI before the build). They include a plain-ollie bot that must survive every chunk at every speed, so a new chunk or a tuning change that makes the game unfair fails the build. Chunks that launch the player must declare a worst-case `airTicks`.
+
 ## Deploy
 
 Cloudflare Pages project: **`under-the-pasupati`** (production branch `main`),

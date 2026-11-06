@@ -1,0 +1,23 @@
+---
+import Base from '../../../layouts/Base.astro';
+import KolongGame from '../../../components/KolongGame.astro';
+import { localeRoutes, routeLang, t } from '../../../i18n/ui';
+
+export function getStaticPaths() {
+  return localeRoutes();
+}
+const lang = routeLang(Astro.params.lang);
+---
+
+<!-- Iframe target for the homepage popup: no site chrome, noindex. Always built. -->
+<Base
+  lang={lang}
+  title={t(lang, 'game.page.title')}
+  description={t(lang, 'game.page.desc')}
+  path="/kolong-run/embed"
+  noindex
+  bare
+  bodyClass="kolong-page kolong-embed"
+>
+  <KolongGame lang={lang} embed />
+</Base>

@@ -14,6 +14,9 @@ interface Props {
     author?: string; // article only
     section?: string; // article only
     jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+    noindex?: boolean; // emits robots noindex,nofollow
+    bare?: boolean; // skip the site header and footer (embedded pages)
+    bodyClass?: string;
 }
 const {
     lang,
@@ -27,6 +30,9 @@ const {
     author,
     section,
     jsonLd,
+    noindex = false,
+    bare = false,
+    bodyClass,
 } = Astro.props;
 const pageTitle = title
     ? `${title} — ${t(lang, "site.title")}`
@@ -62,6 +68,7 @@ const nav = [
         <title>{pageTitle}</title>
         <meta name="description" content={desc} />
         <link rel="canonical" href={canonical} />
+        {noindex && <meta name="robots" content="noindex,nofollow" />}
         <meta name="theme-color" content="#f4efe2" />
 
         <meta property="og:site_name" content={t(lang, "site.title")} />
@@ -133,7 +140,8 @@ const nav = [
             </>
         )}
     </head>
-    <body>
+    <body class={bodyClass}>
+        {!bare && (
         <header class="site-header">
             <div class="wrap">
                 <a class="brand" href={localeHref(lang, "")}>
@@ -167,9 +175,11 @@ const nav = [
                 </nav>
             </div>
         </header>
+        )}
         <main>
             <slot />
         </main>
+        {!bare && (
         <footer class="site-footer">
             <div class="wrap">
                 <p class="foot-mark">Under the Pasupati</p>
@@ -177,5 +187,6 @@ const nav = [
                 <p><a href={localeHref(lang, "/privacy")}>{lang === "id" ? "Kebijakan Privasi" : "Privacy Policy"}</a></p>
             </div>
         </footer>
+        )}
     </body>
 </html>

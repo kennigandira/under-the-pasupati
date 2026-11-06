@@ -1,0 +1,26 @@
+---
+import Base from '../../../layouts/Base.astro';
+import KolongGame from '../../../components/KolongGame.astro';
+import { localeRoutes, routeLang, t } from '../../../i18n/ui';
+
+export function getStaticPaths() {
+  return localeRoutes();
+}
+const lang = routeLang(Astro.params.lang);
+---
+
+<!-- Hidden route: not in the nav, not in the sitemap, noindex. Always built, independent of the popup flag. -->
+<Base
+  lang={lang}
+  title={t(lang, 'game.page.title')}
+  description={t(lang, 'game.page.desc')}
+  path="/kolong-run"
+  noindex
+  bodyClass="kolong-page"
+>
+  <section class="section">
+    <div class="wrap">
+      <KolongGame lang={lang} />
+    </div>
+  </section>
+</Base>
