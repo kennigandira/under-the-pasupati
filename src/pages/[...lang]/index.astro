@@ -40,11 +40,12 @@ const latest = [...posts]
 const schedule = [...parkRhythm].sort((a, b) => a.startHour - b.startHour);
 // First-visit Kolong Run popup. Build-time flag; the game routes never read it.
 const kolongPopup = import.meta.env.PUBLIC_KOLONG_POPUP === "true";
+const showHero = false;
 ---
 
 <Base lang={lang} path="">
-    <!-- 1. Hero -->
-    <section class="hero">
+    <!-- 1. Hero (temporarily hidden; flip `showHero` to restore) -->
+    {showHero && <section class="hero">
         <div class="wrap hero-inner">
             <span class="burst">
                 Est.
@@ -80,46 +81,7 @@ const kolongPopup = import.meta.env.PUBLIC_KOLONG_POPUP === "true";
                 }}
             />
         </div>
-    </section>
-
-    <!-- 2. About this site: carousel + excerpt -->
-    <section class="section">
-        <div class="wrap">
-            <div class="section-head">
-                <h2>{t(lang, "home.about.title")}</h2>
-            </div>
-            <div class="grid grid-2" style="align-items: start;">
-                <div
-                    class="carousel carousel--feature"
-                    role="group"
-                    aria-label={t(lang, "home.about.title")}
-                >
-                    {aboutSlides.map((slide, i) => (
-                        <figure class="slide">
-                            <span class="slide-index">
-                                {String(i + 1).padStart(2, "0")} /{" "}
-                                {String(aboutSlides.length).padStart(2, "0")}
-                            </span>
-                            <MediaSlot lang={lang} slot={slide} />
-                        </figure>
-                    ))}
-                </div>
-                <div>
-                    <p style="font-size: 1.05rem;">
-                        {t(lang, "home.about.body")}
-                    </p>
-                    <p style="margin-top: 1rem; font-size: 1.05rem;">
-                        {t(lang, "home.about.ownership")}
-                    </p>
-                    <p style="margin-top: 1.25rem;">
-                        <a class="btn" href={localeHref(lang, "/the-park")}>
-                            {t(lang, "home.about.cta")} →
-                        </a>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
+    </section>}
 
     <!-- 3. Skater of the month -->
     <section class="section">
@@ -405,6 +367,45 @@ const kolongPopup = import.meta.env.PUBLIC_KOLONG_POPUP === "true";
             </div>
         </div>
     </section>
+    <!-- 2. About this site: carousel + excerpt -->
+    <section class="section">
+        <div class="wrap">
+            <div class="section-head">
+                <h2>{t(lang, "home.about.title")}</h2>
+            </div>
+            <div class="grid grid-2" style="align-items: start;">
+                <div
+                    class="carousel carousel--feature"
+                    role="group"
+                    aria-label={t(lang, "home.about.title")}
+                >
+                    {aboutSlides.map((slide, i) => (
+                        <figure class="slide">
+                            <span class="slide-index">
+                                {String(i + 1).padStart(2, "0")} /{" "}
+                                {String(aboutSlides.length).padStart(2, "0")}
+                            </span>
+                            <MediaSlot lang={lang} slot={slide} />
+                        </figure>
+                    ))}
+                </div>
+                <div>
+                    <p style="font-size: 1.05rem;">
+                        {t(lang, "home.about.body")}
+                    </p>
+                    <p style="margin-top: 1rem; font-size: 1.05rem;">
+                        {t(lang, "home.about.ownership")}
+                    </p>
+                    <p style="margin-top: 1.25rem;">
+                        <a class="btn" href={localeHref(lang, "/the-park")}>
+                            {t(lang, "home.about.cta")} →
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <SpecialtyVideoDialog lang={lang} />
     {kolongPopup && <KolongPopup lang={lang} />}
     <script is:inline define:vars={{ lang }}>
