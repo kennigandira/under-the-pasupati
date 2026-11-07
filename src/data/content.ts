@@ -107,7 +107,7 @@ export const skaters: Skater[] = [
       },
     },
     contacts: [
-      { kind: 'instagram', value: 'spongebob.layback' },
+      { kind: 'instagram', value: 'spongebob_layback' },
       { kind: 'tiktok', value: 'spongebob.layback' },
     ],
   },
